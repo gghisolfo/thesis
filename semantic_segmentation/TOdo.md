@@ -1,0 +1,4 @@
+- modello di semantic segmentation: da delle immagini estrae le mappe
+- poi codice che dalle mappe estrae e genera i log 
+- poi codice che da un video estrae dei frame generando delle immagini
+- i log vanno passati al main e il main genera gli individui
