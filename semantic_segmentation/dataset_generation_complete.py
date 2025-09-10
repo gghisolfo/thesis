@@ -5,10 +5,10 @@ import cv2
 from tqdm import tqdm
 
 # === Config ===
-INPUT_PKL_PATH = "./arkanoid_atom/logs/arkanoid_logs/arkanoid_log_2025_04_15_09_35_00.pkl"
-OUTPUT_IMAGES_DIR = "./arkanoid_atom/semantic_segmentation/output/images"
-OUTPUT_MASKS_DIR = "./arkanoid_atom/semantic_segmentation/output/masks"
-OUTPUT_MASKS_COLOR_DIR = "./arkanoid_atom/semantic_segmentation/output/masks_color"
+INPUT_PKL_PATH = "./logs/arkanoid_logs/arkanoid_log_2025_02_07_16_03_00.pkl"
+OUTPUT_IMAGES_DIR = "./semantic_segmentation/output/images"
+OUTPUT_MASKS_DIR = "./semantic_segmentation/output/masks"
+OUTPUT_MASKS_COLOR_DIR = "./semantic_segmentation/output/masks_color"
 
 # Etichette semantiche
 LABELS = {
