@@ -117,8 +117,8 @@ def mask_rgb_to_class(mask_rgb: np.ndarray) -> np.ndarray:
 # loader = DataLoader(dataset, batch_size=batch_size, shuffle=True)
 
 
-images_dir = "C:/Users/user/Documents/UNI/TESI/thesis/semantic_segmentation/output/images"
-masks_dir  = "C:/Users/user/Documents/UNI/TESI/thesis/semantic_segmentation/output/masks_color"
+images_dir = "C:/Users/user/Documents/UNI/TESI/thesis/semantic_segmentation/dataset/images"
+masks_dir  = "C:/Users/user/Documents/UNI/TESI/thesis/semantic_segmentation/dataset/masks_color"
 
 image_files = sorted([os.path.join(images_dir, f) for f in os.listdir(images_dir) if f.endswith(".png")])
 mask_files  = sorted([os.path.join(masks_dir, f) for f in os.listdir(masks_dir) if f.endswith(".png")])
@@ -165,7 +165,7 @@ optimizer = torch.optim.Adam(model.parameters(), lr=1e-3) #prima 1e-4
 # =========================
 # TRAINING LOOP SEMPLICE
 # =========================
-num_epochs = 20
+num_epochs = 3
 
 for epoch in range(num_epochs):
     model.train()
@@ -264,13 +264,21 @@ def evaluate_miou(model, dataloader, num_classes):
 
 
 
-def evaluate_miou_and_visualization(model, dataloader, num_classes, device="cuda"):
+def evaluate_miou_and_visualization(model, dataloader, num_classes, device="cpu"):
+    print("valutando ... ")
     model.eval()
     intersection_per_class = np.zeros(num_classes, dtype=np.float64)
     union_per_class = np.zeros(num_classes, dtype=np.float64)
+    max_samples = 3
 
     with torch.no_grad():
-        for imgs, masks in dataloader:
+        # for imgs, masks in dataloader:
+
+
+        for i, (imgs, masks) in enumerate(dataloader):
+            if max_samples is not None and i >= max_samples:
+                break  # esce dal loop dopo max_samples batch
+
             imgs, masks = imgs.to(device), masks.to(device)
             outputs = model(imgs)
 
@@ -282,24 +290,43 @@ def evaluate_miou_and_visualization(model, dataloader, num_classes, device="cuda
             # Normalizzazione immagine per [0,1] (se necessario)
             img_vis = (img_vis - img_vis.min()) / (img_vis.max() - img_vis.min() + 1e-8)
 
-            plt.figure(figsize=(15, 5))
-            plt.subplot(1, 3, 1)
-            plt.imshow(img_vis)
-            plt.axis('off')
-            plt.title("Originale")
+            print("risultato grafico mostrato:")
 
-            plt.subplot(1, 3, 2)
-            plt.imshow(mask_vis, cmap="nipy_spectral")
-            plt.axis('off')
-            plt.title("Ground Truth")
+            # plt.figure(figsize=(15, 5))
+            # plt.subplot(1, 3, 1)
+            # plt.imshow(img_vis)
+            # plt.axis('off')
+            # plt.title("Originale")
 
-            plt.subplot(1, 3, 3)
-            plt.imshow(pred_vis, cmap="nipy_spectral")
-            plt.axis('off')
-            plt.title("Predizione")
+            # plt.subplot(1, 3, 2)
+            # plt.imshow(mask_vis, cmap="nipy_spectral")
+            # plt.axis('off')
+            # plt.title("Ground Truth")
+
+            # plt.subplot(1, 3, 3)
+            # plt.imshow(pred_vis, cmap="nipy_spectral")
+            # plt.axis('off')
+            # plt.title("Predizione")
+            # plt.show()
+
+            fig, axes = plt.subplots(1, 3, figsize=(12, 4))
+            axes[0].imshow(img_vis)
+            axes[0].set_title("Input Image")
+            axes[0].axis("off")
+
+            axes[1].imshow(mask_vis)
+            axes[1].set_title("Ground Truth")
+            axes[1].axis("off")
+
+            axes[2].imshow(pred_vis)
+            axes[2].set_title("Prediction")
+            axes[2].axis("off")
+
+            plt.tight_layout()
             plt.show()
 
             # Calcolo metriche
+            print("CALCOLO metriche ... ")
             preds = torch.argmax(outputs, dim=1).cpu().numpy()
             masks = masks.cpu().numpy()
 
@@ -323,9 +350,11 @@ def evaluate_miou_and_visualization(model, dataloader, num_classes, device="cuda
 
 
 
+print("valutando _ out1")
+#miou, iou_classes = evaluate_miou(model, test_loader, num_classes)
+miou, iou_classes = evaluate_miou_and_visualization(model, test_loader, num_classes, device)
+print("valutando _ out2")
 
-miou, iou_classes = evaluate_miou(model, test_loader, num_classes)
-# miou, iou_classes = evaluate_miou_and_visualization(model, test_loader, num_classes)
 
 print(f"\nTest mIoU: {miou:.4f}")
 for i, val in enumerate(iou_classes):

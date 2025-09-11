@@ -5,10 +5,17 @@ import cv2
 from tqdm import tqdm
 
 # === Config ===
-INPUT_PKL_PATH = "./logs/arkanoid_logs/arkanoid_log_2025_02_07_16_03_00.pkl"
-OUTPUT_IMAGES_DIR = "./semantic_segmentation/output/images"
-OUTPUT_MASKS_DIR = "./semantic_segmentation/output/masks"
-OUTPUT_MASKS_COLOR_DIR = "./semantic_segmentation/output/masks_color"
+INPUT_PKL_PATH = "../logs/arkanoid_logs/arkanoid_log_2025_07_15_16_30_15.pkl"
+OUTPUT_IMAGES_DIR = "./dataset/images"
+OUTPUT_MASKS_DIR = "./dataset/masks"
+OUTPUT_MASKS_COLOR_DIR = "./dataset/masks_color"
+
+
+# arkanoid_log_2025_04_15_09_35_00.pkl -> 211
+# arkanoid_log_2025_04_15_09_34_43.pkl -> 20
+# arkanoid_log_2025_07_15_16_29_02.pkl -> 124
+# arkanoid_log_2025_07_15_16_30_15.pkl -> 398 solo pallina e bordo
+
 
 # Etichette semantiche
 LABELS = {
@@ -64,9 +71,18 @@ for i, frame in tqdm(enumerate(data)):
         elif name.startswith("brick"):  # Fallback per eventuali brick non mappati
             draw_bbox(mask, obj, 9)
 
+
+    # pad=0
+    # # Salvataggio immagini
+    # img_path = os.path.join(OUTPUT_IMAGES_DIR, f"frame_{i:04d}.png")
+    # mask_color_path = os.path.join(OUTPUT_MASKS_COLOR_DIR, f"frame_{i:04d}.png")
+    
+    pad = 355  # numero di partenza
+
     # Salvataggio immagini
-    img_path = os.path.join(OUTPUT_IMAGES_DIR, f"frame_{i:04d}.png")
-    mask_color_path = os.path.join(OUTPUT_MASKS_COLOR_DIR, f"frame_{i:04d}.png")
+    img_path = os.path.join(OUTPUT_IMAGES_DIR, f"frame_{i+pad}.png")
+    mask_color_path = os.path.join(OUTPUT_MASKS_COLOR_DIR, f"frame_{i+pad}.png")
+
 
     cv2.imwrite(img_path, cv2.cvtColor(rgb, cv2.COLOR_RGB2BGR))
 
