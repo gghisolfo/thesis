@@ -29,14 +29,28 @@ USE_DEEPLAB = False
 IMAGE_SIZE = (120, 70)
 NUM_CLASSES = 10
 BATCH_SIZE = 4
-EPOCHS = 5
+EPOCHS = 1
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+CLASS_COLORS = np.array([
+    [0, 0, 0],        # Classe 0: nero
+    [255, 0, 0],      # Classe 1: rosso
+    [0, 255, 0],      # Classe 2: verde
+    [0, 0, 255],      # Classe 3: blu
+    [255, 255, 0],    # Classe 4: giallo
+    [255, 0, 255],    # Classe 5: magenta
+    [0, 255, 255],    # Classe 6: ciano
+    [128, 128, 128],  # Classe 7: grigio
+    [255, 165, 0],    # Classe 8: arancione
+    [255, 255, 255],  # Classe 9: bianco
+], dtype=np.uint8)
 
 # images_path= "./arkanoid_atom/semantic_segmentation/output/images"
 # masks_path= "./arkanoid_atom/semantic_segmentation/output/masks_color"
 
-images_path= "./output/images"
-masks_path= "./output/masks_color"
+images_path= "./dataset/images"
+# masks_path= "./dataset/masks_color"
+masks_path= "./dataset/masks"
 
 
 
@@ -47,7 +61,7 @@ LABEL_VALUES = [0, 25, 50, 75, 100, 125, 150, 175, 200, 225]  # 10 classi
 def map_mask(mask):
     mapped_mask = np.zeros_like(mask)
     
-    mapping = {
+    mapping_photo = {
         0: 0,
         23: 1,
         76: 2,
@@ -59,6 +73,17 @@ def map_mask(mask):
         240: 8,
         255: 9
     }
+    mapping = {
+    0: 0,
+    1: 1,
+    3: 2,
+    5: 3,
+    6: 4,
+    7: 5,
+    8: 6,
+    9: 7
+    }
+
     
     for original_value, class_index in mapping.items():
         mapped_mask[mask == original_value] = class_index
@@ -126,11 +151,11 @@ class SegmentationDataset(Dataset):
 
         # Debug e salvataggio maschere mappate per i primi 3 esempi
         if idx < 3:
-            # mask_np = np.array(mask)
-            # print("Mask before mapping:", np.unique(mask_np))
+            mask_np = np.array(mask)
+            print("Mask before mapping:", np.unique(mask_np))
 
-            # mask_np = map_mask(mask_np)
-            # print("Mask after mapping:", np.unique(mask_np))
+            mask_np = map_mask(mask_np)
+            print("Mask after mapping:", np.unique(mask_np))
 
 
             print("Classi uniche prima della mappatura:", np.unique(np.array(mask)))
@@ -189,6 +214,10 @@ def show_image(image_tensor):
     plt.show()
 
 def show_mask(mask_tensor, num_classes=10):
+
+    mask = Image.open(train_masks[0]).convert('L')
+    mask_np = np.array(mask)
+    print("Valori unici nella maschera originale:", np.unique(mask_np))
     """Visualizza la maschera di segmentazione semantica."""
     mask_np = mask_tensor.detach().cpu().numpy()
 
@@ -202,7 +231,8 @@ def show_mask(mask_tensor, num_classes=10):
         raise ValueError(f"Forma maschera non valida: {mask_np.shape}")
 
     # Visualizzazione
-    plt.imshow(label_mask, cmap='tab20', vmin=0, vmax=num_classes - 1)
+    cmap = ListedColormap(CLASS_COLORS/255.0)
+    plt.imshow(label_mask, cmap=cmap, vmin=0, vmax=num_classes - 1)#'tab20'
     plt.colorbar()
     plt.axis('off')
     plt.title("Mask")
@@ -350,52 +380,8 @@ print("Modello salvato come segmentation_model.pth")
 save_dir = "predictions"
 os.makedirs(save_dir, exist_ok=True)
 
-CLASS_COLORS = np.array([
-    [0, 0, 0],        # Classe 0: nero
-    [255, 0, 0],      # Classe 1: rosso
-    [0, 255, 0],      # Classe 2: verde
-    [0, 0, 255],      # Classe 3: blu
-    [255, 255, 0],    # Classe 4: giallo
-    [255, 0, 255],    # Classe 5: magenta
-    [0, 255, 255],    # Classe 6: ciano
-    [128, 128, 128],  # Classe 7: grigio
-    [255, 165, 0],    # Classe 8: arancione
-    [255, 255, 255],  # Classe 9: bianco
-], dtype=np.uint8)
 
 
-# for i, (images, masks) in enumerate(val_loader):
-#     images, masks = images.to(DEVICE), masks.to(DEVICE)
-#     outputs = model(images)
-#     preds = torch.argmax(outputs, dim=1)
-
-#     for j in range(images.size(0)):
-#         image = images[j].cpu().permute(1, 2, 0).numpy()  # (C, H, W) → (H, W, C)
-#         true_mask = masks[j].cpu().numpy()
-#         pred_mask = preds[j].cpu().numpy()
-
-#         color_true = CLASS_COLORS[true_mask]
-#         color_pred = CLASS_COLORS[pred_mask]
-
-#         # Visualizza
-#         fig, axes = plt.subplots(1, 3, figsize=(12, 4))
-#         axes[0].imshow(image)
-#         axes[0].set_title("Input Image")
-#         axes[0].axis("off")
-
-#         axes[1].imshow(color_true)
-#         axes[1].set_title("Ground Truth")
-#         axes[1].axis("off")
-
-#         axes[2].imshow(color_pred)
-#         axes[2].set_title("Prediction")
-#         axes[2].axis("off")
-
-#         plt.tight_layout()
-#         plt.show()
-
-#     # Per mostrare solo il primo batch, rompi qui
-#     break
 
 for i, (images, masks) in enumerate(val_loader):
     images, masks = images.to(DEVICE), masks.to(DEVICE)
@@ -405,11 +391,16 @@ for i, (images, masks) in enumerate(val_loader):
 
     for j in range(images.size(0)):
         image = images[j].cpu().permute(1, 2, 0).numpy()  # (C, H, W) → (H, W, C)
+
+        #qui
         true_mask = masks[j].cpu().numpy()
         pred_mask = preds[j].cpu().numpy()
 
-        color_true = CLASS_COLORS[true_mask]
-        color_pred = CLASS_COLORS[pred_mask]
+        true_mask_mapped = map_mask(true_mask)
+        pred_mask_mapped = pred_mask  # predizione già in 0-9 se CrossEntropyLoss
+
+        color_true = CLASS_COLORS[true_mask_mapped]
+        color_pred = CLASS_COLORS[pred_mask_mapped]
 
     fig, axes = plt.subplots(1, 3, figsize=(12, 4))
     axes[0].imshow(image)

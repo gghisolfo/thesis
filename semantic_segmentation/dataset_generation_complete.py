@@ -5,10 +5,11 @@ import cv2
 from tqdm import tqdm
 
 # === Config ===
-INPUT_PKL_PATH = "../logs/arkanoid_logs/arkanoid_log_2025_07_15_16_30_15.pkl"
+INPUT_PKL_PATH = "../logs/arkanoid_logs/arkanoid_log_2025_04_15_09_35_00.pkl"
 OUTPUT_IMAGES_DIR = "./dataset/images"
 OUTPUT_MASKS_DIR = "./dataset/masks"
 OUTPUT_MASKS_COLOR_DIR = "./dataset/masks_color"
+pad = 0  # numero di partenza
 
 
 # arkanoid_log_2025_04_15_09_35_00.pkl -> 211
@@ -31,6 +32,20 @@ LABELS = {
     # Bricks are from 9 to 34
 }
 
+# === Colormap per visualizzazione (solo per masks_color) ===
+COLOR_MAP = np.array([
+    [0, 0, 0],         # 0 - environment (sfondo) - nero
+    [0, 0, 255],       # 1 - ball - rosso
+    [255, 0, 0],       # 2 - paddle_left - blu
+    [200, 0, 0],       # 3 - paddle_center - blu medio
+    [150, 0, 0],       # 4 - paddle_right - blu scuro
+    [0, 255, 0],       # 5 - wall_left - verde
+    [0, 255, 50],      # 6 - wall_right - verde lime
+    [0, 255, 150],     # 7 - wall_top - acquamarina
+    [0, 255, 150],     # 8 - wall_bottom - acquamarina
+    [255, 255, 255]    # 9 - bricks - bianco
+], dtype=np.uint8)
+
 os.makedirs(OUTPUT_IMAGES_DIR, exist_ok=True)
 os.makedirs(OUTPUT_MASKS_DIR, exist_ok=True)
 os.makedirs(OUTPUT_MASKS_COLOR_DIR, exist_ok=True)
@@ -46,61 +61,46 @@ def draw_bbox(mask, obj, label):
 with open(INPUT_PKL_PATH, "rb") as f:
     data = pickle.load(f)
 
+
+
+
 print(f"Totale frame: {len(data)}")
 
-for i, frame in tqdm(enumerate(data)):
-    h, w = 70, 120
-    rgb = np.zeros((h, w, 3), dtype=np.uint8)
-    mask = np.zeros((h, w), dtype=np.uint8)
+for i, frame in tqdm(enumerate(data), total=len(data)):
+    h, w = 70, 120 #Dimensione frame
+    rgb = np.zeros((h, w, 3), dtype=np.uint8) #  immagine RGB
+    mask = np.zeros((h, w), dtype=np.uint8) # maschera numerica (1 canale)
 
     for name, obj in frame["elements"].items():
         if not obj["existence"]:
             continue
 
-        r = obj['color_r']
-        g = obj['color_g']
-        b = obj['color_b']
+        # Disegna nel frame RGB
+        r, g, b = obj['color_r'], obj['color_g'], obj['color_b']
+        rgb[obj['hitbox_tl_y']:obj['hitbox_br_y']+1,
+            obj['hitbox_tl_x']:obj['hitbox_br_x']+1] = [r, g, b]
 
-        # Colori nell'immagine RGB
-        rgb[obj['hitbox_tl_y']:obj['hitbox_br_y']+1, obj['hitbox_tl_x']:obj['hitbox_br_x']+1] = [r, g, b]
-
-        # Etichetta: se presente nel dizionario
+        # Disegna nella maschera numerica
         if name in LABELS:
             label = LABELS[name]
             draw_bbox(mask, obj, label)
-        elif name.startswith("brick"):  # Fallback per eventuali brick non mappati
-            draw_bbox(mask, obj, 9)
+        elif name.startswith("brick"):
+            draw_bbox(mask, obj, 9)  # fallback brick
 
+    # === Salvataggi ===
+    frame_id = i + pad
 
-    # pad=0
-    # # Salvataggio immagini
-    # img_path = os.path.join(OUTPUT_IMAGES_DIR, f"frame_{i:04d}.png")
-    # mask_color_path = os.path.join(OUTPUT_MASKS_COLOR_DIR, f"frame_{i:04d}.png")
-    
-    pad = 355  # numero di partenza
-
-    # Salvataggio immagini
-    img_path = os.path.join(OUTPUT_IMAGES_DIR, f"frame_{i+pad}.png")
-    mask_color_path = os.path.join(OUTPUT_MASKS_COLOR_DIR, f"frame_{i+pad}.png")
-
-
+    # Immagine RGB
+    img_path = os.path.join(OUTPUT_IMAGES_DIR, f"frame_{frame_id:04d}.png")
     cv2.imwrite(img_path, cv2.cvtColor(rgb, cv2.COLOR_RGB2BGR))
 
-    # Crea una LUT personalizzata (colori distinti per label)
-    color_map = np.array([
-        [0, 0, 0],         # 0 - background - black
-        [0, 0, 255],       # 1 - ball -  red
-        [255, 0, 0],       # 2 - paddle_left - blue
-        [200, 0, 0],       # 3 - paddle_center - mid blue
-        [150, 0, 0 ],       # 4 - paddle_right - dark blue
-        [0, 255, 0],       # 5 - wall_left - green
-        [0, 255, 50],      # 6 - wall_right - Verde con sfumatura lime
-        [0, 255, 150],     # 7 - wall_top -	Verde acqua (acquamarina)
-        [0, 255, 150],     # 8 - wall_bottom - Verde acqua (acquamarina)
-        [255, 255, 255]    # 9 - bricks (fallback) - white
-    ], dtype=np.uint8)
+    # Maschera numerica (1 canale, valori 0–9)
+    mask_path = os.path.join(OUTPUT_MASKS_DIR, f"frame_{frame_id:04d}.png")
+    cv2.imwrite(mask_path, mask)
 
-    mask_color = color_map[mask]
+    # Maschera colorata (per debug/visualizzazione)
+    mask_color = COLOR_MAP[mask]
+    mask_color_path = os.path.join(OUTPUT_MASKS_COLOR_DIR, f"frame_{frame_id:04d}.png")
     cv2.imwrite(mask_color_path, mask_color)
 
-print("✅ Dataset generato!")
+print("✅ Dataset generato con successo!")
