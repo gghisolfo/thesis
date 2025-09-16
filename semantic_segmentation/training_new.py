@@ -7,12 +7,12 @@ from torchvision import transforms
 import matplotlib.pyplot as plt
 from u_net import UNet
 from deep_labv3_plus import get_deeplabv3plus_model
-from Segmentation import SegmentationDataset, map_mask, CLASS_COLORS
+from segmentation import SegmentationDataset, map_mask, CLASS_COLORS
 from EarlyStopping import EarlyStopping
 from sklearn.model_selection import train_test_split
 
 # -----------------------
-# Config (modifica se necessario)
+# Config
 # -----------------------
 USE_DEEPLAB = False
 IMAGE_SIZE = (120, 70)

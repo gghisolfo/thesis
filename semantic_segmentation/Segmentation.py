@@ -74,18 +74,18 @@ class SegmentationDataset(Dataset):
         mask_np = map_mask(np.array(mask))
 
         # Debug e salvataggio maschere mappate per i primi 3 esempi
-        if idx < 3:
-            mask_np = np.array(mask)
-            print("Mask before mapping:", np.unique(mask_np))
+        # if idx < 3:
+        #     mask_np = np.array(mask)
+        #     print("Mask before mapping:", np.unique(mask_np))
 
-            mask_np = map_mask(mask_np)
-            print("Mask after mapping:", np.unique(mask_np))
+        #     mask_np = map_mask(mask_np)
+        #     print("Mask after mapping:", np.unique(mask_np))
 
-            print("Classi uniche prima della mappatura:", np.unique(np.array(mask)))
-            print("Valori unici nella maschera originale:", np.unique(mask))
+        #     print("Classi uniche prima della mappatura:", np.unique(np.array(mask)))
+        #     print("Valori unici nella maschera originale:", np.unique(mask))
 
-            mask_np = map_mask(np.array(mask))
-            print("Classi uniche dopo la mappatura:", np.unique(mask_np))
+        #     mask_np = map_mask(np.array(mask))
+        #     print("Classi uniche dopo la mappatura:", np.unique(mask_np))
 
 
             # Image.fromarray(mask_np.astype(np.uint8)).save(f"check_mask_raw_{idx}.png")
