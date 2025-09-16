@@ -12,8 +12,8 @@ NUM_CLASSES = 10
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 BATCH_SIZE = 1          # batch tipico per inference
 USE_DEEPLAB = False     # False se stai usando UNet
-MAX_IMAGES = 5          # numero massimo di immagini da visualizzare
-IMAGES_FOLDER = "./dataset/real_images"  # cartella con le immagini da inferire
+MAX_IMAGES = 25          # numero massimo di immagini da visualizzare
+IMAGES_FOLDER = "./real_images/images"  # cartella con le immagini da inferire
 
 # ----------------------- Dataset custom per immagini singole -----------------------
 class InferenceDataset(Dataset):

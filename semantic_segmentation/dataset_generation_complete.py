@@ -3,13 +3,14 @@ import pickle
 import numpy as np
 import cv2
 from tqdm import tqdm
+from segmentation import CLASS_COLORS
 
 # === Config ===
-INPUT_PKL_PATH = "../logs/arkanoid_logs/arkanoid_log_2025_07_15_16_30_15.pkl"
+INPUT_PKL_PATH = "../logs/arkanoid_logs/arkanoid_log_2025_04_15_09_34_43.pkl"
 OUTPUT_IMAGES_DIR = "./real_images/images"#"./dataset/test/images"#"./dataset/images"
 OUTPUT_MASKS_DIR = "./real_images/masks"#"./dataset/test/masks"#"./dataset/masks"
 OUTPUT_MASKS_COLOR_DIR = "./real_images/masks_color"#"./dataset/test/masks_color"#"./dataset/masks_color"
-pad = 0  # numero di partenza
+pad = 6  # numero di partenza
 
 
 # arkanoid_log_2025_04_15_09_35_00.pkl -> 211
@@ -46,6 +47,22 @@ COLOR_MAP = np.array([
     [0, 255, 150],     # 8 - wall_bottom - acquamarina
     [255, 255, 255]    # 9 - bricks - bianco
 ], dtype=np.uint8)
+
+NEW_COLOR_MAP = np.array([
+    [0, 0, 0],         # 0 - background - nero
+    [255, 128, 0],     # 1 - arancione
+    [128, 0, 255],     # 2 - viola
+    [0, 255, 255],     # 3 - ciano
+    [255, 0, 128],     # 4 - rosa
+    [0, 255, 0],       # 5 - verde acceso
+    [128, 255, 0],     # 6 - verde-lime
+    [0, 128, 255],     # 7 - blu cielo
+    [255, 255, 0],     # 8 - giallo
+    [255, 255, 255]    # 9 - bianco
+], dtype=np.uint8)
+
+#COLOR_MAP=CLASS_COLORS
+COLOR_MAP=NEW_COLOR_MAP
 
 os.makedirs(OUTPUT_IMAGES_DIR, exist_ok=True)
 os.makedirs(OUTPUT_MASKS_DIR, exist_ok=True)
