@@ -8,6 +8,7 @@ import numpy as np
 import random
 import os
 import matplotlib.pyplot as plt
+from segmentation import CLASS_COLORS
 
 # =========================
 # CONFIGURAZIONE
@@ -103,7 +104,7 @@ def mask_rgb_to_class(mask_rgb: np.ndarray) -> np.ndarray:
 # PREPARA DATASET E DATALOADER
 # =========================
 images_dir = "C:/Users/user/Documents/UNI/TESI/thesis/semantic_segmentation/dataset/images"
-masks_dir  = "C:/Users/user/Documents/UNI/TESI/thesis/semantic_segmentation/dataset/masks_color"
+masks_dir  = "C:/Users/user/Documents/UNI/TESI/thesis/semantic_segmentation/dataset/masks"
 
 image_files = sorted([os.path.join(images_dir, f) for f in os.listdir(images_dir) if f.endswith(".png")])
 mask_files  = sorted([os.path.join(masks_dir, f) for f in os.listdir(masks_dir) if f.endswith(".png")])
@@ -211,18 +212,18 @@ with torch.no_grad():
 
 seg_map_orig = np.array(Image.fromarray(seg_map.astype(np.uint8)).resize(img.size, resample=Image.NEAREST))
 
-colors = np.array([
-    [0, 0, 0],
-    [255, 0, 0],
-    [0, 255, 0],
-    [0, 0, 255],
-    [255, 255, 0],
-    [0, 255, 255],
-    [255, 0, 255],
-    [255, 165, 0],
-    [128, 0, 128],
-    [192, 192, 192]
-], dtype=np.uint8)
+# colors = np.array([
+#     [0, 0, 0],
+#     [255, 0, 0],
+#     [0, 255, 0],
+#     [0, 0, 255],
+#     [255, 255, 0],
+#     [0, 255, 255],
+#     [255, 0, 255],
+#     [255, 165, 0],
+#     [128, 0, 128],
+#     [192, 192, 192]
+# ], dtype=np.uint8)
 
 # CLASS_COLORS = np.array([
 #     [0, 0, 0],        # Classe 0: nero
@@ -238,7 +239,7 @@ colors = np.array([
 # ], dtype=np.uint8)
 
 
-seg_rgb = colors[seg_map_orig]
+seg_rgb = CLASS_COLORS[seg_map_orig]
 
 
 # =========================
@@ -274,8 +275,8 @@ def evaluate_miou_and_visualization(model, dataloader, num_classes, device="cpu"
                 pred_mask = preds[j].cpu().numpy()
 
                 # Mappa colori (es. CLASS_COLORS- colors definito come array NumPy [num_classes, 3])
-                color_true = colors[true_mask]
-                color_pred = colors[pred_mask]
+                color_true = CLASS_COLORS[true_mask]
+                color_pred = CLASS_COLORS[pred_mask]
 
                 # Visualizzazione
                 fig, axes = plt.subplots(1, 3, figsize=(15,5))
