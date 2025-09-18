@@ -14,6 +14,7 @@ BATCH_SIZE = 1          # batch tipico per inference
 USE_DEEPLAB = False     # False se stai usando UNet
 MAX_IMAGES = 25          # numero massimo di immagini da visualizzare
 IMAGES_FOLDER = "./real_images/images"  # cartella con le immagini da inferire
+model_path = "segmentation_model.pth"
 
 # ----------------------- Dataset custom per immagini singole -----------------------
 class InferenceDataset(Dataset):
@@ -38,7 +39,7 @@ model = UNet(3, NUM_CLASSES)
 model = model.to(DEVICE)
 
 print("Carica pesi salvati...")
-model.load_state_dict(torch.load("segmentation_model.pth", map_location=DEVICE))
+model.load_state_dict(torch.load(model_path, map_location=DEVICE))
 model.eval()
 
 # ----------------------- DataLoader -----------------------

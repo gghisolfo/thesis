@@ -17,8 +17,9 @@ num_classes = 10
 batch_size = 4
 device = "cuda" if torch.cuda.is_available() else "cpu"
 test_split = 0.2
-num_epochs = 3
+num_epochs = 10
 training_mode = "decoder_only"  # "decoder_only" | "fine_tune" | "frozen"
+SAVE_MODEL = True
 
 # =========================
 # PAD AUTOMATICO
@@ -69,8 +70,8 @@ mask_transform = transforms.Compose([
 # =========================
 # PREPARA DATASET E DATALOADER
 # =========================
-images_dir = "C:/Users/user/Documents/UNI/TESI/thesis/semantic_segmentation/dataset/images"
-masks_dir  = "C:/Users/user/Documents/UNI/TESI/thesis/semantic_segmentation/dataset/masks"
+images_dir = "./dataset/images"
+masks_dir  = "./dataset/masks"
 
 image_files = sorted([os.path.join(images_dir, f) for f in os.listdir(images_dir) if f.endswith(".png")])
 mask_files  = sorted([os.path.join(masks_dir, f) for f in os.listdir(masks_dir) if f.endswith(".png")])
@@ -145,75 +146,82 @@ if training_mode != "frozen":
 
         print(f"Epoch [{epoch+1}/{num_epochs}] Loss: {running_loss/len(train_loader):.4f}")
 
-# =========================
-# INFERENZA SU UNA IMMAGINE
-# =========================
-model.eval()
-test_img_path = test_images[0]
-img = Image.open(test_img_path).convert("RGB")
-img_tensor = image_transform(img).unsqueeze(0).to(device)
 
-with torch.no_grad():
-    output = model(img_tensor)
-    seg_map = torch.argmax(output, dim=1)[0].cpu().numpy()
+        if SAVE_MODEL:
+            save_path = "unet_finetuned.pth"
+            torch.save(model.state_dict(), save_path)
+            print(f"Modello salvato come {save_path}")
 
-# Pad inverso per tornare alla dimensione originale
-seg_map_resized = np.array(Image.fromarray(seg_map.astype(np.uint8)).resize(img.size, resample=Image.NEAREST))
-seg_rgb = CLASS_COLORS[seg_map_resized]
 
-# =========================
-# FUNZIONE DI VALUTAZIONE mIoU
-# =========================
-def evaluate_miou_and_visualization(model, dataloader, num_classes, device="cpu", max_samples=3):
-    print("Valutazione mIoU ...")
-    model.eval()
+# # =========================
+# # INFERENZA SU UNA IMMAGINE
+# # =========================
+# model.eval()
+# test_img_path = test_images[0]
+# img = Image.open(test_img_path).convert("RGB")
+# img_tensor = image_transform(img).unsqueeze(0).to(device)
+
+# with torch.no_grad():
+#     output = model(img_tensor)
+#     seg_map = torch.argmax(output, dim=1)[0].cpu().numpy()
+
+# # Pad inverso per tornare alla dimensione originale
+# seg_map_resized = np.array(Image.fromarray(seg_map.astype(np.uint8)).resize(img.size, resample=Image.NEAREST))
+# seg_rgb = CLASS_COLORS[seg_map_resized]
+
+# # =========================
+# # FUNZIONE DI VALUTAZIONE mIoU
+# # =========================
+# def evaluate_miou_and_visualization(model, dataloader, num_classes, device="cpu", max_samples=3):
+#     print("Valutazione mIoU ...")
+#     model.eval()
     
-    intersection_per_class = np.zeros(num_classes, dtype=np.float64)
-    union_per_class = np.zeros(num_classes, dtype=np.float64)
+#     intersection_per_class = np.zeros(num_classes, dtype=np.float64)
+#     union_per_class = np.zeros(num_classes, dtype=np.float64)
     
-    samples_processed = 0
-    with torch.no_grad():
-        for imgs, masks in dataloader:
-            imgs, masks = imgs.to(device), masks.to(device)
-            outputs = model(imgs)
-            preds = torch.argmax(outputs, dim=1)
+#     samples_processed = 0
+#     with torch.no_grad():
+#         for imgs, masks in dataloader:
+#             imgs, masks = imgs.to(device), masks.to(device)
+#             outputs = model(imgs)
+#             preds = torch.argmax(outputs, dim=1)
 
-            for j in range(imgs.size(0)):
-                image = imgs[j].cpu().permute(1,2,0).numpy()
-                image = (image - image.min()) / (image.max() - image.min() + 1e-8)
+#             for j in range(imgs.size(0)):
+#                 image = imgs[j].cpu().permute(1,2,0).numpy()
+#                 image = (image - image.min()) / (image.max() - image.min() + 1e-8)
 
-                true_mask = masks[j].cpu().numpy()
-                pred_mask = preds[j].cpu().numpy()
+#                 true_mask = masks[j].cpu().numpy()
+#                 pred_mask = preds[j].cpu().numpy()
 
-                color_true = CLASS_COLORS[true_mask]
-                color_pred = CLASS_COLORS[pred_mask]
+#                 color_true = CLASS_COLORS[true_mask]
+#                 color_pred = CLASS_COLORS[pred_mask]
 
-                fig, axes = plt.subplots(1,3,figsize=(15,5))
-                axes[0].imshow(image); axes[0].set_title("Input"); axes[0].axis("off")
-                axes[1].imshow(color_true); axes[1].set_title("Ground Truth"); axes[1].axis("off")
-                axes[2].imshow(color_pred); axes[2].set_title("Prediction"); axes[2].axis("off")
-                plt.show()
+#                 fig, axes = plt.subplots(1,3,figsize=(15,5))
+#                 axes[0].imshow(image); axes[0].set_title("Input"); axes[0].axis("off")
+#                 axes[1].imshow(color_true); axes[1].set_title("Ground Truth"); axes[1].axis("off")
+#                 axes[2].imshow(color_pred); axes[2].set_title("Prediction"); axes[2].axis("off")
+#                 plt.show()
 
-                for c in range(num_classes):
-                    pred_c = (pred_mask == c)
-                    mask_c = (true_mask == c)
-                    intersection_per_class[c] += np.logical_and(pred_c, mask_c).sum()
-                    union_per_class[c] += np.logical_or(pred_c, mask_c).sum()
+#                 for c in range(num_classes):
+#                     pred_c = (pred_mask == c)
+#                     mask_c = (true_mask == c)
+#                     intersection_per_class[c] += np.logical_and(pred_c, mask_c).sum()
+#                     union_per_class[c] += np.logical_or(pred_c, mask_c).sum()
 
-                samples_processed += 1
-                if max_samples is not None and samples_processed >= max_samples:
-                    break
-            if max_samples is not None and samples_processed >= max_samples:
-                break
+#                 samples_processed += 1
+#                 if max_samples is not None and samples_processed >= max_samples:
+#                     break
+#             if max_samples is not None and samples_processed >= max_samples:
+#                 break
 
-    iou_per_class = intersection_per_class / (union_per_class + 1e-8)
-    miou = np.mean(iou_per_class[union_per_class>0])
-    return miou, iou_per_class
+#     iou_per_class = intersection_per_class / (union_per_class + 1e-8)
+#     miou = np.mean(iou_per_class[union_per_class>0])
+#     return miou, iou_per_class
 
-# =========================
-# VALUTAZIONE
-# =========================
-miou, iou_classes = evaluate_miou_and_visualization(model, test_loader, num_classes, device)
-print(f"\nTest mIoU: {miou:.4f}")
-for i, val in enumerate(iou_classes):
-    print(f"Classe {i}: IoU = {val:.4f}")
+# # =========================
+# # VALUTAZIONE
+# # =========================
+# miou, iou_classes = evaluate_miou_and_visualization(model, test_loader, num_classes, device)
+# print(f"\nTest mIoU: {miou:.4f}")
+# for i, val in enumerate(iou_classes):
+#     print(f"Classe {i}: IoU = {val:.4f}")
