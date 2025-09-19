@@ -17,8 +17,8 @@ num_classes = 10
 batch_size = 4
 device = "cuda" if torch.cuda.is_available() else "cpu"
 test_split = 0.2
-num_epochs = 10
-training_mode = "decoder_only"  # "decoder_only" | "fine_tune" | "frozen"
+num_epochs = 30 # 7 | 30
+training_mode = "fine_tune"  # "decoder_only" | "fine_tune" | "frozen"
 SAVE_MODEL = True
 
 # =========================
@@ -95,12 +95,47 @@ print(f"Train: {len(train_dataset)} immagini, Test: {len(test_dataset)} immagini
 # =========================
 # CREA MODELLO U-NET
 # =========================
-model = smp.Unet(
-    encoder_name="resnet34",
-    encoder_weights="imagenet",
-    classes=num_classes,
-    activation=None
-).to(device)
+#"decoder_only" parte da ImageNet, allena decoder.
+# "fine_tune" riparte dal tuo unet_decoder.pth.
+# "frozen" carica direttamente il modello finale (per inferenza).
+
+if training_mode == "decoder_only":
+    model = smp.Unet(
+        encoder_name="resnet34",
+        encoder_weights="imagenet",
+        classes=num_classes,
+        activation=None
+    ).to(device)
+
+elif training_mode == "fine_tune":
+    model = smp.Unet(
+        encoder_name="resnet34",
+        encoder_weights=None,   # non ricaricare da ImageNet
+        classes=num_classes,
+        activation=None
+    ).to(device)
+
+    checkpoint_path = "unet_finetuned.pth"
+    assert os.path.exists(checkpoint_path), f"{checkpoint_path} non trovato!"
+    model.load_state_dict(torch.load(checkpoint_path, map_location=device))
+
+elif training_mode == "frozen":
+    model = smp.Unet(
+        encoder_name="resnet34",
+        encoder_weights=None,
+        classes=num_classes,
+        activation=None
+    ).to(device)
+
+    checkpoint_path = "unet_finetuned.pth"
+    assert os.path.exists(checkpoint_path), f"{checkpoint_path} non trovato!"
+    model.load_state_dict(torch.load(checkpoint_path, map_location=device))
+
+else:
+    raise ValueError(f"Training mode '{training_mode}' non valido!")
+
+
+
 
 # =========================
 # MODALITÀ TRAINING
@@ -124,7 +159,30 @@ else:
 # LOSS E OTTIMIZZATORE
 # =========================
 criterion = nn.CrossEntropyLoss()
-optimizer = torch.optim.Adam(filter(lambda p: p.requires_grad, model.parameters()), lr=1e-3) if training_mode != "frozen" else None
+# optimizer = torch.optim.Adam(filter(lambda p: p.requires_grad, model.parameters()), lr=LR) if training_mode != "frozen" else None
+if training_mode == "decoder_only":
+    # Alleno SOLO il decoder, encoder congelato
+    optimizer = torch.optim.Adam(
+        filter(lambda p: p.requires_grad, model.parameters()),
+        lr=1e-3
+    )
+
+elif training_mode == "fine_tune":
+    # Alleno encoder + decoder, con LR diversi
+    optimizer = torch.optim.Adam([
+        {"params": model.encoder.parameters(), "lr": 1e-5},   # encoder più lento
+        {"params": model.decoder.parameters(), "lr": 1e-4},   # decoder più veloce
+    ])
+
+elif training_mode == "frozen":
+    # Nessun training → niente optimizer
+    optimizer = None
+
+else:
+    raise ValueError(f"Training mode '{training_mode}' non valido!")
+
+
+
 
 # =========================
 # TRAINING LOOP
@@ -147,7 +205,7 @@ if training_mode != "frozen":
         print(f"Epoch [{epoch+1}/{num_epochs}] Loss: {running_loss/len(train_loader):.4f}")
 
 
-        if SAVE_MODEL:
+        if SAVE_MODEL :
             save_path = "unet_finetuned.pth"
             torch.save(model.state_dict(), save_path)
             print(f"Modello salvato come {save_path}")
