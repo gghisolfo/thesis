@@ -6,17 +6,17 @@ import pickle
 
 def main():
 
-    simple_arkanoid_log_file_name = 'arkanoid_log_2025_02_07_16_03_00.pkl'
+    simple_arkanoid_log_file_name = 'reconstructed_log.pkl'  # '../components/log_generator.py' |'arkanoid_log_2025_02_07_16_03_00.pkl'
     complete_arkanoid_lose_log_file_name = 'arkanoid_log_2025_02_07_16_06_40.pkl'
     complete_arkanoid_win_log_file_name = 'arkanoid_log_2025_02_07_10_58_26.pkl'
     complete_arkanoid_win_2_log_file_name = 'arkanoid_log_2025_02_07_15_44_51.pkl'
     
-    patches_per_frame, global_events_per_frame = load_patches_per_frame(None) # last log
+    #patches_per_frame, global_events_per_frame = load_patches_per_frame(None) # last log
 
     #patches_per_frame = debug_patches_per_frame
     #global_events_per_frame = [[] for _ in range(len(debug_patches_per_frame))]
 
-    #patches_per_frame, global_events_per_frame = load_patches_per_frame(simple_arkanoid_log_file_name)
+    patches_per_frame, global_events_per_frame = load_patches_per_frame(simple_arkanoid_log_file_name)
 
     #patches_per_frame, global_events_per_frame = load_patches_per_frame(complete_arkanoid_lose_log_file_name)
 
