@@ -17,6 +17,7 @@ def main():
     #global_events_per_frame = [[] for _ in range(len(debug_patches_per_frame))]
 
     patches_per_frame, global_events_per_frame = load_patches_per_frame(simple_arkanoid_log_file_name)
+    print("out")
     print(len(patches_per_frame))
     print(patches_per_frame[0])
 
@@ -37,7 +38,9 @@ def main():
 
     #population = euristic_initialization(patches_per_frame, global_events_per_frame)
     stop_at = -15
+    print(f'patches_per_frame - here: {len(patches_per_frame[:stop_at])}')
     population = euristic_initialization(patches_per_frame[:stop_at], global_events_per_frame[:stop_at])
+    print(f'n° individuals here: {len(population)}')
     
     print('\n\n=====================================\neuristic_initialization end\n=====================================\n')
 
