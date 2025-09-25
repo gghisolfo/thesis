@@ -6,7 +6,7 @@ from tqdm import tqdm
 from segmentation import CLASS_COLORS
 
 # === Config ===
-INPUT_PKL_PATH = "../logs/arkanoid_logs/arkanoid_log_2025_02_07_16_03_00.pkl"
+INPUT_PKL_PATH = "../logs/arkanoid_logs/arkanoid_log_2025_07_15_16_29_02.pkl"
 OUTPUT_IMAGES_DIR = "./dataset/images"#"./dataset/test/images"#"./dataset/images"
 OUTPUT_MASKS_DIR = "./dataset/masks"#"./dataset/test/masks"#"./dataset/masks"
 OUTPUT_MASKS_COLOR_DIR = "./dataset/masks_color"#"./dataset/test/masks_color"#"./dataset/masks_color"
