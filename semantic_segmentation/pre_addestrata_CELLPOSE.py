@@ -6,7 +6,7 @@ import cv2
 import matplotlib.pyplot as plt
 
 # path immagine
-img_path = "C:/Users/user/Documents/UNI/TESI/thesis/semantic_segmentation/real_images/frame_0008.png"
+img_path = "C:/Users/user/Documents/UNI/TESI/thesis/semantic_segmentation/real_images/images/frame_0008.png"
 img = cv2.imread(img_path, cv2.IMREAD_GRAYSCALE)
 
 if img is None:
