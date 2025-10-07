@@ -5,7 +5,7 @@ import numpy as np
 from copy import deepcopy
 
 # === Config ===
-INPUT_MASKS_DIR = "../semantic_segmentation/dataset/masks"
+INPUT_MASKS_DIR = "../semantic_segmentation/real_images/masks"#"../semantic_segmentation/dataset/masks"
 OUTPUT_PKL_PATH = "../logs/arkanoid_logs/reconstructed_log_clean.pkl"
 REFERENCE_PKL_PATH = "../logs/arkanoid_logs/arkanoid_log_2025_02_07_16_03_00.pkl"
 
