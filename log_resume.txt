@@ -7,122 +7,102 @@ obj_0
 
 rules: []
 
-frame 0 - patch: Patch(wall_left, [('pos_x', 1), ('pos_y', 35), ('shape_x', 1), ('shape_y', 35)])
+frame 0 - patch: Patch(wall_left, [('pos_x', 1), ('pos_y', 35), ('shape_x', 1), ('shape_y', 32)])
 - unexplained: []
 - explained: []
 - events: []
-- global events: [game_start]
-frame 1 - patch: Patch(wall_left, [('pos_x', 1), ('pos_y', 35), ('shape_x', 1), ('shape_y', 35)])
-- unexplained: []
-- explained: []
-- events: []
-- global events: []
-frame 2 - patch: Patch(wall_left, [('pos_x', 1), ('pos_y', 35), ('shape_x', 1), ('shape_y', 35)])
+- global events: [left_arrow_pressed, game_start]
+frame 1 - patch: Patch(wall_left, [('pos_x', 1), ('pos_y', 35), ('shape_x', 1), ('shape_y', 32)])
 - unexplained: []
 - explained: []
 - events: []
 - global events: []
-frame 3 - patch: Patch(wall_left, [('pos_x', 1), ('pos_y', 35), ('shape_x', 1), ('shape_y', 35)])
+frame 2 - patch: Patch(wall_left, [('pos_x', 1), ('pos_y', 35), ('shape_x', 1), ('shape_y', 32)])
 - unexplained: []
 - explained: []
 - events: []
 - global events: []
-frame 4 - patch: Patch(wall_left, [('pos_x', 1), ('pos_y', 35), ('shape_x', 1), ('shape_y', 35)])
+frame 3 - patch: Patch(wall_left, [('pos_x', 1), ('pos_y', 35), ('shape_x', 1), ('shape_y', 32)])
 - unexplained: []
 - explained: []
 - events: []
 - global events: []
-frame 5 - patch: Patch(wall_left, [('pos_x', 1), ('pos_y', 35), ('shape_x', 1), ('shape_y', 35)])
+frame 4 - patch: Patch(wall_left, [('pos_x', 1), ('pos_y', 35), ('shape_x', 1), ('shape_y', 32)])
 - unexplained: []
 - explained: []
 - events: []
 - global events: []
-frame 6 - patch: Patch(wall_left, [('pos_x', 1), ('pos_y', 35), ('shape_x', 1), ('shape_y', 35)])
+frame 5 - patch: Patch(wall_left, [('pos_x', 1), ('pos_y', 35), ('shape_x', 1), ('shape_y', 32)])
 - unexplained: []
 - explained: []
 - events: []
 - global events: []
-frame 7 - patch: Patch(wall_left, [('pos_x', 1), ('pos_y', 35), ('shape_x', 1), ('shape_y', 35)])
+frame 6 - patch: Patch(wall_left, [('pos_x', 1), ('pos_y', 35), ('shape_x', 1), ('shape_y', 32)])
 - unexplained: []
 - explained: []
 - events: []
 - global events: []
-frame 8 - patch: Patch(wall_left, [('pos_x', 1), ('pos_y', 35), ('shape_x', 1), ('shape_y', 35)])
+frame 7 - patch: Patch(wall_left, [('pos_x', 1), ('pos_y', 35), ('shape_x', 1), ('shape_y', 32)])
 - unexplained: []
 - explained: []
 - events: []
 - global events: []
-frame 9 - patch: Patch(wall_left, [('pos_x', 1), ('pos_y', 35), ('shape_x', 1), ('shape_y', 35)])
+frame 8 - patch: Patch(wall_left, [('pos_x', 1), ('pos_y', 35), ('shape_x', 1), ('shape_y', 32)])
 - unexplained: []
 - explained: []
 - events: []
 - global events: []
-frame 10 - patch: Patch(wall_left, [('pos_x', 1), ('pos_y', 35), ('shape_x', 1), ('shape_y', 35)])
+frame 9 - patch: Patch(wall_left, [('pos_x', 1), ('pos_y', 35), ('shape_x', 1), ('shape_y', 32)])
 - unexplained: []
 - explained: []
 - events: []
 - global events: []
-frame 11 - patch: Patch(wall_left, [('pos_x', 1), ('pos_y', 35), ('shape_x', 1), ('shape_y', 35)])
+frame 10 - patch: Patch(wall_left, [('pos_x', 1), ('pos_y', 35), ('shape_x', 1), ('shape_y', 32)])
 - unexplained: []
 - explained: []
 - events: []
 - global events: []
-frame 12 - patch: Patch(wall_left, [('pos_x', 1), ('pos_y', 35), ('shape_x', 1), ('shape_y', 35)])
+frame 11 - patch: Patch(wall_left, [('pos_x', 1), ('pos_y', 35), ('shape_x', 1), ('shape_y', 32)])
 - unexplained: []
 - explained: []
 - events: []
 - global events: []
-frame 13 - patch: Patch(wall_left, [('pos_x', 1), ('pos_y', 35), ('shape_x', 1), ('shape_y', 35)])
+frame 12 - patch: Patch(wall_left, [('pos_x', 1), ('pos_y', 35), ('shape_x', 1), ('shape_y', 32)])
 - unexplained: []
 - explained: []
 - events: []
 - global events: []
-frame 14 - patch: Patch(wall_left, [('pos_x', 1), ('pos_y', 35), ('shape_x', 1), ('shape_y', 35)])
+frame 13 - patch: Patch(wall_left, [('pos_x', 1), ('pos_y', 35), ('shape_x', 1), ('shape_y', 32)])
 - unexplained: []
 - explained: []
 - events: []
 - global events: []
-frame 15 - patch: Patch(wall_left, [('pos_x', 1), ('pos_y', 35), ('shape_x', 1), ('shape_y', 35)])
+frame 14 - patch: Patch(wall_left, [('pos_x', 1), ('pos_y', 35), ('shape_x', 1), ('shape_y', 32)])
 - unexplained: []
 - explained: []
 - events: []
 - global events: []
-frame 16 - patch: Patch(wall_left, [('pos_x', 1), ('pos_y', 35), ('shape_x', 1), ('shape_y', 35)])
+frame 15 - patch: Patch(wall_left, [('pos_x', 1), ('pos_y', 35), ('shape_x', 1), ('shape_y', 32)])
 - unexplained: []
 - explained: []
 - events: []
 - global events: []
-frame 17 - patch: Patch(wall_left, [('pos_x', 1), ('pos_y', 35), ('shape_x', 1), ('shape_y', 35)])
+frame 16 - patch: Patch(wall_left, [('pos_x', 1), ('pos_y', 35), ('shape_x', 1), ('shape_y', 32)])
 - unexplained: []
 - explained: []
 - events: []
 - global events: []
-frame 18 - patch: Patch(wall_left, [('pos_x', 1), ('pos_y', 35), ('shape_x', 1), ('shape_y', 35)])
+frame 17 - patch: Patch(wall_left, [('pos_x', 1), ('pos_y', 35), ('shape_x', 1), ('shape_y', 32)])
 - unexplained: []
 - explained: []
 - events: []
 - global events: []
-frame 19 - patch: Patch(wall_left, [('pos_x', 1), ('pos_y', 35), ('shape_x', 1), ('shape_y', 35)])
+frame 18 - patch: Patch(wall_left, [('pos_x', 1), ('pos_y', 35), ('shape_x', 1), ('shape_y', 32)])
 - unexplained: []
 - explained: []
 - events: []
 - global events: []
-frame 20 - patch: Patch(wall_left, [('pos_x', 1), ('pos_y', 35), ('shape_x', 1), ('shape_y', 35)])
-- unexplained: []
-- explained: []
-- events: []
-- global events: []
-frame 21 - patch: Patch(wall_left, [('pos_x', 1), ('pos_y', 35), ('shape_x', 1), ('shape_y', 35)])
-- unexplained: []
-- explained: []
-- events: []
-- global events: []
-frame 22 - patch: Patch(wall_left, [('pos_x', 1), ('pos_y', 35), ('shape_x', 1), ('shape_y', 35)])
-- unexplained: []
-- explained: []
-- events: []
-- global events: []
-frame 23 - patch: Patch(wall_left, [('pos_x', 1), ('pos_y', 35), ('shape_x', 1), ('shape_y', 35)])
+frame 19 - patch: Patch(wall_left, [('pos_x', 1), ('pos_y', 35), ('shape_x', 1), ('shape_y', 32)])
 - unexplained: []
 - explained: []
 - events: []
@@ -132,122 +112,102 @@ obj_1
 
 rules: []
 
-frame 0 - patch: Patch(wall_right, [('pos_x', 118), ('pos_y', 35), ('shape_x', 1), ('shape_y', 35)])
+frame 0 - patch: Patch(wall_right, [('pos_x', 119), ('pos_y', 35), ('shape_x', 1), ('shape_y', 32)])
 - unexplained: []
 - explained: []
 - events: []
-- global events: [game_start]
-frame 1 - patch: Patch(wall_right, [('pos_x', 118), ('pos_y', 35), ('shape_x', 1), ('shape_y', 35)])
-- unexplained: []
-- explained: []
-- events: []
-- global events: []
-frame 2 - patch: Patch(wall_right, [('pos_x', 118), ('pos_y', 35), ('shape_x', 1), ('shape_y', 35)])
+- global events: [left_arrow_pressed, game_start]
+frame 1 - patch: Patch(wall_right, [('pos_x', 119), ('pos_y', 35), ('shape_x', 1), ('shape_y', 32)])
 - unexplained: []
 - explained: []
 - events: []
 - global events: []
-frame 3 - patch: Patch(wall_right, [('pos_x', 118), ('pos_y', 35), ('shape_x', 1), ('shape_y', 35)])
+frame 2 - patch: Patch(wall_right, [('pos_x', 119), ('pos_y', 35), ('shape_x', 1), ('shape_y', 32)])
 - unexplained: []
 - explained: []
 - events: []
 - global events: []
-frame 4 - patch: Patch(wall_right, [('pos_x', 118), ('pos_y', 35), ('shape_x', 1), ('shape_y', 35)])
+frame 3 - patch: Patch(wall_right, [('pos_x', 119), ('pos_y', 35), ('shape_x', 1), ('shape_y', 32)])
 - unexplained: []
 - explained: []
 - events: []
 - global events: []
-frame 5 - patch: Patch(wall_right, [('pos_x', 118), ('pos_y', 35), ('shape_x', 1), ('shape_y', 35)])
+frame 4 - patch: Patch(wall_right, [('pos_x', 119), ('pos_y', 35), ('shape_x', 1), ('shape_y', 32)])
 - unexplained: []
 - explained: []
 - events: []
 - global events: []
-frame 6 - patch: Patch(wall_right, [('pos_x', 118), ('pos_y', 35), ('shape_x', 1), ('shape_y', 35)])
+frame 5 - patch: Patch(wall_right, [('pos_x', 119), ('pos_y', 35), ('shape_x', 1), ('shape_y', 32)])
 - unexplained: []
 - explained: []
 - events: []
 - global events: []
-frame 7 - patch: Patch(wall_right, [('pos_x', 118), ('pos_y', 35), ('shape_x', 1), ('shape_y', 35)])
+frame 6 - patch: Patch(wall_right, [('pos_x', 119), ('pos_y', 35), ('shape_x', 1), ('shape_y', 32)])
 - unexplained: []
 - explained: []
 - events: []
 - global events: []
-frame 8 - patch: Patch(wall_right, [('pos_x', 118), ('pos_y', 35), ('shape_x', 1), ('shape_y', 35)])
+frame 7 - patch: Patch(wall_right, [('pos_x', 119), ('pos_y', 35), ('shape_x', 1), ('shape_y', 32)])
 - unexplained: []
 - explained: []
 - events: []
 - global events: []
-frame 9 - patch: Patch(wall_right, [('pos_x', 118), ('pos_y', 35), ('shape_x', 1), ('shape_y', 35)])
+frame 8 - patch: Patch(wall_right, [('pos_x', 119), ('pos_y', 35), ('shape_x', 1), ('shape_y', 32)])
 - unexplained: []
 - explained: []
 - events: []
 - global events: []
-frame 10 - patch: Patch(wall_right, [('pos_x', 118), ('pos_y', 35), ('shape_x', 1), ('shape_y', 35)])
+frame 9 - patch: Patch(wall_right, [('pos_x', 119), ('pos_y', 35), ('shape_x', 1), ('shape_y', 32)])
 - unexplained: []
 - explained: []
 - events: []
 - global events: []
-frame 11 - patch: Patch(wall_right, [('pos_x', 118), ('pos_y', 35), ('shape_x', 1), ('shape_y', 35)])
+frame 10 - patch: Patch(wall_right, [('pos_x', 119), ('pos_y', 35), ('shape_x', 1), ('shape_y', 32)])
 - unexplained: []
 - explained: []
 - events: []
 - global events: []
-frame 12 - patch: Patch(wall_right, [('pos_x', 118), ('pos_y', 35), ('shape_x', 1), ('shape_y', 35)])
+frame 11 - patch: Patch(wall_right, [('pos_x', 119), ('pos_y', 35), ('shape_x', 1), ('shape_y', 32)])
 - unexplained: []
 - explained: []
 - events: []
 - global events: []
-frame 13 - patch: Patch(wall_right, [('pos_x', 118), ('pos_y', 35), ('shape_x', 1), ('shape_y', 35)])
+frame 12 - patch: Patch(wall_right, [('pos_x', 119), ('pos_y', 35), ('shape_x', 1), ('shape_y', 32)])
 - unexplained: []
 - explained: []
 - events: []
 - global events: []
-frame 14 - patch: Patch(wall_right, [('pos_x', 118), ('pos_y', 35), ('shape_x', 1), ('shape_y', 35)])
+frame 13 - patch: Patch(wall_right, [('pos_x', 119), ('pos_y', 35), ('shape_x', 1), ('shape_y', 32)])
 - unexplained: []
 - explained: []
 - events: []
 - global events: []
-frame 15 - patch: Patch(wall_right, [('pos_x', 118), ('pos_y', 35), ('shape_x', 1), ('shape_y', 35)])
+frame 14 - patch: Patch(wall_right, [('pos_x', 119), ('pos_y', 35), ('shape_x', 1), ('shape_y', 32)])
 - unexplained: []
 - explained: []
 - events: []
 - global events: []
-frame 16 - patch: Patch(wall_right, [('pos_x', 118), ('pos_y', 35), ('shape_x', 1), ('shape_y', 35)])
+frame 15 - patch: Patch(wall_right, [('pos_x', 119), ('pos_y', 35), ('shape_x', 1), ('shape_y', 32)])
 - unexplained: []
 - explained: []
 - events: []
 - global events: []
-frame 17 - patch: Patch(wall_right, [('pos_x', 118), ('pos_y', 35), ('shape_x', 1), ('shape_y', 35)])
+frame 16 - patch: Patch(wall_right, [('pos_x', 119), ('pos_y', 35), ('shape_x', 1), ('shape_y', 32)])
 - unexplained: []
 - explained: []
 - events: []
 - global events: []
-frame 18 - patch: Patch(wall_right, [('pos_x', 118), ('pos_y', 35), ('shape_x', 1), ('shape_y', 35)])
+frame 17 - patch: Patch(wall_right, [('pos_x', 119), ('pos_y', 35), ('shape_x', 1), ('shape_y', 32)])
 - unexplained: []
 - explained: []
 - events: []
 - global events: []
-frame 19 - patch: Patch(wall_right, [('pos_x', 118), ('pos_y', 35), ('shape_x', 1), ('shape_y', 35)])
+frame 18 - patch: Patch(wall_right, [('pos_x', 119), ('pos_y', 35), ('shape_x', 1), ('shape_y', 32)])
 - unexplained: []
 - explained: []
 - events: []
 - global events: []
-frame 20 - patch: Patch(wall_right, [('pos_x', 118), ('pos_y', 35), ('shape_x', 1), ('shape_y', 35)])
-- unexplained: []
-- explained: []
-- events: []
-- global events: []
-frame 21 - patch: Patch(wall_right, [('pos_x', 118), ('pos_y', 35), ('shape_x', 1), ('shape_y', 35)])
-- unexplained: []
-- explained: []
-- events: []
-- global events: []
-frame 22 - patch: Patch(wall_right, [('pos_x', 118), ('pos_y', 35), ('shape_x', 1), ('shape_y', 35)])
-- unexplained: []
-- explained: []
-- events: []
-- global events: []
-frame 23 - patch: Patch(wall_right, [('pos_x', 118), ('pos_y', 35), ('shape_x', 1), ('shape_y', 35)])
+frame 19 - patch: Patch(wall_right, [('pos_x', 119), ('pos_y', 35), ('shape_x', 1), ('shape_y', 32)])
 - unexplained: []
 - explained: []
 - events: []
@@ -257,122 +217,102 @@ obj_2
 
 rules: []
 
-frame 0 - patch: Patch(wall_top, [('pos_x', 60), ('pos_y', 1), ('shape_x', 60), ('shape_y', 1)])
+frame 0 - patch: Patch(wall_top, [('pos_x', 60), ('pos_y', 1), ('shape_x', 57), ('shape_y', 1)])
 - unexplained: []
 - explained: []
 - events: []
-- global events: [game_start]
-frame 1 - patch: Patch(wall_top, [('pos_x', 60), ('pos_y', 1), ('shape_x', 60), ('shape_y', 1)])
-- unexplained: []
-- explained: []
-- events: []
-- global events: []
-frame 2 - patch: Patch(wall_top, [('pos_x', 60), ('pos_y', 1), ('shape_x', 60), ('shape_y', 1)])
+- global events: [left_arrow_pressed, game_start]
+frame 1 - patch: Patch(wall_top, [('pos_x', 60), ('pos_y', 1), ('shape_x', 57), ('shape_y', 1)])
 - unexplained: []
 - explained: []
 - events: []
 - global events: []
-frame 3 - patch: Patch(wall_top, [('pos_x', 60), ('pos_y', 1), ('shape_x', 60), ('shape_y', 1)])
+frame 2 - patch: Patch(wall_top, [('pos_x', 60), ('pos_y', 1), ('shape_x', 57), ('shape_y', 1)])
 - unexplained: []
 - explained: []
 - events: []
 - global events: []
-frame 4 - patch: Patch(wall_top, [('pos_x', 60), ('pos_y', 1), ('shape_x', 60), ('shape_y', 1)])
+frame 3 - patch: Patch(wall_top, [('pos_x', 60), ('pos_y', 1), ('shape_x', 57), ('shape_y', 1)])
 - unexplained: []
 - explained: []
 - events: []
 - global events: []
-frame 5 - patch: Patch(wall_top, [('pos_x', 60), ('pos_y', 1), ('shape_x', 60), ('shape_y', 1)])
+frame 4 - patch: Patch(wall_top, [('pos_x', 60), ('pos_y', 1), ('shape_x', 57), ('shape_y', 1)])
 - unexplained: []
 - explained: []
 - events: []
 - global events: []
-frame 6 - patch: Patch(wall_top, [('pos_x', 60), ('pos_y', 1), ('shape_x', 60), ('shape_y', 1)])
+frame 5 - patch: Patch(wall_top, [('pos_x', 60), ('pos_y', 1), ('shape_x', 57), ('shape_y', 1)])
 - unexplained: []
 - explained: []
 - events: []
 - global events: []
-frame 7 - patch: Patch(wall_top, [('pos_x', 60), ('pos_y', 1), ('shape_x', 60), ('shape_y', 1)])
+frame 6 - patch: Patch(wall_top, [('pos_x', 60), ('pos_y', 1), ('shape_x', 57), ('shape_y', 1)])
 - unexplained: []
 - explained: []
 - events: []
 - global events: []
-frame 8 - patch: Patch(wall_top, [('pos_x', 60), ('pos_y', 1), ('shape_x', 60), ('shape_y', 1)])
+frame 7 - patch: Patch(wall_top, [('pos_x', 60), ('pos_y', 1), ('shape_x', 57), ('shape_y', 1)])
 - unexplained: []
 - explained: []
 - events: []
 - global events: []
-frame 9 - patch: Patch(wall_top, [('pos_x', 60), ('pos_y', 1), ('shape_x', 60), ('shape_y', 1)])
+frame 8 - patch: Patch(wall_top, [('pos_x', 60), ('pos_y', 1), ('shape_x', 57), ('shape_y', 1)])
 - unexplained: []
 - explained: []
 - events: []
 - global events: []
-frame 10 - patch: Patch(wall_top, [('pos_x', 60), ('pos_y', 1), ('shape_x', 60), ('shape_y', 1)])
+frame 9 - patch: Patch(wall_top, [('pos_x', 60), ('pos_y', 1), ('shape_x', 57), ('shape_y', 1)])
 - unexplained: []
 - explained: []
 - events: []
 - global events: []
-frame 11 - patch: Patch(wall_top, [('pos_x', 60), ('pos_y', 1), ('shape_x', 60), ('shape_y', 1)])
+frame 10 - patch: Patch(wall_top, [('pos_x', 60), ('pos_y', 1), ('shape_x', 57), ('shape_y', 1)])
 - unexplained: []
 - explained: []
 - events: []
 - global events: []
-frame 12 - patch: Patch(wall_top, [('pos_x', 60), ('pos_y', 1), ('shape_x', 60), ('shape_y', 1)])
+frame 11 - patch: Patch(wall_top, [('pos_x', 60), ('pos_y', 1), ('shape_x', 57), ('shape_y', 1)])
 - unexplained: []
 - explained: []
 - events: []
 - global events: []
-frame 13 - patch: Patch(wall_top, [('pos_x', 60), ('pos_y', 1), ('shape_x', 60), ('shape_y', 1)])
+frame 12 - patch: Patch(wall_top, [('pos_x', 60), ('pos_y', 1), ('shape_x', 57), ('shape_y', 1)])
 - unexplained: []
 - explained: []
 - events: []
 - global events: []
-frame 14 - patch: Patch(wall_top, [('pos_x', 60), ('pos_y', 1), ('shape_x', 60), ('shape_y', 1)])
+frame 13 - patch: Patch(wall_top, [('pos_x', 60), ('pos_y', 1), ('shape_x', 57), ('shape_y', 1)])
 - unexplained: []
 - explained: []
 - events: []
 - global events: []
-frame 15 - patch: Patch(wall_top, [('pos_x', 60), ('pos_y', 1), ('shape_x', 60), ('shape_y', 1)])
+frame 14 - patch: Patch(wall_top, [('pos_x', 60), ('pos_y', 1), ('shape_x', 57), ('shape_y', 1)])
 - unexplained: []
 - explained: []
 - events: []
 - global events: []
-frame 16 - patch: Patch(wall_top, [('pos_x', 60), ('pos_y', 1), ('shape_x', 60), ('shape_y', 1)])
+frame 15 - patch: Patch(wall_top, [('pos_x', 60), ('pos_y', 1), ('shape_x', 57), ('shape_y', 1)])
 - unexplained: []
 - explained: []
 - events: []
 - global events: []
-frame 17 - patch: Patch(wall_top, [('pos_x', 60), ('pos_y', 1), ('shape_x', 60), ('shape_y', 1)])
+frame 16 - patch: Patch(wall_top, [('pos_x', 60), ('pos_y', 1), ('shape_x', 57), ('shape_y', 1)])
 - unexplained: []
 - explained: []
 - events: []
 - global events: []
-frame 18 - patch: Patch(wall_top, [('pos_x', 60), ('pos_y', 1), ('shape_x', 60), ('shape_y', 1)])
+frame 17 - patch: Patch(wall_top, [('pos_x', 60), ('pos_y', 1), ('shape_x', 57), ('shape_y', 1)])
 - unexplained: []
 - explained: []
 - events: []
 - global events: []
-frame 19 - patch: Patch(wall_top, [('pos_x', 60), ('pos_y', 1), ('shape_x', 60), ('shape_y', 1)])
+frame 18 - patch: Patch(wall_top, [('pos_x', 60), ('pos_y', 1), ('shape_x', 57), ('shape_y', 1)])
 - unexplained: []
 - explained: []
 - events: []
 - global events: []
-frame 20 - patch: Patch(wall_top, [('pos_x', 60), ('pos_y', 1), ('shape_x', 60), ('shape_y', 1)])
-- unexplained: []
-- explained: []
-- events: []
-- global events: []
-frame 21 - patch: Patch(wall_top, [('pos_x', 60), ('pos_y', 1), ('shape_x', 60), ('shape_y', 1)])
-- unexplained: []
-- explained: []
-- events: []
-- global events: []
-frame 22 - patch: Patch(wall_top, [('pos_x', 60), ('pos_y', 1), ('shape_x', 60), ('shape_y', 1)])
-- unexplained: []
-- explained: []
-- events: []
-- global events: []
-frame 23 - patch: Patch(wall_top, [('pos_x', 60), ('pos_y', 1), ('shape_x', 60), ('shape_y', 1)])
+frame 19 - patch: Patch(wall_top, [('pos_x', 60), ('pos_y', 1), ('shape_x', 57), ('shape_y', 1)])
 - unexplained: []
 - explained: []
 - events: []
@@ -382,147 +322,127 @@ obj_3
 
 rules: []
 
-frame 0 - patch: Patch(wall_bottom, [('pos_x', 60), ('pos_y', 68), ('shape_x', 60), ('shape_y', 1)])
+frame 0 - patch: Patch(wall_bottom, [('pos_x', 60), ('pos_y', 69), ('shape_x', 57), ('shape_y', 1)])
 - unexplained: []
 - explained: []
 - events: []
-- global events: [game_start]
-frame 1 - patch: Patch(wall_bottom, [('pos_x', 60), ('pos_y', 68), ('shape_x', 60), ('shape_y', 1)])
-- unexplained: []
-- explained: []
-- events: []
-- global events: []
-frame 2 - patch: Patch(wall_bottom, [('pos_x', 60), ('pos_y', 68), ('shape_x', 60), ('shape_y', 1)])
+- global events: [left_arrow_pressed, game_start]
+frame 1 - patch: Patch(wall_bottom, [('pos_x', 60), ('pos_y', 69), ('shape_x', 57), ('shape_y', 1)])
 - unexplained: []
 - explained: []
 - events: []
 - global events: []
-frame 3 - patch: Patch(wall_bottom, [('pos_x', 60), ('pos_y', 68), ('shape_x', 60), ('shape_y', 1)])
+frame 2 - patch: Patch(wall_bottom, [('pos_x', 60), ('pos_y', 69), ('shape_x', 57), ('shape_y', 1)])
 - unexplained: []
 - explained: []
 - events: []
 - global events: []
-frame 4 - patch: Patch(wall_bottom, [('pos_x', 60), ('pos_y', 68), ('shape_x', 60), ('shape_y', 1)])
+frame 3 - patch: Patch(wall_bottom, [('pos_x', 60), ('pos_y', 69), ('shape_x', 57), ('shape_y', 1)])
 - unexplained: []
 - explained: []
 - events: []
 - global events: []
-frame 5 - patch: Patch(wall_bottom, [('pos_x', 60), ('pos_y', 68), ('shape_x', 60), ('shape_y', 1)])
+frame 4 - patch: Patch(wall_bottom, [('pos_x', 60), ('pos_y', 69), ('shape_x', 57), ('shape_y', 1)])
 - unexplained: []
 - explained: []
 - events: []
 - global events: []
-frame 6 - patch: Patch(wall_bottom, [('pos_x', 60), ('pos_y', 68), ('shape_x', 60), ('shape_y', 1)])
+frame 5 - patch: Patch(wall_bottom, [('pos_x', 60), ('pos_y', 69), ('shape_x', 57), ('shape_y', 1)])
 - unexplained: []
 - explained: []
 - events: []
 - global events: []
-frame 7 - patch: Patch(wall_bottom, [('pos_x', 60), ('pos_y', 68), ('shape_x', 60), ('shape_y', 1)])
+frame 6 - patch: Patch(wall_bottom, [('pos_x', 60), ('pos_y', 69), ('shape_x', 57), ('shape_y', 1)])
 - unexplained: []
 - explained: []
 - events: []
 - global events: []
-frame 8 - patch: Patch(wall_bottom, [('pos_x', 60), ('pos_y', 68), ('shape_x', 60), ('shape_y', 1)])
+frame 7 - patch: Patch(wall_bottom, [('pos_x', 60), ('pos_y', 69), ('shape_x', 57), ('shape_y', 1)])
 - unexplained: []
 - explained: []
 - events: []
 - global events: []
-frame 9 - patch: Patch(wall_bottom, [('pos_x', 60), ('pos_y', 68), ('shape_x', 60), ('shape_y', 1)])
+frame 8 - patch: Patch(wall_bottom, [('pos_x', 60), ('pos_y', 69), ('shape_x', 57), ('shape_y', 1)])
 - unexplained: []
 - explained: []
 - events: []
 - global events: []
-frame 10 - patch: Patch(wall_bottom, [('pos_x', 60), ('pos_y', 68), ('shape_x', 60), ('shape_y', 1)])
+frame 9 - patch: Patch(wall_bottom, [('pos_x', 60), ('pos_y', 69), ('shape_x', 57), ('shape_y', 1)])
 - unexplained: []
 - explained: []
 - events: []
 - global events: []
-frame 11 - patch: Patch(wall_bottom, [('pos_x', 60), ('pos_y', 68), ('shape_x', 60), ('shape_y', 1)])
+frame 10 - patch: Patch(wall_bottom, [('pos_x', 60), ('pos_y', 69), ('shape_x', 57), ('shape_y', 1)])
 - unexplained: []
 - explained: []
 - events: []
 - global events: []
-frame 12 - patch: Patch(wall_bottom, [('pos_x', 60), ('pos_y', 68), ('shape_x', 60), ('shape_y', 1)])
+frame 11 - patch: Patch(wall_bottom, [('pos_x', 60), ('pos_y', 69), ('shape_x', 57), ('shape_y', 1)])
 - unexplained: []
 - explained: []
 - events: []
 - global events: []
-frame 13 - patch: Patch(wall_bottom, [('pos_x', 60), ('pos_y', 68), ('shape_x', 60), ('shape_y', 1)])
+frame 12 - patch: Patch(wall_bottom, [('pos_x', 60), ('pos_y', 69), ('shape_x', 57), ('shape_y', 1)])
 - unexplained: []
 - explained: []
 - events: []
 - global events: []
-frame 14 - patch: Patch(wall_bottom, [('pos_x', 60), ('pos_y', 68), ('shape_x', 60), ('shape_y', 1)])
+frame 13 - patch: Patch(wall_bottom, [('pos_x', 60), ('pos_y', 69), ('shape_x', 57), ('shape_y', 1)])
 - unexplained: []
 - explained: []
 - events: []
 - global events: []
-frame 15 - patch: Patch(wall_bottom, [('pos_x', 60), ('pos_y', 68), ('shape_x', 60), ('shape_y', 1)])
+frame 14 - patch: Patch(wall_bottom, [('pos_x', 60), ('pos_y', 69), ('shape_x', 57), ('shape_y', 1)])
 - unexplained: []
 - explained: []
 - events: []
 - global events: []
-frame 16 - patch: Patch(wall_bottom, [('pos_x', 60), ('pos_y', 68), ('shape_x', 60), ('shape_y', 1)])
+frame 15 - patch: Patch(wall_bottom, [('pos_x', 60), ('pos_y', 69), ('shape_x', 57), ('shape_y', 1)])
 - unexplained: []
 - explained: []
 - events: []
 - global events: []
-frame 17 - patch: Patch(wall_bottom, [('pos_x', 60), ('pos_y', 68), ('shape_x', 60), ('shape_y', 1)])
-- unexplained: []
-- explained: []
-- events: []
-- global events: []
-frame 18 - patch: Patch(wall_bottom, [('pos_x', 60), ('pos_y', 68), ('shape_x', 60), ('shape_y', 1)])
-- unexplained: []
-- explained: []
-- events: []
-- global events: []
-frame 19 - patch: Patch(wall_bottom, [('pos_x', 60), ('pos_y', 68), ('shape_x', 60), ('shape_y', 1)])
+frame 16 - patch: Patch(wall_bottom, [('pos_x', 60), ('pos_y', 69), ('shape_x', 57), ('shape_y', 1)])
 - unexplained: []
 - explained: []
 - events: [<class 'core.events.Contact_With_Something_T'>]
 - global events: []
-frame 20 - patch: Patch(wall_bottom, [('pos_x', 60), ('pos_y', 68), ('shape_x', 60), ('shape_y', 1)])
+frame 17 - patch: Patch(wall_bottom, [('pos_x', 60), ('pos_y', 69), ('shape_x', 57), ('shape_y', 1)])
 - unexplained: []
 - explained: []
 - events: []
 - global events: []
-frame 21 - patch: Patch(wall_bottom, [('pos_x', 60), ('pos_y', 68), ('shape_x', 60), ('shape_y', 1)])
-- unexplained: []
-- explained: []
-- events: [<class 'core.events.Contact_With_Something_T'>]
-- global events: []
-frame 22 - patch: Patch(wall_bottom, [('pos_x', 60), ('pos_y', 68), ('shape_x', 60), ('shape_y', 1)])
+frame 18 - patch: Patch(wall_bottom, [('pos_x', 60), ('pos_y', 69), ('shape_x', 57), ('shape_y', 1)])
 - unexplained: []
 - explained: []
 - events: []
 - global events: []
-frame 23 - patch: Patch(wall_bottom, [('pos_x', 60), ('pos_y', 68), ('shape_x', 60), ('shape_y', 1)])
+frame 19 - patch: Patch(wall_bottom, [('pos_x', 60), ('pos_y', 69), ('shape_x', 57), ('shape_y', 1)])
 - unexplained: []
 - explained: []
 - events: []
 - global events: []
 
-obj_15
+obj_4
 
 rules: []
 
-frame 0 - patch not present
+frame 0 - patch: Patch(brick_0, [('pos_x', 11), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: [left_arrow_pressed, game_start]
+frame 1 - patch: Patch(brick_0, [('pos_x', 11), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
 - unexplained: []
 - explained: []
 - events: []
 - global events: []
-frame 1 - patch not present
+frame 2 - patch: Patch(brick_0, [('pos_x', 11), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
 - unexplained: []
 - explained: []
 - events: []
 - global events: []
-frame 2 - patch not present
-- unexplained: []
-- explained: []
-- events: []
-- global events: []
-frame 3 - patch not present
+frame 3 - patch: Patch(brick_0, [('pos_x', 11), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
 - unexplained: []
 - explained: []
 - events: []
@@ -607,22 +527,1577 @@ frame 19 - patch: Patch(brick_0, [('pos_x', 11), ('pos_y', 10), ('shape_x', 5), 
 - explained: []
 - events: []
 - global events: []
-frame 20 - patch: Patch(brick_0, [('pos_x', 11), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+
+obj_5
+
+rules: []
+
+frame 0 - patch: Patch(brick_1, [('pos_x', 11), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: [left_arrow_pressed, game_start]
+frame 1 - patch: Patch(brick_1, [('pos_x', 11), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
 - unexplained: []
 - explained: []
 - events: []
 - global events: []
-frame 21 - patch: Patch(brick_0, [('pos_x', 11), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+frame 2 - patch: Patch(brick_1, [('pos_x', 11), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
 - unexplained: []
 - explained: []
 - events: []
 - global events: []
-frame 22 - patch: Patch(brick_0, [('pos_x', 11), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+frame 3 - patch: Patch(brick_1, [('pos_x', 11), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
 - unexplained: []
 - explained: []
 - events: []
 - global events: []
-frame 23 - patch: Patch(brick_0, [('pos_x', 11), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+frame 4 - patch: Patch(brick_1, [('pos_x', 11), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 5 - patch: Patch(brick_1, [('pos_x', 11), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 6 - patch: Patch(brick_1, [('pos_x', 11), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 7 - patch: Patch(brick_1, [('pos_x', 11), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 8 - patch: Patch(brick_1, [('pos_x', 11), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 9 - patch: Patch(brick_1, [('pos_x', 11), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 10 - patch: Patch(brick_1, [('pos_x', 11), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 11 - patch: Patch(brick_1, [('pos_x', 11), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 12 - patch: Patch(brick_1, [('pos_x', 11), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 13 - patch: Patch(brick_1, [('pos_x', 11), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 14 - patch: Patch(brick_1, [('pos_x', 11), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 15 - patch: Patch(brick_1, [('pos_x', 11), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 16 - patch: Patch(brick_1, [('pos_x', 11), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 17 - patch: Patch(brick_1, [('pos_x', 11), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 18 - patch: Patch(brick_1, [('pos_x', 11), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 19 - patch: Patch(brick_1, [('pos_x', 11), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+
+obj_6
+
+rules: []
+
+frame 0 - patch: Patch(brick_2, [('pos_x', 11), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: [left_arrow_pressed, game_start]
+frame 1 - patch: Patch(brick_2, [('pos_x', 11), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 2 - patch: Patch(brick_2, [('pos_x', 11), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 3 - patch: Patch(brick_2, [('pos_x', 11), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 4 - patch: Patch(brick_2, [('pos_x', 11), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 5 - patch: Patch(brick_2, [('pos_x', 11), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 6 - patch: Patch(brick_2, [('pos_x', 11), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 7 - patch: Patch(brick_2, [('pos_x', 11), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 8 - patch: Patch(brick_2, [('pos_x', 11), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 9 - patch: Patch(brick_2, [('pos_x', 11), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 10 - patch: Patch(brick_2, [('pos_x', 11), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 11 - patch: Patch(brick_2, [('pos_x', 11), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 12 - patch: Patch(brick_2, [('pos_x', 11), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 13 - patch: Patch(brick_2, [('pos_x', 11), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 14 - patch: Patch(brick_2, [('pos_x', 11), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 15 - patch: Patch(brick_2, [('pos_x', 11), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 16 - patch: Patch(brick_2, [('pos_x', 11), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 17 - patch: Patch(brick_2, [('pos_x', 11), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 18 - patch: Patch(brick_2, [('pos_x', 11), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 19 - patch: Patch(brick_2, [('pos_x', 11), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+
+obj_7
+
+rules: []
+
+frame 0 - patch: Patch(brick_3, [('pos_x', 25), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: [left_arrow_pressed, game_start]
+frame 1 - patch: Patch(brick_3, [('pos_x', 25), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 2 - patch: Patch(brick_3, [('pos_x', 25), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 3 - patch: Patch(brick_3, [('pos_x', 25), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 4 - patch: Patch(brick_3, [('pos_x', 25), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 5 - patch: Patch(brick_3, [('pos_x', 25), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 6 - patch: Patch(brick_3, [('pos_x', 25), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 7 - patch: Patch(brick_3, [('pos_x', 25), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 8 - patch: Patch(brick_3, [('pos_x', 25), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 9 - patch: Patch(brick_3, [('pos_x', 25), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 10 - patch: Patch(brick_3, [('pos_x', 25), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 11 - patch: Patch(brick_3, [('pos_x', 25), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 12 - patch: Patch(brick_3, [('pos_x', 25), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 13 - patch: Patch(brick_3, [('pos_x', 25), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 14 - patch: Patch(brick_3, [('pos_x', 25), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 15 - patch: Patch(brick_3, [('pos_x', 25), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 16 - patch: Patch(brick_3, [('pos_x', 25), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 17 - patch: Patch(brick_3, [('pos_x', 25), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 18 - patch: Patch(brick_3, [('pos_x', 25), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 19 - patch: Patch(brick_3, [('pos_x', 25), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+
+obj_8
+
+rules: []
+
+frame 0 - patch: Patch(brick_4, [('pos_x', 25), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: [left_arrow_pressed, game_start]
+frame 1 - patch: Patch(brick_4, [('pos_x', 25), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 2 - patch: Patch(brick_4, [('pos_x', 25), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 3 - patch: Patch(brick_4, [('pos_x', 25), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 4 - patch: Patch(brick_4, [('pos_x', 25), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 5 - patch: Patch(brick_4, [('pos_x', 25), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 6 - patch: Patch(brick_4, [('pos_x', 25), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 7 - patch: Patch(brick_4, [('pos_x', 25), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 8 - patch: Patch(brick_4, [('pos_x', 25), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 9 - patch: Patch(brick_4, [('pos_x', 25), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 10 - patch: Patch(brick_4, [('pos_x', 25), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 11 - patch: Patch(brick_4, [('pos_x', 25), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 12 - patch: Patch(brick_4, [('pos_x', 25), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 13 - patch: Patch(brick_4, [('pos_x', 25), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 14 - patch: Patch(brick_4, [('pos_x', 25), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 15 - patch: Patch(brick_4, [('pos_x', 25), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 16 - patch: Patch(brick_4, [('pos_x', 25), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 17 - patch: Patch(brick_4, [('pos_x', 25), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 18 - patch: Patch(brick_4, [('pos_x', 25), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 19 - patch: Patch(brick_4, [('pos_x', 25), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+
+obj_9
+
+rules: []
+
+frame 0 - patch: Patch(brick_5, [('pos_x', 25), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: [left_arrow_pressed, game_start]
+frame 1 - patch: Patch(brick_5, [('pos_x', 25), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 2 - patch: Patch(brick_5, [('pos_x', 25), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 3 - patch: Patch(brick_5, [('pos_x', 25), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 4 - patch: Patch(brick_5, [('pos_x', 25), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 5 - patch: Patch(brick_5, [('pos_x', 25), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 6 - patch: Patch(brick_5, [('pos_x', 25), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 7 - patch: Patch(brick_5, [('pos_x', 25), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 8 - patch: Patch(brick_5, [('pos_x', 25), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 9 - patch: Patch(brick_5, [('pos_x', 25), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 10 - patch: Patch(brick_5, [('pos_x', 25), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 11 - patch: Patch(brick_5, [('pos_x', 25), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 12 - patch: Patch(brick_5, [('pos_x', 25), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 13 - patch: Patch(brick_5, [('pos_x', 25), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 14 - patch: Patch(brick_5, [('pos_x', 25), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 15 - patch: Patch(brick_5, [('pos_x', 25), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 16 - patch: Patch(brick_5, [('pos_x', 25), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 17 - patch: Patch(brick_5, [('pos_x', 25), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 18 - patch: Patch(brick_5, [('pos_x', 25), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 19 - patch: Patch(brick_5, [('pos_x', 25), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+
+obj_10
+
+rules: []
+
+frame 0 - patch: Patch(brick_6, [('pos_x', 39), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: [left_arrow_pressed, game_start]
+frame 1 - patch: Patch(brick_6, [('pos_x', 39), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 2 - patch: Patch(brick_6, [('pos_x', 39), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 3 - patch: Patch(brick_6, [('pos_x', 39), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 4 - patch: Patch(brick_6, [('pos_x', 39), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 5 - patch: Patch(brick_6, [('pos_x', 39), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 6 - patch: Patch(brick_6, [('pos_x', 39), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 7 - patch: Patch(brick_6, [('pos_x', 39), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 8 - patch: Patch(brick_6, [('pos_x', 39), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 9 - patch: Patch(brick_6, [('pos_x', 39), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 10 - patch: Patch(brick_6, [('pos_x', 39), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 11 - patch: Patch(brick_6, [('pos_x', 39), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 12 - patch: Patch(brick_6, [('pos_x', 39), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 13 - patch: Patch(brick_6, [('pos_x', 39), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 14 - patch: Patch(brick_6, [('pos_x', 39), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 15 - patch: Patch(brick_6, [('pos_x', 39), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 16 - patch: Patch(brick_6, [('pos_x', 39), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 17 - patch: Patch(brick_6, [('pos_x', 39), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 18 - patch: Patch(brick_6, [('pos_x', 39), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 19 - patch: Patch(brick_6, [('pos_x', 39), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+
+obj_11
+
+rules: []
+
+frame 0 - patch: Patch(brick_7, [('pos_x', 39), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: [left_arrow_pressed, game_start]
+frame 1 - patch: Patch(brick_7, [('pos_x', 39), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 2 - patch: Patch(brick_7, [('pos_x', 39), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 3 - patch: Patch(brick_7, [('pos_x', 39), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 4 - patch: Patch(brick_7, [('pos_x', 39), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 5 - patch: Patch(brick_7, [('pos_x', 39), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 6 - patch: Patch(brick_7, [('pos_x', 39), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 7 - patch: Patch(brick_7, [('pos_x', 39), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 8 - patch: Patch(brick_7, [('pos_x', 39), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 9 - patch: Patch(brick_7, [('pos_x', 39), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 10 - patch: Patch(brick_7, [('pos_x', 39), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 11 - patch: Patch(brick_7, [('pos_x', 39), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 12 - patch: Patch(brick_7, [('pos_x', 39), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 13 - patch: Patch(brick_7, [('pos_x', 39), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 14 - patch: Patch(brick_7, [('pos_x', 39), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 15 - patch: Patch(brick_7, [('pos_x', 39), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 16 - patch: Patch(brick_7, [('pos_x', 39), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 17 - patch: Patch(brick_7, [('pos_x', 39), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 18 - patch: Patch(brick_7, [('pos_x', 39), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 19 - patch: Patch(brick_7, [('pos_x', 39), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+
+obj_12
+
+rules: []
+
+frame 0 - patch: Patch(brick_8, [('pos_x', 39), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: [left_arrow_pressed, game_start]
+frame 1 - patch: Patch(brick_8, [('pos_x', 39), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 2 - patch: Patch(brick_8, [('pos_x', 39), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 3 - patch: Patch(brick_8, [('pos_x', 39), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 4 - patch: Patch(brick_8, [('pos_x', 39), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 5 - patch: Patch(brick_8, [('pos_x', 39), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 6 - patch: Patch(brick_8, [('pos_x', 39), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 7 - patch: Patch(brick_8, [('pos_x', 39), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 8 - patch: Patch(brick_8, [('pos_x', 39), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 9 - patch: Patch(brick_8, [('pos_x', 39), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 10 - patch: Patch(brick_8, [('pos_x', 39), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 11 - patch: Patch(brick_8, [('pos_x', 39), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 12 - patch: Patch(brick_8, [('pos_x', 39), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 13 - patch: Patch(brick_8, [('pos_x', 39), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 14 - patch: Patch(brick_8, [('pos_x', 39), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 15 - patch: Patch(brick_8, [('pos_x', 39), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 16 - patch: Patch(brick_8, [('pos_x', 39), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 17 - patch: Patch(brick_8, [('pos_x', 39), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 18 - patch: Patch(brick_8, [('pos_x', 39), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 19 - patch: Patch(brick_8, [('pos_x', 39), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+
+obj_13
+
+rules: []
+
+frame 0 - patch: Patch(brick_9, [('pos_x', 53), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: [left_arrow_pressed, game_start]
+frame 1 - patch: Patch(brick_9, [('pos_x', 53), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 2 - patch: Patch(brick_9, [('pos_x', 53), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 3 - patch: Patch(brick_9, [('pos_x', 53), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 4 - patch: Patch(brick_9, [('pos_x', 53), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 5 - patch: Patch(brick_9, [('pos_x', 53), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 6 - patch: Patch(brick_9, [('pos_x', 53), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 7 - patch: Patch(brick_9, [('pos_x', 53), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 8 - patch: Patch(brick_9, [('pos_x', 53), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 9 - patch: Patch(brick_9, [('pos_x', 53), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 10 - patch: Patch(brick_9, [('pos_x', 53), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 11 - patch: Patch(brick_9, [('pos_x', 53), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 12 - patch: Patch(brick_9, [('pos_x', 53), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 13 - patch: Patch(brick_9, [('pos_x', 53), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 14 - patch: Patch(brick_9, [('pos_x', 53), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 15 - patch: Patch(brick_9, [('pos_x', 53), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 16 - patch: Patch(brick_9, [('pos_x', 53), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 17 - patch: Patch(brick_9, [('pos_x', 53), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 18 - patch: Patch(brick_9, [('pos_x', 53), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 19 - patch: Patch(brick_9, [('pos_x', 53), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+
+obj_14
+
+rules: []
+
+frame 0 - patch: Patch(brick_10, [('pos_x', 53), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: [left_arrow_pressed, game_start]
+frame 1 - patch: Patch(brick_10, [('pos_x', 53), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 2 - patch: Patch(brick_10, [('pos_x', 53), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 3 - patch: Patch(brick_10, [('pos_x', 53), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 4 - patch: Patch(brick_10, [('pos_x', 53), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 5 - patch: Patch(brick_10, [('pos_x', 53), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 6 - patch: Patch(brick_10, [('pos_x', 53), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 7 - patch: Patch(brick_10, [('pos_x', 53), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 8 - patch: Patch(brick_10, [('pos_x', 53), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 9 - patch: Patch(brick_10, [('pos_x', 53), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 10 - patch: Patch(brick_10, [('pos_x', 53), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 11 - patch: Patch(brick_10, [('pos_x', 53), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 12 - patch: Patch(brick_10, [('pos_x', 53), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 13 - patch: Patch(brick_10, [('pos_x', 53), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 14 - patch: Patch(brick_10, [('pos_x', 53), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 15 - patch: Patch(brick_10, [('pos_x', 53), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 16 - patch: Patch(brick_10, [('pos_x', 53), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 17 - patch: Patch(brick_10, [('pos_x', 53), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 18 - patch: Patch(brick_10, [('pos_x', 53), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 19 - patch: Patch(brick_10, [('pos_x', 53), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+
+obj_15
+
+rules: []
+
+frame 0 - patch: Patch(brick_11, [('pos_x', 53), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: [left_arrow_pressed, game_start]
+frame 1 - patch: Patch(brick_11, [('pos_x', 53), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 2 - patch: Patch(brick_11, [('pos_x', 53), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 3 - patch: Patch(brick_11, [('pos_x', 53), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 4 - patch: Patch(brick_11, [('pos_x', 53), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 5 - patch: Patch(brick_11, [('pos_x', 53), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 6 - patch: Patch(brick_11, [('pos_x', 53), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 7 - patch: Patch(brick_11, [('pos_x', 53), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 8 - patch: Patch(brick_11, [('pos_x', 53), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 9 - patch: Patch(brick_11, [('pos_x', 53), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 10 - patch: Patch(brick_11, [('pos_x', 53), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 11 - patch: Patch(brick_11, [('pos_x', 53), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 12 - patch: Patch(brick_11, [('pos_x', 53), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 13 - patch: Patch(brick_11, [('pos_x', 53), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 14 - patch: Patch(brick_11, [('pos_x', 53), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 15 - patch: Patch(brick_11, [('pos_x', 53), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 16 - patch: Patch(brick_11, [('pos_x', 53), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 17 - patch: Patch(brick_11, [('pos_x', 53), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 18 - patch: Patch(brick_11, [('pos_x', 53), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 19 - patch: Patch(brick_11, [('pos_x', 53), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+
+obj_16
+
+rules: []
+
+frame 0 - patch: Patch(brick_12, [('pos_x', 67), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: [left_arrow_pressed, game_start]
+frame 1 - patch: Patch(brick_12, [('pos_x', 67), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 2 - patch: Patch(brick_12, [('pos_x', 67), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 3 - patch: Patch(brick_12, [('pos_x', 67), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 4 - patch: Patch(brick_12, [('pos_x', 67), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 5 - patch: Patch(brick_12, [('pos_x', 67), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 6 - patch: Patch(brick_12, [('pos_x', 67), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 7 - patch: Patch(brick_12, [('pos_x', 67), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 8 - patch: Patch(brick_12, [('pos_x', 67), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 9 - patch: Patch(brick_12, [('pos_x', 67), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 10 - patch: Patch(brick_12, [('pos_x', 67), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 11 - patch: Patch(brick_12, [('pos_x', 67), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 12 - patch: Patch(brick_12, [('pos_x', 67), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 13 - patch: Patch(brick_12, [('pos_x', 67), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 14 - patch: Patch(brick_12, [('pos_x', 67), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 15 - patch: Patch(brick_12, [('pos_x', 67), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 16 - patch: Patch(brick_12, [('pos_x', 67), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 17 - patch: Patch(brick_12, [('pos_x', 67), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 18 - patch: Patch(brick_12, [('pos_x', 67), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 19 - patch: Patch(brick_12, [('pos_x', 67), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+
+obj_17
+
+rules: []
+
+frame 0 - patch: Patch(brick_13, [('pos_x', 67), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: [left_arrow_pressed, game_start]
+frame 1 - patch: Patch(brick_13, [('pos_x', 67), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 2 - patch: Patch(brick_13, [('pos_x', 67), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 3 - patch: Patch(brick_13, [('pos_x', 67), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 4 - patch: Patch(brick_13, [('pos_x', 67), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 5 - patch: Patch(brick_13, [('pos_x', 67), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 6 - patch: Patch(brick_13, [('pos_x', 67), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 7 - patch: Patch(brick_13, [('pos_x', 67), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 8 - patch: Patch(brick_13, [('pos_x', 67), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 9 - patch: Patch(brick_13, [('pos_x', 67), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 10 - patch: Patch(brick_13, [('pos_x', 67), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 11 - patch: Patch(brick_13, [('pos_x', 67), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 12 - patch: Patch(brick_13, [('pos_x', 67), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 13 - patch: Patch(brick_13, [('pos_x', 67), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 14 - patch: Patch(brick_13, [('pos_x', 67), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 15 - patch: Patch(brick_13, [('pos_x', 67), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 16 - patch: Patch(brick_13, [('pos_x', 67), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 17 - patch: Patch(brick_13, [('pos_x', 67), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 18 - patch: Patch(brick_13, [('pos_x', 67), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 19 - patch: Patch(brick_13, [('pos_x', 67), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+
+obj_18
+
+rules: []
+
+frame 0 - patch: Patch(brick_14, [('pos_x', 67), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: [left_arrow_pressed, game_start]
+frame 1 - patch: Patch(brick_14, [('pos_x', 67), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 2 - patch: Patch(brick_14, [('pos_x', 67), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 3 - patch: Patch(brick_14, [('pos_x', 67), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 4 - patch: Patch(brick_14, [('pos_x', 67), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 5 - patch: Patch(brick_14, [('pos_x', 67), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 6 - patch: Patch(brick_14, [('pos_x', 67), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 7 - patch: Patch(brick_14, [('pos_x', 67), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 8 - patch: Patch(brick_14, [('pos_x', 67), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 9 - patch: Patch(brick_14, [('pos_x', 67), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 10 - patch: Patch(brick_14, [('pos_x', 67), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 11 - patch: Patch(brick_14, [('pos_x', 67), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 12 - patch: Patch(brick_14, [('pos_x', 67), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 13 - patch: Patch(brick_14, [('pos_x', 67), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 14 - patch: Patch(brick_14, [('pos_x', 67), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 15 - patch: Patch(brick_14, [('pos_x', 67), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 16 - patch: Patch(brick_14, [('pos_x', 67), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 17 - patch: Patch(brick_14, [('pos_x', 67), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 18 - patch: Patch(brick_14, [('pos_x', 67), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 19 - patch: Patch(brick_14, [('pos_x', 67), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+
+obj_19
+
+rules: []
+
+frame 0 - patch: Patch(brick_15, [('pos_x', 81), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: [left_arrow_pressed, game_start]
+frame 1 - patch: Patch(brick_15, [('pos_x', 81), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 2 - patch: Patch(brick_15, [('pos_x', 81), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 3 - patch: Patch(brick_15, [('pos_x', 81), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 4 - patch: Patch(brick_15, [('pos_x', 81), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 5 - patch: Patch(brick_15, [('pos_x', 81), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 6 - patch: Patch(brick_15, [('pos_x', 81), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 7 - patch: Patch(brick_15, [('pos_x', 81), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 8 - patch: Patch(brick_15, [('pos_x', 81), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 9 - patch: Patch(brick_15, [('pos_x', 81), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 10 - patch: Patch(brick_15, [('pos_x', 81), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 11 - patch: Patch(brick_15, [('pos_x', 81), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 12 - patch: Patch(brick_15, [('pos_x', 81), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 13 - patch: Patch(brick_15, [('pos_x', 81), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 14 - patch: Patch(brick_15, [('pos_x', 81), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 15 - patch: Patch(brick_15, [('pos_x', 81), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 16 - patch: Patch(brick_15, [('pos_x', 81), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 17 - patch: Patch(brick_15, [('pos_x', 81), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 18 - patch: Patch(brick_15, [('pos_x', 81), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 19 - patch: Patch(brick_15, [('pos_x', 81), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
 - unexplained: []
 - explained: []
 - events: []
@@ -630,135 +2105,1066 @@ frame 23 - patch: Patch(brick_0, [('pos_x', 11), ('pos_y', 10), ('shape_x', 5), 
 
 obj_20
 
+rules: []
+
+frame 0 - patch: Patch(brick_16, [('pos_x', 81), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: [left_arrow_pressed, game_start]
+frame 1 - patch: Patch(brick_16, [('pos_x', 81), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 2 - patch: Patch(brick_16, [('pos_x', 81), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 3 - patch: Patch(brick_16, [('pos_x', 81), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 4 - patch: Patch(brick_16, [('pos_x', 81), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 5 - patch: Patch(brick_16, [('pos_x', 81), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 6 - patch: Patch(brick_16, [('pos_x', 81), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 7 - patch: Patch(brick_16, [('pos_x', 81), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 8 - patch: Patch(brick_16, [('pos_x', 81), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 9 - patch: Patch(brick_16, [('pos_x', 81), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 10 - patch: Patch(brick_16, [('pos_x', 81), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 11 - patch: Patch(brick_16, [('pos_x', 81), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 12 - patch: Patch(brick_16, [('pos_x', 81), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 13 - patch: Patch(brick_16, [('pos_x', 81), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 14 - patch: Patch(brick_16, [('pos_x', 81), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 15 - patch: Patch(brick_16, [('pos_x', 81), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 16 - patch: Patch(brick_16, [('pos_x', 81), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 17 - patch: Patch(brick_16, [('pos_x', 81), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 18 - patch: Patch(brick_16, [('pos_x', 81), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 19 - patch: Patch(brick_16, [('pos_x', 81), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+
+obj_21
+
+rules: []
+
+frame 0 - patch: Patch(brick_17, [('pos_x', 81), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: [left_arrow_pressed, game_start]
+frame 1 - patch: Patch(brick_17, [('pos_x', 81), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 2 - patch: Patch(brick_17, [('pos_x', 81), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 3 - patch: Patch(brick_17, [('pos_x', 81), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 4 - patch: Patch(brick_17, [('pos_x', 81), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 5 - patch: Patch(brick_17, [('pos_x', 81), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 6 - patch: Patch(brick_17, [('pos_x', 81), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 7 - patch: Patch(brick_17, [('pos_x', 81), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 8 - patch: Patch(brick_17, [('pos_x', 81), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 9 - patch: Patch(brick_17, [('pos_x', 81), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 10 - patch: Patch(brick_17, [('pos_x', 81), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 11 - patch: Patch(brick_17, [('pos_x', 81), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 12 - patch: Patch(brick_17, [('pos_x', 81), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 13 - patch: Patch(brick_17, [('pos_x', 81), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 14 - patch: Patch(brick_17, [('pos_x', 81), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 15 - patch: Patch(brick_17, [('pos_x', 81), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 16 - patch: Patch(brick_17, [('pos_x', 81), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 17 - patch: Patch(brick_17, [('pos_x', 81), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 18 - patch: Patch(brick_17, [('pos_x', 81), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 19 - patch: Patch(brick_17, [('pos_x', 81), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+
+obj_22
+
+rules: []
+
+frame 0 - patch: Patch(brick_18, [('pos_x', 95), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: [left_arrow_pressed, game_start]
+frame 1 - patch: Patch(brick_18, [('pos_x', 95), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 2 - patch: Patch(brick_18, [('pos_x', 95), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 3 - patch: Patch(brick_18, [('pos_x', 95), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 4 - patch: Patch(brick_18, [('pos_x', 95), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 5 - patch: Patch(brick_18, [('pos_x', 95), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 6 - patch: Patch(brick_18, [('pos_x', 95), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 7 - patch: Patch(brick_18, [('pos_x', 95), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 8 - patch: Patch(brick_18, [('pos_x', 95), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 9 - patch: Patch(brick_18, [('pos_x', 95), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 10 - patch: Patch(brick_18, [('pos_x', 95), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 11 - patch: Patch(brick_18, [('pos_x', 95), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 12 - patch: Patch(brick_18, [('pos_x', 95), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 13 - patch: Patch(brick_18, [('pos_x', 95), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 14 - patch: Patch(brick_18, [('pos_x', 95), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 15 - patch: Patch(brick_18, [('pos_x', 95), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 16 - patch: Patch(brick_18, [('pos_x', 95), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 17 - patch: Patch(brick_18, [('pos_x', 95), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 18 - patch: Patch(brick_18, [('pos_x', 95), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 19 - patch: Patch(brick_18, [('pos_x', 95), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+
+obj_23
+
+rules: []
+
+frame 0 - patch: Patch(brick_19, [('pos_x', 95), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: [left_arrow_pressed, game_start]
+frame 1 - patch: Patch(brick_19, [('pos_x', 95), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 2 - patch: Patch(brick_19, [('pos_x', 95), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 3 - patch: Patch(brick_19, [('pos_x', 95), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 4 - patch: Patch(brick_19, [('pos_x', 95), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 5 - patch: Patch(brick_19, [('pos_x', 95), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 6 - patch: Patch(brick_19, [('pos_x', 95), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 7 - patch: Patch(brick_19, [('pos_x', 95), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 8 - patch: Patch(brick_19, [('pos_x', 95), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 9 - patch: Patch(brick_19, [('pos_x', 95), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 10 - patch: Patch(brick_19, [('pos_x', 95), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 11 - patch: Patch(brick_19, [('pos_x', 95), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 12 - patch: Patch(brick_19, [('pos_x', 95), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 13 - patch: Patch(brick_19, [('pos_x', 95), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 14 - patch: Patch(brick_19, [('pos_x', 95), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 15 - patch: Patch(brick_19, [('pos_x', 95), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 16 - patch: Patch(brick_19, [('pos_x', 95), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 17 - patch: Patch(brick_19, [('pos_x', 95), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 18 - patch: Patch(brick_19, [('pos_x', 95), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 19 - patch: Patch(brick_19, [('pos_x', 95), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+
+obj_24
+
+rules: []
+
+frame 0 - patch: Patch(brick_20, [('pos_x', 95), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: [left_arrow_pressed, game_start]
+frame 1 - patch: Patch(brick_20, [('pos_x', 95), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 2 - patch: Patch(brick_20, [('pos_x', 95), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 3 - patch: Patch(brick_20, [('pos_x', 95), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 4 - patch: Patch(brick_20, [('pos_x', 95), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 5 - patch: Patch(brick_20, [('pos_x', 95), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 6 - patch: Patch(brick_20, [('pos_x', 95), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 7 - patch: Patch(brick_20, [('pos_x', 95), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 8 - patch: Patch(brick_20, [('pos_x', 95), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 9 - patch: Patch(brick_20, [('pos_x', 95), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 10 - patch: Patch(brick_20, [('pos_x', 95), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 11 - patch: Patch(brick_20, [('pos_x', 95), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 12 - patch: Patch(brick_20, [('pos_x', 95), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 13 - patch: Patch(brick_20, [('pos_x', 95), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 14 - patch: Patch(brick_20, [('pos_x', 95), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 15 - patch: Patch(brick_20, [('pos_x', 95), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 16 - patch: Patch(brick_20, [('pos_x', 95), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 17 - patch: Patch(brick_20, [('pos_x', 95), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 18 - patch: Patch(brick_20, [('pos_x', 95), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 19 - patch: Patch(brick_20, [('pos_x', 95), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+
+obj_25
+
+rules: []
+
+frame 0 - patch: Patch(brick_21, [('pos_x', 109), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: [left_arrow_pressed, game_start]
+frame 1 - patch: Patch(brick_21, [('pos_x', 109), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 2 - patch: Patch(brick_21, [('pos_x', 109), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 3 - patch: Patch(brick_21, [('pos_x', 109), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 4 - patch: Patch(brick_21, [('pos_x', 109), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 5 - patch: Patch(brick_21, [('pos_x', 109), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 6 - patch: Patch(brick_21, [('pos_x', 109), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 7 - patch: Patch(brick_21, [('pos_x', 109), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 8 - patch: Patch(brick_21, [('pos_x', 109), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 9 - patch: Patch(brick_21, [('pos_x', 109), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 10 - patch: Patch(brick_21, [('pos_x', 109), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 11 - patch: Patch(brick_21, [('pos_x', 109), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 12 - patch: Patch(brick_21, [('pos_x', 109), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 13 - patch: Patch(brick_21, [('pos_x', 109), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 14 - patch: Patch(brick_21, [('pos_x', 109), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 15 - patch: Patch(brick_21, [('pos_x', 109), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 16 - patch: Patch(brick_21, [('pos_x', 109), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 17 - patch: Patch(brick_21, [('pos_x', 109), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 18 - patch: Patch(brick_21, [('pos_x', 109), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 19 - patch: Patch(brick_21, [('pos_x', 109), ('pos_y', 10), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+
+obj_26
+
+rules: []
+
+frame 0 - patch: Patch(brick_22, [('pos_x', 109), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: [left_arrow_pressed, game_start]
+frame 1 - patch: Patch(brick_22, [('pos_x', 109), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 2 - patch: Patch(brick_22, [('pos_x', 109), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 3 - patch: Patch(brick_22, [('pos_x', 109), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 4 - patch: Patch(brick_22, [('pos_x', 109), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 5 - patch: Patch(brick_22, [('pos_x', 109), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 6 - patch: Patch(brick_22, [('pos_x', 109), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 7 - patch: Patch(brick_22, [('pos_x', 109), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 8 - patch: Patch(brick_22, [('pos_x', 109), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 9 - patch: Patch(brick_22, [('pos_x', 109), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 10 - patch: Patch(brick_22, [('pos_x', 109), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 11 - patch: Patch(brick_22, [('pos_x', 109), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 12 - patch: Patch(brick_22, [('pos_x', 109), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 13 - patch: Patch(brick_22, [('pos_x', 109), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 14 - patch: Patch(brick_22, [('pos_x', 109), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 15 - patch: Patch(brick_22, [('pos_x', 109), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 16 - patch: Patch(brick_22, [('pos_x', 109), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 17 - patch: Patch(brick_22, [('pos_x', 109), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 18 - patch: Patch(brick_22, [('pos_x', 109), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 19 - patch: Patch(brick_22, [('pos_x', 109), ('pos_y', 20), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+
+obj_27
+
+rules: []
+
+frame 0 - patch: Patch(brick_23, [('pos_x', 109), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: [left_arrow_pressed, game_start]
+frame 1 - patch: Patch(brick_23, [('pos_x', 109), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 2 - patch: Patch(brick_23, [('pos_x', 109), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 3 - patch: Patch(brick_23, [('pos_x', 109), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 4 - patch: Patch(brick_23, [('pos_x', 109), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 5 - patch: Patch(brick_23, [('pos_x', 109), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 6 - patch: Patch(brick_23, [('pos_x', 109), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 7 - patch: Patch(brick_23, [('pos_x', 109), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 8 - patch: Patch(brick_23, [('pos_x', 109), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 9 - patch: Patch(brick_23, [('pos_x', 109), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 10 - patch: Patch(brick_23, [('pos_x', 109), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 11 - patch: Patch(brick_23, [('pos_x', 109), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 12 - patch: Patch(brick_23, [('pos_x', 109), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 13 - patch: Patch(brick_23, [('pos_x', 109), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 14 - patch: Patch(brick_23, [('pos_x', 109), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 15 - patch: Patch(brick_23, [('pos_x', 109), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 16 - patch: Patch(brick_23, [('pos_x', 109), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 17 - patch: Patch(brick_23, [('pos_x', 109), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 18 - patch: Patch(brick_23, [('pos_x', 109), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 19 - patch: Patch(brick_23, [('pos_x', 109), ('pos_y', 30), ('shape_x', 5), ('shape_y', 2)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+
+obj_28
+
 rules: [rule
-with causes: [game_start]
+with causes: [left_arrow_pressed]
+with effects: [pos_x(i+1) = 1 * pos_x(i) + -2]
+after 1 frames]
+
+frame 0 - patch: Patch(paddle_center, [('pos_x', 60), ('pos_y', 60), ('shape_x', 5), ('shape_y', 1)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: [left_arrow_pressed, game_start]
+frame 1 - patch: Patch(paddle_center, [('pos_x', 58), ('pos_y', 60), ('shape_x', 5), ('shape_y', 1)])
+- unexplained: [PropertyChange(pos_x: 60 -> 58)]
+- explained: []
+- events: []
+- global events: []
+frame 2 - patch: Patch(paddle_center, [('pos_x', 58), ('pos_y', 60), ('shape_x', 5), ('shape_y', 1)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 3 - patch: Patch(paddle_center, [('pos_x', 58), ('pos_y', 60), ('shape_x', 5), ('shape_y', 1)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 4 - patch: Patch(paddle_center, [('pos_x', 58), ('pos_y', 60), ('shape_x', 5), ('shape_y', 1)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 5 - patch: Patch(paddle_center, [('pos_x', 58), ('pos_y', 60), ('shape_x', 5), ('shape_y', 1)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 6 - patch: Patch(paddle_center, [('pos_x', 58), ('pos_y', 60), ('shape_x', 5), ('shape_y', 1)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 7 - patch: Patch(paddle_center, [('pos_x', 58), ('pos_y', 60), ('shape_x', 5), ('shape_y', 1)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 8 - patch: Patch(paddle_center, [('pos_x', 58), ('pos_y', 60), ('shape_x', 5), ('shape_y', 1)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 9 - patch: Patch(paddle_center, [('pos_x', 58), ('pos_y', 60), ('shape_x', 5), ('shape_y', 1)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 10 - patch: Patch(paddle_center, [('pos_x', 58), ('pos_y', 60), ('shape_x', 5), ('shape_y', 1)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 11 - patch: Patch(paddle_center, [('pos_x', 58), ('pos_y', 60), ('shape_x', 5), ('shape_y', 1)])
+- unexplained: []
+- explained: []
+- events: [<class 'core.events.Contact_With_Something_L'>]
+- global events: []
+frame 12 - patch: Patch(paddle_center, [('pos_x', 58), ('pos_y', 60), ('shape_x', 5), ('shape_y', 1)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 13 - patch: Patch(paddle_center, [('pos_x', 58), ('pos_y', 60), ('shape_x', 5), ('shape_y', 1)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 14 - patch: Patch(paddle_center, [('pos_x', 58), ('pos_y', 60), ('shape_x', 5), ('shape_y', 1)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 15 - patch: Patch(paddle_center, [('pos_x', 58), ('pos_y', 60), ('shape_x', 5), ('shape_y', 1)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 16 - patch: Patch(paddle_center, [('pos_x', 58), ('pos_y', 60), ('shape_x', 5), ('shape_y', 1)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 17 - patch: Patch(paddle_center, [('pos_x', 58), ('pos_y', 60), ('shape_x', 5), ('shape_y', 1)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 18 - patch: Patch(paddle_center, [('pos_x', 58), ('pos_y', 60), ('shape_x', 5), ('shape_y', 1)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+frame 19 - patch: Patch(paddle_center, [('pos_x', 58), ('pos_y', 60), ('shape_x', 5), ('shape_y', 1)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+
+obj_35
+
+rules: [rule
+with causes: [left_arrow_pressed]
 with effects: [vx(i+1) = 0 * vx(i) + 1]
 after 0 frames, rule
-with causes: [game_start]
+with causes: [left_arrow_pressed]
 with effects: [vy(i+1) = 0 * vy(i) + 1]
 after 0 frames, rule
 with causes: [Contact]
+with effects: [vx(i+1) = -1 * vx(i) + 0]
+after 0 frames, rule
+with causes: [Contact]
 with effects: [vy(i+1) = -1 * vy(i) + 0]
-after 1 frames]
+after 0 frames]
 
-frame 0 - patch: Patch(ball, [('pos_x', 47), ('pos_y', 44), ('shape_x', 1), ('shape_y', 1)])
+frame 0 - patch: Patch(ball, [('pos_x', 40), ('pos_y', 50), ('shape_x', 1), ('shape_y', 1)])
 - unexplained: [PropertyChange(vx: 0 -> 1), PropertyChange(vy: 0 -> 1)]
 - explained: []
 - events: []
-- global events: [game_start]
-frame 1 - patch: Patch(ball, [('pos_x', 48), ('pos_y', 45), ('shape_x', 1), ('shape_y', 1)])
+- global events: [left_arrow_pressed, game_start]
+frame 1 - patch: Patch(ball, [('pos_x', 41), ('pos_y', 51), ('shape_x', 1), ('shape_y', 1)])
 - unexplained: []
 - explained: []
 - events: []
 - global events: []
-frame 2 - patch: Patch(ball, [('pos_x', 49), ('pos_y', 46), ('shape_x', 1), ('shape_y', 1)])
+frame 2 - patch: Patch(ball, [('pos_x', 42), ('pos_y', 52), ('shape_x', 1), ('shape_y', 1)])
 - unexplained: []
 - explained: []
 - events: []
 - global events: []
-frame 3 - patch: Patch(ball, [('pos_x', 50), ('pos_y', 47), ('shape_x', 1), ('shape_y', 1)])
+frame 3 - patch: Patch(ball, [('pos_x', 43), ('pos_y', 53), ('shape_x', 1), ('shape_y', 1)])
 - unexplained: []
 - explained: []
 - events: []
 - global events: []
-frame 4 - patch: Patch(ball, [('pos_x', 42), ('pos_y', 50), ('shape_x', 1), ('shape_y', 1)])
-- unexplained: [PropertyChange(pos_x: 50 -> 42), PropertyChange(pos_y: 47 -> 50)]
-- explained: []
-- events: []
-- global events: []
-frame 5 - patch: Patch(ball, [('pos_x', 43), ('pos_y', 51), ('shape_x', 1), ('shape_y', 1)])
+frame 4 - patch: Patch(ball, [('pos_x', 44), ('pos_y', 54), ('shape_x', 1), ('shape_y', 1)])
 - unexplained: []
 - explained: []
 - events: []
 - global events: []
-frame 6 - patch: Patch(ball, [('pos_x', 44), ('pos_y', 52), ('shape_x', 1), ('shape_y', 1)])
+frame 5 - patch: Patch(ball, [('pos_x', 45), ('pos_y', 55), ('shape_x', 1), ('shape_y', 1)])
 - unexplained: []
 - explained: []
 - events: []
 - global events: []
-frame 7 - patch: Patch(ball, [('pos_x', 45), ('pos_y', 53), ('shape_x', 1), ('shape_y', 1)])
+frame 6 - patch: Patch(ball, [('pos_x', 46), ('pos_y', 56), ('shape_x', 1), ('shape_y', 1)])
 - unexplained: []
 - explained: []
 - events: []
 - global events: []
-frame 8 - patch: Patch(ball, [('pos_x', 46), ('pos_y', 54), ('shape_x', 1), ('shape_y', 1)])
+frame 7 - patch: Patch(ball, [('pos_x', 47), ('pos_y', 57), ('shape_x', 1), ('shape_y', 1)])
 - unexplained: []
 - explained: []
 - events: []
 - global events: []
-frame 9 - patch: Patch(ball, [('pos_x', 47), ('pos_y', 55), ('shape_x', 1), ('shape_y', 1)])
+frame 8 - patch: Patch(ball, [('pos_x', 48), ('pos_y', 58), ('shape_x', 1), ('shape_y', 1)])
 - unexplained: []
 - explained: []
 - events: []
 - global events: []
-frame 10 - patch: Patch(ball, [('pos_x', 48), ('pos_y', 56), ('shape_x', 1), ('shape_y', 1)])
+frame 9 - patch: Patch(ball, [('pos_x', 49), ('pos_y', 59), ('shape_x', 1), ('shape_y', 1)])
 - unexplained: []
 - explained: []
 - events: []
 - global events: []
-frame 11 - patch: Patch(ball, [('pos_x', 49), ('pos_y', 57), ('shape_x', 1), ('shape_y', 1)])
+frame 10 - patch: Patch(ball, [('pos_x', 50), ('pos_y', 60), ('shape_x', 1), ('shape_y', 1)])
 - unexplained: []
 - explained: []
 - events: []
 - global events: []
-frame 12 - patch: Patch(ball, [('pos_x', 50), ('pos_y', 58), ('shape_x', 1), ('shape_y', 1)])
-- unexplained: []
-- explained: []
-- events: []
-- global events: []
-frame 13 - patch: Patch(ball, [('pos_x', 51), ('pos_y', 59), ('shape_x', 1), ('shape_y', 1)])
-- unexplained: []
-- explained: []
-- events: []
-- global events: []
-frame 14 - patch: Patch(ball, [('pos_x', 52), ('pos_y', 60), ('shape_x', 1), ('shape_y', 1)])
-- unexplained: []
-- explained: []
-- events: []
-- global events: []
-frame 15 - patch: Patch(ball, [('pos_x', 53), ('pos_y', 61), ('shape_x', 1), ('shape_y', 1)])
+frame 11 - patch: Patch(ball, [('pos_x', 51), ('pos_y', 61), ('shape_x', 1), ('shape_y', 1)])
 - unexplained: [PropertyChange(vx: 1 -> -1)]
 - explained: []
-- events: []
+- events: [<class 'core.events.Contact_With_Something_R'>]
 - global events: []
-frame 16 - patch: Patch(ball, [('pos_x', 52), ('pos_y', 62), ('shape_x', 1), ('shape_y', 1)])
+frame 12 - patch: Patch(ball, [('pos_x', 50), ('pos_y', 62), ('shape_x', 1), ('shape_y', 1)])
 - unexplained: []
 - explained: []
 - events: []
 - global events: []
-frame 17 - patch: Patch(ball, [('pos_x', 51), ('pos_y', 63), ('shape_x', 1), ('shape_y', 1)])
+frame 13 - patch: Patch(ball, [('pos_x', 49), ('pos_y', 63), ('shape_x', 1), ('shape_y', 1)])
 - unexplained: []
 - explained: []
 - events: []
 - global events: []
-frame 18 - patch: Patch(ball, [('pos_x', 50), ('pos_y', 64), ('shape_x', 1), ('shape_y', 1)])
+frame 14 - patch: Patch(ball, [('pos_x', 48), ('pos_y', 64), ('shape_x', 1), ('shape_y', 1)])
 - unexplained: []
 - explained: []
 - events: []
 - global events: []
-frame 19 - patch: Patch(ball, [('pos_x', 49), ('pos_y', 65), ('shape_x', 1), ('shape_y', 1)])
+frame 15 - patch: Patch(ball, [('pos_x', 47), ('pos_y', 65), ('shape_x', 1), ('shape_y', 1)])
 - unexplained: []
 - explained: []
-- events: [<class 'core.events.Contact_With_Something_B'>]
+- events: []
 - global events: []
-frame 20 - patch: Patch(ball, [('pos_x', 48), ('pos_y', 66), ('shape_x', 1), ('shape_y', 1)])
+frame 16 - patch: Patch(ball, [('pos_x', 46), ('pos_y', 66), ('shape_x', 1), ('shape_y', 1)])
 - unexplained: [PropertyChange(vy: 1 -> -1)]
 - explained: []
-- events: []
-- global events: []
-frame 21 - patch: Patch(ball, [('pos_x', 47), ('pos_y', 65), ('shape_x', 1), ('shape_y', 1)])
-- unexplained: []
-- explained: []
 - events: [<class 'core.events.Contact_With_Something_B'>]
 - global events: []
-frame 22 - patch: Patch(ball, [('pos_x', 46), ('pos_y', 64), ('shape_x', 1), ('shape_y', 1)])
+frame 17 - patch: Patch(ball, [('pos_x', 45), ('pos_y', 65), ('shape_x', 1), ('shape_y', 1)])
 - unexplained: []
 - explained: []
 - events: []
 - global events: []
-frame 23 - patch: Patch(ball, [('pos_x', 45), ('pos_y', 63), ('shape_x', 1), ('shape_y', 1)])
+frame 18 - patch: Patch(ball, [('pos_x', 44), ('pos_y', 64), ('shape_x', 1), ('shape_y', 1)])
 - unexplained: []
 - explained: []
 - events: []
 - global events: []
-score: 6
+frame 19 - patch: Patch(ball, [('pos_x', 43), ('pos_y', 63), ('shape_x', 1), ('shape_y', 1)])
+- unexplained: []
+- explained: []
+- events: []
+- global events: []
+score: 5

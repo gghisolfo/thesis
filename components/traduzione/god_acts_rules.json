@@ -1,0 +1,28 @@
+{
+  "rules": [
+    {
+      "rule_id": "R1",
+      "trigger": "ball_paddle_collision",
+      "effect": "velocity_invert_y",
+      "confidence": 0.95,
+      "priority": 3.0,
+      "reward_modifier": 1.5
+    },
+    {
+      "rule_id": "R2",
+      "trigger": "ball_brick_collision",
+      "effect": "brick_disappear_and_velocity_invert",
+      "confidence": 0.9,
+      "priority": 2.0,
+      "reward_modifier": 2.0
+    },
+    {
+      "rule_id": "R3",
+      "trigger": "ball_lost",
+      "effect": "game_over",
+      "confidence": 1.0,
+      "priority": 2.5,
+      "reward_modifier": 1.0
+    }
+  ]
+}
