@@ -9,74 +9,14 @@ sys.path.append(BASE_DIR)
 from arkanoid_game import Game
 
 from components.traduzione.godAct.god_act_core import GodActDQNIntegrator
-import gym
 
-
-import numpy as np
-import torch
-import torch.nn as nn
-import torch.optim as optim
-import random, os, json
 
 RULES_PATH = "god_acts_rules.json"
 
 # ---------------------------
 # Arkanoid Gym Environment
 # ---------------------------
-class ArkanoidEnv(gym.Env):
-    metadata = {"render_modes": ["human"], "render_fps": 60}
 
-    def __init__(self):
-        super().__init__()
-        self.game = Game()  # Niente parametri
-        self.action_space = gym.spaces.Discrete(3)
-        self.observation_space = gym.spaces.Box(low=-1.0, high=1.0, shape=(5,), dtype=np.float32)
-        self.done = False
-
-    def reset(self):
-        self.game = Game()  # Reset semplice
-        self.done = False
-        return self._get_obs()
-
-    def step(self, action):
-        # Mappiamo azioni sulla paddle
-        if action == 0:
-            self.game.set_paddle_speed(-1)
-        elif action == 2:
-            self.game.set_paddle_speed(1)
-        else:
-            self.game.set_paddle_speed(0)
-
-        self.game.update()
-        reward = self._compute_reward()
-        if self.game.bricks_alive == 0:
-            self.done = True
-        return self._get_obs(), reward, self.done, {}
-
-    def _get_obs(self):
-        ball_x = self.game.ball_x / grid_width
-        ball_y = self.game.ball_y / grid_height
-        vx = self.game.ball_speed_x / 10.0
-        vy = self.game.ball_speed_y / 10.0
-        paddle_x = self.game.paddle_x / grid_width
-        return np.array([ball_x*2-1, ball_y*2-1, vx, vy, paddle_x*2-1], dtype=np.float32)
-
-    def _compute_reward(self):
-        r = 0.1
-        # Semplice reward shaping basato su eventi
-        if hasattr(self.game, "ball_hit_paddle") and self.game.ball_hit_paddle:
-            r += 1.0
-        if hasattr(self.game, "brick_destroyed") and self.game.brick_destroyed:
-            r += 2.0
-        if hasattr(self.game, "ball_lost") and self.game.ball_lost:
-            r -= 5.0
-        return r
-
-    def render(self, mode="human"):
-        pass  # pygame render non implementato qui
-
-    def close(self):
-        pass
 
 
 # ---------------------------
