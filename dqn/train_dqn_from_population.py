@@ -1,3 +1,5 @@
+
+#run at thesis levels with python -m dqn.train_dqn_from_population
 import pickle
 import torch
 import torch.nn as nn
@@ -13,7 +15,7 @@ from godAct import GodActDQNIntegrator
 from arkanoid_game import Game
 
 BEST_POPULATION_PATH= "best_population.pkl"
-SAVE_DIR = "././dqn_model"
+SAVE_DIR = "./dqn/dqn_models"
 os.makedirs(SAVE_DIR, exist_ok=True)  # crea la cartella se non esiste
 
 
