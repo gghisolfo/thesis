@@ -8,11 +8,11 @@ import numpy as np
 import random
 import gym
 import os
-
+import pygame
 
 
 from godAct import GodActDQNIntegrator
-from arkanoid_game import Game
+from arkanoid_game import Game, grid_width, grid_height, screen_width, screen_height
 
 BEST_POPULATION_PATH= "best_population.pkl"
 SAVE_DIR = "./dqn/dqn_models"
@@ -24,11 +24,24 @@ class ArkanoidEnv(gym.Env):
     metadata = {"render_modes": ["human"], "render_fps": 60}
 
     def __init__(self):
+        # super().__init__()
+        # self.game = Game()  # Niente parametri
+        # self.action_space = gym.spaces.Discrete(3)
+        # self.observation_space = gym.spaces.Box(low=-1.0, high=1.0, shape=(5,), dtype=np.float32)
+        # self.done = False
         super().__init__()
         self.game = Game()  # Niente parametri
         self.action_space = gym.spaces.Discrete(3)
         self.observation_space = gym.spaces.Box(low=-1.0, high=1.0, shape=(5,), dtype=np.float32)
         self.done = False
+
+        # --- Inizializza pygame per il rendering ---
+        pygame.init()
+        self.screen_width = screen_width#400
+        self.screen_height = screen_height#600
+        self.screen = pygame.display.set_mode((self.screen_width, self.screen_height))
+        pygame.display.set_caption("Arkanoid RL")
+        self.clock = pygame.time.Clock()
 
     def reset(self):
         self.game = Game()  # Reset semplice
@@ -51,11 +64,11 @@ class ArkanoidEnv(gym.Env):
         return self._get_obs(), reward, self.done, {}
 
     def _get_obs(self):
-        ball_x = self.game.ball_x #/ grid_width
-        ball_y = self.game.ball_y #/ grid_height
+        ball_x = self.game.ball_x / grid_width
+        ball_y = self.game.ball_y / grid_height
         vx = self.game.ball_speed_x / 10.0
         vy = self.game.ball_speed_y / 10.0
-        paddle_x = self.game.paddle_x #/ grid_width
+        paddle_x = self.game.paddle_x / grid_width
         return np.array([ball_x*2-1, ball_y*2-1, vx, vy, paddle_x*2-1], dtype=np.float32)
 
     def _compute_reward(self):
@@ -70,10 +83,52 @@ class ArkanoidEnv(gym.Env):
         return r
 
     def render(self, mode="human"):
-        pass  # pygame render non implementato qui
+        # gestione eventi per chiusura finestra
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                self.done = True
+
+        self.screen.fill((0, 0, 0))  # sfondo nero
+
+        # --- Fattori di scala ---
+        scale_x = self.screen_width / grid_width
+        scale_y = self.screen_height / grid_height
+
+        # --- Paddle ---
+        paddle_rect = pygame.Rect(
+            int((self.game.paddle_x - self.game.paddle_halfwidth) * scale_x),
+            int((self.game.paddle_y - self.game.paddle_halfheight) * scale_y),
+            int(self.game.paddle_halfwidth * 2 * scale_x),
+            int(self.game.paddle_halfheight * 2 * scale_y)
+        )
+        pygame.draw.rect(self.screen, (255, 255, 255), paddle_rect)
+
+        # --- Palla ---
+        pygame.draw.circle(
+            self.screen, (255, 0, 0),
+            (int(self.game.ball_x * scale_x), int(self.game.ball_y * scale_y)),
+            max(1, int(self.game.ball_radius * (scale_x + scale_y) / 2))
+        )
+
+        # --- Mattoni ---
+        for i, brick_pos in enumerate(self.game.brick_positions):
+            brick = self.game.elements[f'brick_{i}']
+            if brick['existence']:
+                rect = pygame.Rect(
+                    int((brick['pos_x'] - self.game.brick_halfwidth) * scale_x),
+                    int((brick['pos_y'] - self.game.brick_halfheight) * scale_y),
+                    int((self.game.brick_halfwidth * 2 + 1) * scale_x),
+                    int((self.game.brick_halfheight * 2 + 1) * scale_y)
+                )
+                pygame.draw.rect(self.screen, (0, 255, 0), rect)
+
+        pygame.display.flip()
+        self.clock.tick(60)  # 60 FPS
+
+
 
     def close(self):
-        pass
+        pygame.quit()
 
 # modello DQN semplice
 class QNetwork(nn.Module):
