@@ -10,7 +10,6 @@ import gym
 import os
 import pygame
 
-
 from godAct import GodActDQNIntegrator
 from arkanoid_game import Game, grid_width, grid_height, screen_width, screen_height
 
@@ -18,7 +17,7 @@ BEST_POPULATION_PATH= "best_population.pkl"
 SAVE_DIR = "./dqn/dqn_models"
 os.makedirs(SAVE_DIR, exist_ok=True)  # crea la cartella se non esiste
 
-
+FRAME_RATE = 60 #2
 
 class ArkanoidEnv(gym.Env):
     metadata = {"render_modes": ["human"], "render_fps": 60}
@@ -45,6 +44,10 @@ class ArkanoidEnv(gym.Env):
 
     def reset(self):
         self.game = Game()  # Reset semplice
+        self.ball_hit_paddle = False ## quiii
+        self.brick_destroyed = False
+        self.ball_lost = False
+
         self.done = False
         return self._get_obs()
 
@@ -83,48 +86,30 @@ class ArkanoidEnv(gym.Env):
         return r
 
     def render(self, mode="human"):
-        # gestione eventi per chiusura finestra
+        # Gestione eventi per chiusura finestra
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.done = True
 
-        self.screen.fill((0, 0, 0))  # sfondo nero
+        # Aggiornamento logico del gioco
+        # self.game.update()  quii
 
-        # --- Fattori di scala ---
-        scale_x = self.screen_width / grid_width
-        scale_y = self.screen_height / grid_height
+        # Ottieni la griglia RGB come superficie Pygame
+        grid_surface = pygame.surfarray.make_surface(self.game.get_grid())
 
-        # --- Paddle ---
-        paddle_rect = pygame.Rect(
-            int((self.game.paddle_x - self.game.paddle_halfwidth) * scale_x),
-            int((self.game.paddle_y - self.game.paddle_halfheight) * scale_y),
-            int(self.game.paddle_halfwidth * 2 * scale_x),
-            int(self.game.paddle_halfheight * 2 * scale_y)
-        )
-        pygame.draw.rect(self.screen, (255, 255, 255), paddle_rect)
-
-        # --- Palla ---
-        pygame.draw.circle(
-            self.screen, (255, 0, 0),
-            (int(self.game.ball_x * scale_x), int(self.game.ball_y * scale_y)),
-            max(1, int(self.game.ball_radius * (scale_x + scale_y) / 2))
+        # Ridimensiona la superficie alla dimensione della finestra
+        scaled_surface = pygame.transform.scale(
+            grid_surface, (self.screen_width, self.screen_height)
         )
 
-        # --- Mattoni ---
-        for i, brick_pos in enumerate(self.game.brick_positions):
-            brick = self.game.elements[f'brick_{i}']
-            if brick['existence']:
-                rect = pygame.Rect(
-                    int((brick['pos_x'] - self.game.brick_halfwidth) * scale_x),
-                    int((brick['pos_y'] - self.game.brick_halfheight) * scale_y),
-                    int((self.game.brick_halfwidth * 2 + 1) * scale_x),
-                    int((self.game.brick_halfheight * 2 + 1) * scale_y)
-                )
-                pygame.draw.rect(self.screen, (0, 255, 0), rect)
+        # Disegna la superficie sulla finestra
+        self.screen.blit(scaled_surface, (0, 0))
 
+        # Aggiorna lo schermo
         pygame.display.flip()
-        self.clock.tick(60)  # 60 FPS
 
+        # Imposta il frame rate
+        self.clock.tick(FRAME_RATE)#60
 
 
     def close(self):
@@ -135,17 +120,19 @@ class QNetwork(nn.Module):
     def __init__(self, state_dim, action_dim):
         super().__init__()
         self.net = nn.Sequential(
-            nn.Linear(state_dim, 128),
+            nn.Linear(state_dim, 256),
             nn.ReLU(),
-            nn.Linear(128, 128),
+            nn.Linear(256, 256),
             nn.ReLU(),
-            nn.Linear(128, action_dim)
+            nn.Linear(256, action_dim)
         )
-    def forward(self, x): return self.net(x)
+    def forward(self, x):
+        return self.net(x)
+
 
 def train_dqn_from_population(
     population_path=BEST_POPULATION_PATH,
-    total_episodes=400,
+    total_episodes=1000, #400
     max_steps_per_episode=2000
 ):
     # carica popolazione euristica
@@ -170,9 +157,14 @@ def train_dqn_from_population(
     buffer = integrator.create_replay_buffer(50000)
 
     gamma = 0.99
+    # epsilon = 1.0#0.2#1.0
+    # epsilon_min = 0.02
+    # epsilon_decay = 0.995
+
     epsilon = 1.0
     epsilon_min = 0.02
-    epsilon_decay = 0.995
+    epsilon_decay = 0.97  # più rapido: dopo ~200 episodi arriva vicino al minimo
+
 
     for ep in range(total_episodes):
         state = env.reset()
@@ -219,7 +211,7 @@ def train_dqn_from_population(
         epsilon = max(epsilon_min, epsilon * epsilon_decay)
         print(f"Ep {ep} - Reward: {total_reward:.2f} - Eps: {epsilon:.3f}")
 
-        if ep % 50 == 0:
+        if ep % 10 == 0: #ep % 50 == 0
             q_target.load_state_dict(q_net.state_dict())
             model_path = os.path.join(SAVE_DIR, f"dqn_from_population_ep{ep}.pth")
             torch.save(q_net.state_dict(), model_path)

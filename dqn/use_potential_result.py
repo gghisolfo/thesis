@@ -16,8 +16,6 @@ obs = env.reset()
 done = False
 
 
-
-
 # Inizializza la rete e carica i pesi
 state_dim = env.observation_space.shape[0]
 action_dim = env.action_space.n

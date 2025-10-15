@@ -48,9 +48,6 @@ class Game:
             'never_hit': True,
             'existence': False,
         }
-        # global grid_width, grid_height
-        # self.grid_width = grid_width
-        # self.grid_height = grid_height
 
         self.init_grid()
 
