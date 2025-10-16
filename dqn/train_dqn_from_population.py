@@ -181,13 +181,18 @@ def train_dqn_from_population(
 
             next_state, reward, done, _ = env.step(action)
 
-            # Reward shaping dal GodActs integrator
-            shaped_reward = env.reward_shaper.shape_reward(state, action, reward, next_state)
+            # Reward shaping dal GodActs integrator qui-reward
+            # shaped_reward = env.reward_shaper.shape_reward(state, action, reward, next_state)
+            # buffer.push(state, action, shaped_reward, next_state, done)
+            # total_reward += shaped_reward
 
-            buffer.push(state, action, shaped_reward, next_state, done)
+
+            # temporaneamente, usa il reward grezzo
+            buffer.push(state, action, reward, next_state, done)
+            total_reward += reward
+
             state = next_state
-            total_reward += shaped_reward
-
+            
             # training
             if len(buffer.buffer) >= 64:
                 s, a, r, ns, d = buffer.sample(64)
