@@ -9,7 +9,7 @@ import torch.nn as nn
 
 # Path del modello PT
 MODEL_PATH = "./dqn/dqn_models/dqn_from_population_final.pth" #"./dqn/dqn_model/dqn_from_population_final.pth"
-
+# MODEL_PATH = "./dqn/dqn_models/dqn_from_population_ep980.pth"
 # Crea ambiente
 env = ArkanoidEnv()
 obs = env.reset()

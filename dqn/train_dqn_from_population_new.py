@@ -1,4 +1,3 @@
-
 #run at thesis levels with python -m dqn.train_dqn_from_population
 import pickle
 import torch
@@ -23,38 +22,32 @@ class ArkanoidEnv(gym.Env):
     metadata = {"render_modes": ["human"], "render_fps": 60}
 
     def __init__(self):
-        # super().__init__()
-        # self.game = Game()  # Niente parametri
-        # self.action_space = gym.spaces.Discrete(3)
-        # self.observation_space = gym.spaces.Box(low=-1.0, high=1.0, shape=(5,), dtype=np.float32)
-        # self.done = False
         super().__init__()
-        self.game = Game()  # Niente parametri
-        self.action_space = gym.spaces.Discrete(3) # 0=sinistra, 1=fermo, 2=destra
-        self.observation_space = gym.spaces.Box(low=-1.0, high=1.0, shape=(5,), dtype=np.float32)
-        self.done = False
+        self.game = Game()
+        self.action_space = gym.spaces.Discrete(3)  # 0=sinistra, 1=fermo, 2=destra
+        self.observation_space = gym.spaces.Box(low=0, high=1, shape=(5,), dtype=np.float32)
 
-        # --- Inizializza pygame per il rendering ---
-        pygame.init()
-        self.screen_width = screen_width#400
-        self.screen_height = screen_height#600
-        self.screen = pygame.display.set_mode((self.screen_width, self.screen_height))
-        pygame.display.set_caption("Arkanoid RL")
-        self.clock = pygame.time.Clock()
+        # Stato precedente per rilevare eventi
+        self.prev_bricks_alive = self.game.bricks_alive
+        self.prev_ball_vy = self.game.ball_speed_y
+        self.prev_ball_y = self.game.ball_y
+
 
     # crea una nuova partita Game()
+    # --- Reset del gioco ---
     def reset(self):
-        self.game = Game()  # Reset semplice
-        self.ball_hit_paddle = False ## quiii
-        self.brick_destroyed = False
-        self.ball_lost = False
+        self.game = Game()
+        self.prev_bricks_alive = self.game.bricks_alive
+        self.prev_ball_vy = self.game.ball_speed_y
+        self.prev_ball_y = self.game.ball_y
 
-        self.done = False
         return self._get_obs()
 
     # muove la paddle, aggiorna il gioco, calcola reward.
+    
+    # --- Un singolo passo di simulazione ---
     def step(self, action):
-        # Mappiamo azioni sulla paddle
+        # Applica l'azione - Mappiamo azioni sulla paddle
         if action == 0:
             self.game.set_paddle_speed(-1)
         elif action == 2:
@@ -62,13 +55,23 @@ class ArkanoidEnv(gym.Env):
         else:
             self.game.set_paddle_speed(0)
 
-        self.game.update()
-        reward = self._compute_reward()
-        if self.game.bricks_alive == 0:
-            self.done = True
-        return self._get_obs(), reward, self.done, {}
 
-    # restituisce un vettore compatto: [ball_x_norm, ball_y_norm, vx, vy, paddle_x_norm] rappresenta la fisica del gioco, non l’immagine (molto più efficiente).
+        # Aggiorna la simulazione
+        self.game.update()
+
+        # Calcola la ricompensa
+        reward = self._compute_reward()
+
+        # Condizione di fine partita
+        done = (
+            self.game.bricks_alive == 0 or
+            self.game.ball_y > grid_height - 1
+        )
+
+        return self._get_obs(), reward, done, {}
+
+    # restituisce un vettore compatto: [ball_x_norm, ball_y_norm, vx, vy, paddle_x_norm] rappresenta la fisica del gioco, non l'immagine (molto più efficiente).
+     # --- Osservazione compatta ---
     def _get_obs(self):
         ball_x = self.game.ball_x / grid_width
         ball_y = self.game.ball_y / grid_height
@@ -77,17 +80,33 @@ class ArkanoidEnv(gym.Env):
         paddle_x = self.game.paddle_x / grid_width
         return np.array([ball_x*2-1, ball_y*2-1, vx, vy, paddle_x*2-1], dtype=np.float32)
 
+
     # assegna ricompense
+    # --- Reward function basata su variazioni ---
     def _compute_reward(self):
-        r = 0.1
-        # Semplice reward shaping basato su eventi
-        if hasattr(self.game, "ball_hit_paddle") and self.game.ball_hit_paddle:
-            r += 1.0
-        if hasattr(self.game, "brick_destroyed") and self.game.brick_destroyed:
-            r += 2.0
-        if hasattr(self.game, "ball_lost") and self.game.ball_lost:
-            r -= 5.0
-        return r
+        reward = 0.05  # piccola ricompensa di sopravvivenza
+
+        # 🧱 Brick distrutto → se il conteggio è diminuito
+        if self.game.bricks_alive < self.prev_bricks_alive:
+            reward += 3.0
+        self.prev_bricks_alive = self.game.bricks_alive
+
+        # 🏓 Colpo sulla paddle → vy cambia da + a − vicino alla paddle
+        if self.prev_ball_vy > 0 and self.game.ball_speed_y < 0:
+            paddle_y = self.game.paddle_y
+            if abs(self.game.ball_y - paddle_y) < 2:
+                reward += 2.0
+        self.prev_ball_vy = self.game.ball_speed_y
+
+        # 💀 Palla persa → la y aumenta troppo (scende oltre il fondo)
+        if self.game.ball_y > grid_height - 1:
+            reward -= 10.0
+
+        # Bonus leggero se la palla rimane alta (per incoraggiare controllo)
+        reward += 0.02 * (1.0 - self.game.ball_y / grid_height)
+
+        return np.clip(reward, -10, 10)
+
 
     def render(self, mode="human"):
         # Gestione eventi per chiusura finestra
@@ -103,7 +122,7 @@ class ArkanoidEnv(gym.Env):
 
         # Ridimensiona la superficie alla dimensione della finestra
         scaled_surface = pygame.transform.scale(
-            grid_surface, (self.screen_width, self.screen_height)
+            grid_surface, (screen_width, screen_height)
         )
 
         # Disegna la superficie sulla finestra
@@ -174,10 +193,10 @@ def train_dqn_from_population(
     #process:
     """
     Ottieni lo stato corrente s
-    Scegli un’azione:
+    Scegli un'azione:
         Con probabilità ε → azione casuale (exploration)
         Altrimenti → argmax Q(s, a)
-    Applica l’azione all’ambiente (env.step(a))
+    Applica l'azione all'ambiente (env.step(a))
     Ottieni la nuova osservazione e reward
     Memorizza la transizione (s, a, r, s′, done)
     Aggiorna la rete Q minimizzando la temporal difference loss
@@ -188,7 +207,8 @@ def train_dqn_from_population(
         state = env.reset() 
         total_reward = 0
         done = False
-        while not done:
+        step_count = 0
+        while not done and step_count < max_steps_per_episode:
             if random.random() < epsilon:
                 action = env.action_space.sample()
             else:
@@ -210,6 +230,7 @@ def train_dqn_from_population(
             total_reward += reward
 
             state = next_state
+            step_count += 1
             
             # training
             if len(buffer.buffer) >= 64:
@@ -232,7 +253,7 @@ def train_dqn_from_population(
                 optimizer.step()
 
         epsilon = max(epsilon_min, epsilon * epsilon_decay)
-        print(f"Ep {ep} - Reward: {total_reward:.2f} - Eps: {epsilon:.3f}")
+        print(f"Ep {ep} - Reward: {total_reward:.1f} - Steps: {step_count} - Eps: {epsilon:.3f}")
 
         if ep % 10 == 0: #ep % 50 == 0
             q_target.load_state_dict(q_net.state_dict())
