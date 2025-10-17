@@ -28,9 +28,9 @@ class Game:
 
     def __init__(self):
 
-        self.elements = {} #dizionario metadati per ogni oggetto 
+        self.elements = {}
         self.event_log = []
-        self.ball_lost = False 
+        self.ball_lost = False
 
         self.elements['environment'] = {
             'id': 0,
@@ -73,7 +73,7 @@ class Game:
 
         self.init_ball()
 
-        self.event_pending = [] # mantiene una coda di eventi -> lista di tuple (event_function, param, delay)
+        self.event_pending = []
 
 
     def init_grid(self):
@@ -214,6 +214,8 @@ class Game:
 
         brick_id = id - 9
         brick_pos = self.brick_positions[brick_id]
+        print("#original briks", brick_pos)
+        print("BEFORE - bricks alive", self.bricks_alive)
 
         if False:
         #if self.elements[f'brick_{brick_id}']['never_hit']: # first hit change color, the second destroy the brick
@@ -232,6 +234,7 @@ class Game:
             self.elements[f'brick_{brick_id}']['alive'] = False
             self.elements[f'brick_{brick_id}']['existence'] = False
             self.bricks_alive -= 1
+            print("AFTER - bricks alive", self.bricks_alive)
 
     def hit_wall(self, id):
 
@@ -265,7 +268,7 @@ class Game:
 
                 self.r[3:grid_width - 3, grid_height - 3:grid_height] = 100 * color_state
 
-                # self.bricks_alive = 0 #termina partita
+                # self.bricks_alive = 0
                 self.ball_lost = True
 
 
@@ -303,7 +306,7 @@ class Game:
         
             if (self.paddle_x - self.paddle_halfwidth + self.paddle_speed > 2) and (self.paddle_x + self.paddle_halfwidth + self.paddle_speed < grid_width - 3):
                 if (self.ball_y + self.ball_radius > self.paddle_y - self.paddle_halfheight - 1 and self.ball_y - self.ball_radius < self.paddle_y + self.paddle_halfheight + 1) and (self.ball_x + self.ball_radius > self.paddle_x - self.paddle_halfwidth + self.paddle_speed and self.ball_x - self.ball_radius < self.paddle_x + self.paddle_halfwidth + self.paddle_speed):
-                    pass #se il movimento implicherebbe la sovrapposizione con la pallina
+                    pass
 
                 else:
                     self.paddle_old_x = self.paddle_x
@@ -352,7 +355,6 @@ class Game:
         }
 
 
-    # metodo che cerca di distinguere tra collisioni laterali, verticali e diagonali
     def update_ball(self):
         
         invert_speed_x = False
@@ -407,13 +409,13 @@ class Game:
         
         for collision_id in collisions:
             if collision_id != 0:
-                if collision_id >= 9: #collisione con un briks
+                if collision_id >= 9:
                     self.event_pending.append((self.hit_brick, collision_id, 1))
                 
-                elif collision_id >= 5: # collisione con un wall
+                elif collision_id >= 5:
                     self.event_pending.append((self.hit_wall, collision_id, 2))
 
-        ###### aggiorna metadati con la nuova posizione e hitbox
+        ######
 
         self.elements['ball']['pos_x'] = self.ball_x
         self.elements['ball']['pos_y'] = self.ball_y
@@ -440,7 +442,6 @@ class Game:
     def bounce_y(self):
         self.ball_speed_y = - self.ball_speed_y
 
-    #utile per gestione eventi differiti: eliminazione di un bricks o cambio colore parete
     def resolve_pending(self):
         new_event_pending = []
         for event, param, delay in self.event_pending:
@@ -452,18 +453,165 @@ class Game:
         self.event_pending = new_event_pending
 
     def update(self):
-        self.resolve_pending() #esegue gli eventi la cui delay è scaduto
-        self.update_paddle() #aggiorna la posizione della paddle
-        self.draw_paddle() #scrive la paddle sulla griglia/immagine
-        self.update_ball() # calcola nuovo movimento e collisioni, popola event_pending con hit_brick/hit_wall
+        self.resolve_pending()
+        self.update_paddle()
+        self.draw_paddle()
+        self.update_ball()
         self.draw_ball()
 
         event_log = self.event_log
         self.event_log = []
 
-        return self.elements, event_log, (self.bricks_alive == 0)
+        return self.elements, event_log, (self.bricks_alive == 0 or self.ball_lost)
     
     def get_log(self): return self.elements, self.event_log
     
     def get_grid(self):
         return np.transpose(np.stack([self.r, self.g, self.b]), (1, 2, 0))
+
+####
+
+save_log = True
+
+pygame.init()
+window = pygame.display.set_mode((screen_width, screen_height))
+pygame.display.set_caption("Basic Arkanoid")
+
+game = Game()
+
+grid = pygame.surfarray.make_surface(game.get_grid())
+screen = pygame.transform.scale(grid, (screen_width, screen_height))
+window.blit(screen, (0, 0))
+
+t = time.time()
+keys_down = []
+keys_up = []
+
+# [NEW] Two booleans track whether left/right arrow is held down
+leftArrowHeld = False
+rightArrowHeld = False
+
+paddle_left = False
+paddle_right = False
+first_time_run = True
+screen_running = True
+game_running = False
+
+element_log, event_log = game.get_log()
+
+frame_id = 0
+frames = []
+frames.append({
+    'frame_id': frame_id,
+    'commands': [],
+    'elements': deepcopy(element_log),
+    'events': [{
+        'description': 'game_start',
+        'subject': 0
+    }]
+})
+frame_id += 1
+
+while screen_running:
+
+    for e in pygame.event.get():
+        if e == pygame.QUIT:
+            screen_running = False
+
+        if e.type == pygame.KEYDOWN:
+            keys_down.append(e.key)
+            # [NEW] If the user pressed LEFT or RIGHT, mark it as held
+            if e.key == pygame.K_LEFT:
+                leftArrowHeld = True
+            elif e.key == pygame.K_RIGHT:
+                rightArrowHeld = True
+
+        if e.type == pygame.KEYUP:
+            keys_up.append(e.key)
+            # [NEW] If the user released LEFT or RIGHT, unmark it as held
+            if e.key == pygame.K_LEFT:
+                leftArrowHeld = False
+            elif e.key == pygame.K_RIGHT:
+                rightArrowHeld = False
+
+    new_t = time.time()
+    if new_t - t > refresh_rate:
+
+        command_log = []
+
+        if first_time_run:
+            if not game_running and len(keys_down) > 0:
+                game_running = True
+
+        if pygame.K_q in keys_down:
+            screen_running = False
+
+        if pygame.K_s in keys_down:
+            game_running = not game_running
+
+        # [CHANGED] Instead of counting keys_down vs. keys_up, we rely on booleans
+        paddle_left = leftArrowHeld
+        paddle_right = rightArrowHeld
+
+        # [CHANGED] The logic below is now based on whether leftArrowHeld/rightArrowHeld are True
+        if not paddle_left and not paddle_right:
+            game.set_paddle_speed(0)
+            #command_log.append(('nothing_pressed'))
+        elif paddle_left and not paddle_right:
+            game.set_paddle_speed(-1)
+            command_log.append(('left_arrow_pressed'))
+        elif paddle_right and not paddle_left:
+            game.set_paddle_speed(1)
+            command_log.append(('right_arrow_pressed'))
+        else:
+            # if both are pressed, do whatever you want:
+            game.set_paddle_speed(0)
+            #command_log.append(('nothing_pressed'))
+
+        # (Everything else remains the same)
+        if game_running:
+            element_log, event_log, end_game = game.update()
+
+            #if first_time_run:
+            #    first_time_run = False
+            #    event_log.append({
+            #        'description': 'game_start',
+            #        'subject': 0
+            #    })
+
+            if frame_id > 0: frames[-1]['commands'].extend(deepcopy(command_log))
+            frames.append({
+                'frame_id': frame_id,
+                'commands': [],
+                'elements': deepcopy(element_log),
+                'events': event_log
+            })
+            frame_id += 1
+
+            grid = pygame.surfarray.make_surface(game.get_grid())
+            screen = pygame.transform.scale(grid, (screen_width, screen_height))
+            window.blit(screen, (0, 0))
+
+            if end_game:
+                game_running = False
+                screen_running = False
+
+        t = new_t
+
+        # [CHANGED] Still safe to reset these each frame;
+        # leftArrowHeld/rightArrowHeld store the actual "held" state.
+        keys_down = []
+        keys_up = []
+
+    pygame.display.flip()
+
+# (Log saving, pygame.quit, and sys.exit remain unchanged)
+if save_log:
+    with open(
+        f'logs/arkanoid_logs/arkanoid_log{datetime.now().strftime("_%Y_%m_%d_%H_%M_%S")}.pkl',
+        'wb'
+    ) as logfile:
+        pickle.dump(frames, logfile)
+
+pygame.quit()
+sys.exit()
