@@ -24,6 +24,7 @@ class ArkanoidEnv(gym.Env):
     def __init__(self):
         super().__init__()
         self.game = Game()
+        # self.game.ball_lost = False
         self.action_space = gym.spaces.Discrete(3)
         self.observation_space = gym.spaces.Box(low=-1.0, high=1.0, shape=(5,), dtype=np.float32)
         self.done = False
@@ -34,17 +35,18 @@ class ArkanoidEnv(gym.Env):
 
     def reset(self):
         self.game = Game()
+        # self.game.ball_lost = False
         self._prev_bricks_alive = self.game.bricks_alive
         self._prev_ball_y = self.game.ball_y
         self.done = False
         return self._get_obs()
 
     def step(self, action):
-        # Salva lo stato PRIMA dell'update
+        # Salva lo stato precedente
         prev_bricks = self.game.bricks_alive
         prev_ball_y = self.game.ball_y
-        
-        # Mappiamo azioni sulla paddle
+
+        # Esegui azione
         if action == 0:
             self.game.set_paddle_speed(-1)
         elif action == 2:
@@ -52,22 +54,33 @@ class ArkanoidEnv(gym.Env):
         else:
             self.game.set_paddle_speed(0)
 
-        # Update del gioco
+        # Aggiorna il gioco
         self.game.update()
 
-        # Calcola reward usando gli stati salvati
+        # Calcola reward PRIMA di controllare la terminazione
         reward = self._compute_reward(prev_bricks, prev_ball_y)
-        
-        # Controlla condizioni di termine
+
+        # Controlla condizioni di terminazione
+        # 1. Tutti i brick distrutti (VITTORIA)
         if self.game.bricks_alive == 0:
             self.done = True
-            reward += 100.0  # Bonus per vittoria
-            print("🎉 WIN! All bricks destroyed! (+100.0)")
-        
+            reward += 100.0
+            print("🎉 VITTORIA! Tutti i brick distrutti! (+100.0)")
+
+        # 2. Palla persa (SCONFITTA)
+        if self.game.ball_lost:
+            self.done = True
+            reward -= 50.0
+            # print("💀 GAME OVER! Palla persa! (-50.0)")
+
+        # 3. Palla troppo vicina al bordo inferiore (backup safety check)
         if self.game.ball_y + self.game.ball_radius >= grid_height - 3:
             self.done = True
-            
+            reward -= 50.0
+            # print("💀 GAME OVER! Palla fuori campo! (-50.0)")
+
         return self._get_obs(), reward, self.done, {}
+
 
     def _get_obs(self):
         ball_x = self.game.ball_x / grid_width
@@ -78,28 +91,28 @@ class ArkanoidEnv(gym.Env):
         return np.array([ball_x*2-1, ball_y*2-1, vx, vy, paddle_x*2-1], dtype=np.float32)
 
     def _compute_reward(self, prev_bricks, prev_ball_y):
-        r = 0.01  # piccolo reward per passo (ridotto da 0.1)
-
-        # Ricompensa per brick distrutti
+        r = 0.0  # reward base per ogni step
+        
+        # 🧱 Reward per brick distrutti
         if self.game.bricks_alive < prev_bricks:
             destroyed = prev_bricks - self.game.bricks_alive
-            r += 5.0 * destroyed
-            print(f"🧱 {destroyed} brick(s) destroyed! (+{5.0 * destroyed})")
+            r += 10.0 * destroyed
+            # print(f"🧱 {destroyed} brick distrutti! (+{10.0 * destroyed})")
 
-        # Hit paddle - verifica se la palla ha rimbalzato verso l'alto
+        # 🏓 Reward per colpo sulla paddle
         if self._check_ball_hits_paddle(prev_ball_y):
-            r += 1.0
-            print("✅ Hit paddle (+1.0)")
+            r += 2.0
+            # print("✅ Palla colpita dalla paddle! (+2.0)")
 
-        # Penalità se la palla è troppo vicina al fondo
-        if self.game.ball_y + self.game.ball_radius >= grid_height - 3:
-            r -= 10.0
-            print("❌ Ball lost! (-10.0)")
-
-        # Bonus per mantenere la palla in gioco (vicinanza alla paddle)
+        # 📍 Piccolo bonus per mantenere la paddle vicina alla palla (in orizzontale)
         distance_to_paddle = abs(self.game.ball_x - self.game.paddle_x)
         if distance_to_paddle < 10:
-            r += 0.05
+            r += 0.1
+        
+        # ⚠️ Piccola penalità se la palla è molto vicina al fondo
+        # (incentiva l'agente a mantenere la palla alta)
+        if self.game.ball_y > grid_height - 15:
+            r -= 0.2
         
         return r
 
@@ -182,15 +195,16 @@ def train_dqn_from_population(
     gamma = 0.99
     epsilon = 1.0
     epsilon_min = 0.02
-    epsilon_decay = 0.97
+    epsilon_decay = 0.97 #0.995
 
-    for ep in range(total_episodes):
+    for ep in range(total_episodes): #episodi
         state = env.reset() 
         total_reward = 0
         done = False
         steps = 0
         
-        while not done and steps < max_steps_per_episode:
+        while not done and steps < max_steps_per_episode: #steps
+            # 1️⃣ Scegli un'azione (esplorazione vs. sfruttamento)
             if random.random() < epsilon:
                 action = env.action_space.sample()
             else:
@@ -199,13 +213,20 @@ def train_dqn_from_population(
                     q_vals = q_net(s_t)
                     action = int(q_vals.argmax(1).item())
 
+            # 2️⃣ Esegui l’azione nell’ambiente
+            # print("episodio", ep, steps)
             next_state, reward, done, _ = env.step(action)
+
+            # 3️⃣ Salva l’esperienza nel buffer
             buffer.push(state, action, reward, next_state, done)
+
+            # 5️⃣ Passa allo stato successivo
             total_reward += reward
             state = next_state
             steps += 1
             
             # Training
+            # 4️⃣ Aggiorna la rete (training vero e proprio)
             if len(buffer.buffer) >= 64:
                 s, a, r, ns, d = buffer.sample(64)
                 s_t = torch.tensor(s, device=device)
@@ -214,22 +235,34 @@ def train_dqn_from_population(
                 ns_t = torch.tensor(ns, device=device)
                 d_t = torch.tensor(d, dtype=torch.float32, device=device)
 
+                # quanto la rete crede sia buono fare l'azione a nello stato s
+                # Q-target
                 with torch.no_grad():
                     max_next_q = q_target(ns_t).max(1)[0]
                     target_q = r_t + gamma * (1 - d_t) * max_next_q
 
+                # Q-current
                 current_q = q_net(s_t).gather(1, a_t).squeeze(1)
                 loss = nn.functional.mse_loss(current_q, target_q)
 
+                # Backpropagation: calcolo perdita e aggiornamento pesi
                 optimizer.zero_grad()
                 loss.backward()
                 optimizer.step()
+
+            # 5️⃣ Passa allo stato successivo
+            total_reward += reward
+            state = next_state
+            steps += 1
+
+
+
 
         epsilon = max(epsilon_min, epsilon * epsilon_decay)
         print(f"Ep {ep} - Reward: {total_reward:.2f} - Steps: {steps} - Eps: {epsilon:.3f}")
 
         if ep % 10 == 0:
-            q_target.load_state_dict(q_net.state_dict())
+            q_target.load_state_dict(q_net.state_dict())# q_net si allena ad ogni step, q_target ogni 10 episodi viene aggiornata
             model_path = os.path.join(SAVE_DIR, f"dqn_from_population_ep{ep}.pth")
             torch.save(q_net.state_dict(), model_path)
 

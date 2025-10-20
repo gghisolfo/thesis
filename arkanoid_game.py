@@ -214,8 +214,8 @@ class Game:
 
         brick_id = id - 9
         brick_pos = self.brick_positions[brick_id]
-        print("#original briks", brick_pos)
-        print("BEFORE - bricks alive", self.bricks_alive)
+        # print("#original briks", brick_pos)
+        # print("BEFORE - bricks alive", self.bricks_alive)
 
         if False:
         #if self.elements[f'brick_{brick_id}']['never_hit']: # first hit change color, the second destroy the brick
@@ -234,7 +234,7 @@ class Game:
             self.elements[f'brick_{brick_id}']['alive'] = False
             self.elements[f'brick_{brick_id}']['existence'] = False
             self.bricks_alive -= 1
-            print("AFTER - bricks alive", self.bricks_alive)
+            # print("AFTER - bricks alive", self.bricks_alive)
 
     def hit_wall(self, id):
 
@@ -270,7 +270,7 @@ class Game:
 
                 # self.bricks_alive = 0
                 self.ball_lost = True
-                print("BALL - lost")
+                # print("BALL - lost")
 
 
     def init_paddle(self):
