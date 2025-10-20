@@ -28,9 +28,9 @@ class Game:
 
     def __init__(self):
 
-        self.elements = {} #dizionario metadati per ogni oggetto 
+        self.elements = {}
         self.event_log = []
-        self.ball_lost = False 
+        self.ball_lost = False
 
         self.elements['environment'] = {
             'id': 0,
@@ -73,7 +73,7 @@ class Game:
 
         self.init_ball()
 
-        self.event_pending = [] # mantiene una coda di eventi -> lista di tuple (event_function, param, delay)
+        self.event_pending = []
 
 
     def init_grid(self):
@@ -214,6 +214,8 @@ class Game:
 
         brick_id = id - 9
         brick_pos = self.brick_positions[brick_id]
+        print("#original briks", brick_pos)
+        print("BEFORE - bricks alive", self.bricks_alive)
 
         if False:
         #if self.elements[f'brick_{brick_id}']['never_hit']: # first hit change color, the second destroy the brick
@@ -232,6 +234,7 @@ class Game:
             self.elements[f'brick_{brick_id}']['alive'] = False
             self.elements[f'brick_{brick_id}']['existence'] = False
             self.bricks_alive -= 1
+            print("AFTER - bricks alive", self.bricks_alive)
 
     def hit_wall(self, id):
 
@@ -265,8 +268,9 @@ class Game:
 
                 self.r[3:grid_width - 3, grid_height - 3:grid_height] = 100 * color_state
 
-                # self.bricks_alive = 0 #termina partita
+                # self.bricks_alive = 0
                 self.ball_lost = True
+                print("BALL - lost")
 
 
     def init_paddle(self):
@@ -303,7 +307,7 @@ class Game:
         
             if (self.paddle_x - self.paddle_halfwidth + self.paddle_speed > 2) and (self.paddle_x + self.paddle_halfwidth + self.paddle_speed < grid_width - 3):
                 if (self.ball_y + self.ball_radius > self.paddle_y - self.paddle_halfheight - 1 and self.ball_y - self.ball_radius < self.paddle_y + self.paddle_halfheight + 1) and (self.ball_x + self.ball_radius > self.paddle_x - self.paddle_halfwidth + self.paddle_speed and self.ball_x - self.ball_radius < self.paddle_x + self.paddle_halfwidth + self.paddle_speed):
-                    pass #se il movimento implicherebbe la sovrapposizione con la pallina
+                    pass
 
                 else:
                     self.paddle_old_x = self.paddle_x
@@ -352,7 +356,6 @@ class Game:
         }
 
 
-    # metodo che cerca di distinguere tra collisioni laterali, verticali e diagonali
     def update_ball(self):
         
         invert_speed_x = False
@@ -407,13 +410,13 @@ class Game:
         
         for collision_id in collisions:
             if collision_id != 0:
-                if collision_id >= 9: #collisione con un briks
+                if collision_id >= 9:
                     self.event_pending.append((self.hit_brick, collision_id, 1))
                 
-                elif collision_id >= 5: # collisione con un wall
+                elif collision_id >= 5:
                     self.event_pending.append((self.hit_wall, collision_id, 2))
 
-        ###### aggiorna metadati con la nuova posizione e hitbox
+        ######
 
         self.elements['ball']['pos_x'] = self.ball_x
         self.elements['ball']['pos_y'] = self.ball_y
@@ -440,7 +443,6 @@ class Game:
     def bounce_y(self):
         self.ball_speed_y = - self.ball_speed_y
 
-    #utile per gestione eventi differiti: eliminazione di un bricks o cambio colore parete
     def resolve_pending(self):
         new_event_pending = []
         for event, param, delay in self.event_pending:
@@ -452,16 +454,16 @@ class Game:
         self.event_pending = new_event_pending
 
     def update(self):
-        self.resolve_pending() #esegue gli eventi la cui delay è scaduto
-        self.update_paddle() #aggiorna la posizione della paddle
-        self.draw_paddle() #scrive la paddle sulla griglia/immagine
-        self.update_ball() # calcola nuovo movimento e collisioni, popola event_pending con hit_brick/hit_wall
+        self.resolve_pending()
+        self.update_paddle()
+        self.draw_paddle()
+        self.update_ball()
         self.draw_ball()
 
         event_log = self.event_log
         self.event_log = []
 
-        return self.elements, event_log, (self.bricks_alive == 0)
+        return self.elements, event_log, (self.bricks_alive == 0 or self.ball_lost)
     
     def get_log(self): return self.elements, self.event_log
     

@@ -270,6 +270,7 @@ class Game:
 
                 # self.bricks_alive = 0
                 self.ball_lost = True
+                print("BALL - lost")
 
 
     def init_paddle(self):
