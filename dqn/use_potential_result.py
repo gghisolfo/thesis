@@ -1,36 +1,44 @@
-
-#run at thesis level with python -m dqn.use_potential_result
+import pygame
 import torch
-import numpy as np
-from .train_dqn_from_population import ArkanoidEnv, QNetwork
+from .train_dqn import ArkanoidEnv, QNetwork
+from arkanoid_game import Game, grid_width, grid_height, screen_width, screen_height
 
-# Ricrea la rete QNetwork (uguale a quella usata in training)
-import torch.nn as nn
 
-# Path del modello PT
-MODEL_PATH = "./dqn/dqn_models/dqn_from_population_final.pth" #"./dqn/dqn_model/dqn_from_population_final.pth"
-# MODEL_PATH = "./dqn/dqn_models/dqn_from_population_ep980.pth"
-# Crea ambiente
+MODEL_PATH = "./dqn/dqn_models/dqn_from_population_final.pth"
+
+# Setup Pygame
+pygame.init()
+screen = pygame.display.set_mode((screen_width, screen_height))
+clock = pygame.time.Clock()
+FRAME_RATE = 60
+
 env = ArkanoidEnv()
 obs = env.reset()
 done = False
 
-
-# Inizializza la rete e carica i pesi
 state_dim = env.observation_space.shape[0]
 action_dim = env.action_space.n
 q_net = QNetwork(state_dim, action_dim)
-q_net.load_state_dict(torch.load(MODEL_PATH, map_location=torch.device('cpu')))
-q_net.eval()  # modalità valutazione
+q_net.load_state_dict(torch.load(MODEL_PATH, map_location="cpu"))
+q_net.eval()
 
-# Gioca la partita
 while not done:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            done = True
+
     obs_tensor = torch.tensor(obs, dtype=torch.float32).unsqueeze(0)
     with torch.no_grad():
         q_values = q_net(obs_tensor)
         action = int(torch.argmax(q_values, dim=1).item())
-    
-    obs, reward, done, _ = env.step(action)
-    env.render()
 
-env.close()
+    obs, reward, done, _ = env.step(action)
+
+    # Rendering manuale
+    grid_surface = pygame.surfarray.make_surface(env.game.get_grid())
+    scaled_surface = pygame.transform.scale(grid_surface, (screen_width, screen_height))
+    screen.blit(scaled_surface, (0, 0))
+    pygame.display.flip()
+    clock.tick(FRAME_RATE)
+
+pygame.quit()

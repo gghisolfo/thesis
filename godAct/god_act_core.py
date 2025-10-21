@@ -14,17 +14,18 @@ import gym
 class GodActRule:
     def __init__(self, rule_data: dict):
         self.rule_id = rule_data['rule_id']
-        self.trigger = rule_data['trigger']
+        self.trigger = rule_data['trigger'] #ogni regola è attivata da un trigger
         self.effect = rule_data.get('effect', '')
         self.confidence = rule_data.get('confidence', 1.0)
         self.priority = rule_data.get('priority', 1.0)
         self.reward_modifier = rule_data.get('reward_modifier', 1.0)
         self.conditions = rule_data.get('conditions', {})
 
+    # verifica se la regola si applica a una transizione
     def matches_state_transition(self, state, next_state, reward) -> bool:
         if state is None or next_state is None:
             return False
-        if self.trigger == 'ball_paddle_collision':
+        if self.trigger == 'ball_paddle_collision': #esempi di trigger
             return self._check_ball_paddle_collision(state, next_state)
         elif self.trigger == 'ball_brick_collision':
             return reward > 1.0
@@ -39,7 +40,7 @@ class GodActRule:
         prev_vy, next_vy = state[3], next_state[3]
         return prev_vy > 0 and next_vy < 0 and ball_y > 0.7
 
-
+#Assegna priorità maggiore alle transizioni che attivano una regola o hanno reward estremo
 class GodActPrioritizedReplayBuffer:
     def __init__(self, capacity: int, rules: List[GodActRule]):
         self.capacity = capacity
@@ -86,7 +87,7 @@ class GodActPrioritizedReplayBuffer:
     def __len__(self):
         return len(self.buffer)
 
-
+# Modifica il reward dell’agente in base alle regole.
 class GodActRewardShaper:
     def __init__(self, rules: List[GodActRule]):
         self.rules = rules
@@ -106,6 +107,7 @@ class GodActRewardShaper:
                 shaped -= 0.2 * r.confidence
         return shaped
 
+# Permette un curriculum learning: inizia con compiti semplici e aumenta la difficoltà.
 
 class GodActCurriculumGenerator:
     def __init__(self, rules: List[GodActRule]):
@@ -123,12 +125,13 @@ class GodActCurriculumGenerator:
     def get_current_stage(self):
         return self.stages[self.current_stage]
 
+    # passa allo stage successivo quando completati gli episodi richiesti.
     def advance_stage(self):
         if self.current_stage < len(self.stages) - 1:
             self.current_stage += 1
             print(f"[Curriculum] Passato a stage: {self.get_current_stage()['name']}")
 
-
+# wrapper che applica reward shaping e curriculum learning.
 class GodActEnvWrapper(gym.Wrapper):
     def __init__(self, env, rules: List[GodActRule]):
         super().__init__(env)
@@ -151,7 +154,7 @@ class GodActEnvWrapper(gym.Wrapper):
                 self.episode_count = 0
         return next_state, shaped_reward, done, info
 
-
+# Integrazione delle regole GodAct in DQN
 class GodActDQNIntegrator:
     def __init__(self, rules_json_path=None, rules_dict=None):
         if rules_dict is not None:
@@ -163,6 +166,7 @@ class GodActDQNIntegrator:
             self.rules = []
         print(f"[GodAct] Caricate {len(self.rules)} regole.")
 
+    # Carica regole da file JSON o dizionario Python.
     def _load_rules(self, path: str):
         with open(path, 'r') as f:
             data = json.load(f)
@@ -184,6 +188,8 @@ class GodActPopulationIntegrator:
         self.rules = self._extract_rules_from_population(population)
         self.reward_shaper = GodActRewardShaper(self.rules)
 
+    # Trasforma ogni regola euristica in un oggetto GodActRule compatibile.
+    # Fornisce reward shaping e replay buffer per l’ambiente.
     def _extract_rules_from_population(self, population):
         rules = []
         for ind_id, individual in population.items():

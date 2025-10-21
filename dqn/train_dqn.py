@@ -138,21 +138,21 @@ class ArkanoidEnv(gym.Env):
         
         return False
 
-    def render(self, mode="human"):
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                self.done = True
+    # def render(self, mode="human"):
+    #     for event in pygame.event.get():
+    #         if event.type == pygame.QUIT:
+    #             self.done = True
 
-        grid_surface = pygame.surfarray.make_surface(self.game.get_grid())
-        scaled_surface = pygame.transform.scale(
-            grid_surface, (self.screen_width, self.screen_height)
-        )
-        self.screen.blit(scaled_surface, (0, 0))
-        pygame.display.flip()
-        self.clock.tick(FRAME_RATE)
+    #     grid_surface = pygame.surfarray.make_surface(self.game.get_grid())
+    #     scaled_surface = pygame.transform.scale(
+    #         grid_surface, (self.screen_width, self.screen_height)
+    #     )
+    #     self.screen.blit(scaled_surface, (0, 0))
+    #     pygame.display.flip()
+    #     self.clock.tick(FRAME_RATE)
 
-    def close(self):
-        pygame.quit()
+    # def close(self):
+    #     pygame.quit()
 
 
 class QNetwork(nn.Module):
@@ -266,7 +266,7 @@ def train_dqn_from_population(
             model_path = os.path.join(SAVE_DIR, f"dqn_from_population_ep{ep}.pth")
             torch.save(q_net.state_dict(), model_path)
 
-    env.close()
+    # env.close()
     final_path = os.path.join(SAVE_DIR, "dqn_from_population_final.pth")
     torch.save(q_net.state_dict(), final_path)
     print("✅ Training completo, modello salvato.")

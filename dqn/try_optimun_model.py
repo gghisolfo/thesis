@@ -1,30 +1,38 @@
-from stable_baselines3 import DQN
-from stable_baselines3.common.evaluation import evaluate_policy
+import torch
+import numpy as np
 import time
-from dqn_arkanoid_pygame import ArkanoidEnv
+import gymnasium as gym
+from .train_dqn_from_population import ArkanoidEnv, QNetwork
+
+# Ricrea la rete QNetwork (uguale a quella usata in training)
+import torch.nn as nn
 
 # Crea ambiente
 env = ArkanoidEnv()
 
-# Carica modello salvato
-model = DQN.load("dqn_arkanoid_model", env=env)
+# Carica modello PyTorch
+state_dim = env.observation_space.shape[0]
+action_dim = env.action_space.n
 
-# Valutazione quantitativa
-mean_reward, std_reward = evaluate_policy(model, env, n_eval_episodes=10, render=False)
-print(f"Reward medio: {mean_reward:.2f} ± {std_reward:.2f}")
+model = QNetwork(state_dim, action_dim)
+model.load_state_dict(torch.load("./dqn/dqn_models/dqn_from_population_final.pth", map_location="cpu"))
+model.eval()
 
-# Visualizzazione di una partita
+# Esegui un episodio
 obs = env.reset()
 done = False
 total_reward = 0
 
 while not done:
-    action, _ = model.predict(obs, deterministic=True)
+    obs_t = torch.tensor(obs, dtype=torch.float32).unsqueeze(0)
+    with torch.no_grad():
+        q_values = model(obs_t)
+        action = int(torch.argmax(q_values, dim=1).item())
+
     obs, reward, done, _ = env.step(action)
     total_reward += reward
-    env.render()       # render grafico
-    time.sleep(0.05)   # rallenta la partita (slow motion)
+    env.render()
+    time.sleep(0.05)
 
-print(f"Reward totale in questa partita: {total_reward:.2f}")
-
+print(f"🏁 Reward totale: {total_reward:.2f}")
 env.close()
