@@ -69,6 +69,7 @@ class Contact_With_Something_T(Contact):
                 return True
         return False
 
+# Il suo scopo è determinare se l'entità current è in contatto con il lato superiore di qualsiasi altra entità presente in current_others
 class Contact_With_Something_B(Contact):
 
     @staticmethod

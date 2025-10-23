@@ -13,6 +13,7 @@ import gym
 
 class GodActRule:
     def __init__(self, rule_data: dict):
+        print("---1")
         self.rule_id = rule_data['rule_id']
         self.trigger = rule_data['trigger'] #ogni regola è attivata da un trigger
         self.effect = rule_data.get('effect', '')
@@ -23,6 +24,7 @@ class GodActRule:
 
     # verifica se la regola si applica a una transizione
     def matches_state_transition(self, state, next_state, reward) -> bool:
+        print("---2")
         if state is None or next_state is None:
             return False
         if self.trigger == 'ball_paddle_collision': #esempi di trigger
@@ -36,6 +38,7 @@ class GodActRule:
         return False
 
     def _check_ball_paddle_collision(self, state, next_state):
+        print("---3")
         ball_y = (state[1] + 1) / 2
         prev_vy, next_vy = state[3], next_state[3]
         return prev_vy > 0 and next_vy < 0 and ball_y > 0.7
@@ -43,6 +46,7 @@ class GodActRule:
 #Assegna priorità maggiore alle transizioni che attivano una regola o hanno reward estremo
 class GodActPrioritizedReplayBuffer:
     def __init__(self, capacity: int, rules: List[GodActRule]):
+        print("---4")
         self.capacity = capacity
         self.buffer = deque(maxlen=capacity)
         self.priorities = deque(maxlen=capacity)
@@ -51,6 +55,7 @@ class GodActPrioritizedReplayBuffer:
         self.total_transitions = 0
 
     def push(self, state, action, reward, next_state, done):
+        print("---5")
         priority = 1.0
         matched = []
         for r in self.rules:
@@ -70,6 +75,7 @@ class GodActPrioritizedReplayBuffer:
         self.total_transitions += 1
 
     def sample(self, batch_size: int):
+        print("---6")
         batch_size = min(batch_size, len(self.buffer))
         p = np.array(self.priorities, dtype=np.float64)
         probs = p / (p.sum() + 1e-8)
@@ -85,14 +91,17 @@ class GodActPrioritizedReplayBuffer:
         )
 
     def __len__(self):
+        print("---7")
         return len(self.buffer)
 
 # Modifica il reward dell’agente in base alle regole.
 class GodActRewardShaper:
     def __init__(self, rules: List[GodActRule]):
+        print("---8")
         self.rules = rules
 
     def shape_reward(self, state, action, reward, next_state):
+        print("---9")
         shaped = float(reward)
         for r in self.rules:
             if r.trigger == 'ball_paddle_collision':
@@ -111,11 +120,13 @@ class GodActRewardShaper:
 
 class GodActCurriculumGenerator:
     def __init__(self, rules: List[GodActRule]):
+        print("---10")
         self.rules = rules
         self.stages = self._generate_stages()
         self.current_stage = 0
 
     def _generate_stages(self):
+        print("---11")
         return [
             {'name': 'paddle_focus', 'episodes': 50},
             {'name': 'brick_focus', 'episodes': 100},
@@ -123,10 +134,12 @@ class GodActCurriculumGenerator:
         ]
 
     def get_current_stage(self):
+        print("---12")
         return self.stages[self.current_stage]
 
     # passa allo stage successivo quando completati gli episodi richiesti.
     def advance_stage(self):
+        print("---13")
         if self.current_stage < len(self.stages) - 1:
             self.current_stage += 1
             print(f"[Curriculum] Passato a stage: {self.get_current_stage()['name']}")
@@ -140,9 +153,11 @@ class GodActEnvWrapper(gym.Wrapper):
         self.episode_count = 0
 
     def reset(self, **kwargs):
+        print("---14")
         return self.env.reset(**kwargs)
 
     def step(self, action):
+        print("---15")
         state = self.env._get_obs()
         next_state, reward, done, info = self.env.step(action)
         shaped_reward = self.reward_shaper.shape_reward(state, action, reward, next_state)
@@ -157,6 +172,7 @@ class GodActEnvWrapper(gym.Wrapper):
 # Integrazione delle regole GodAct in DQN
 class GodActDQNIntegrator:
     def __init__(self, rules_json_path=None, rules_dict=None):
+        print("---16")
         if rules_dict is not None:
             # la popolazione caricata da pickle
             self.rules = [GodActRule(r) for r in rules_dict.get('rules', [])]
@@ -168,14 +184,17 @@ class GodActDQNIntegrator:
 
     # Carica regole da file JSON o dizionario Python.
     def _load_rules(self, path: str):
+        print("---17")
         with open(path, 'r') as f:
             data = json.load(f)
         return [GodActRule(r) for r in data.get('rules', [])]
 
     def wrap_environment(self, env):
+        print("---18")
         return GodActEnvWrapper(env, self.rules)
 
     def create_replay_buffer(self, capacity: int):
+        print("---19")
         return GodActPrioritizedReplayBuffer(capacity, self.rules)
 
 
@@ -184,6 +203,7 @@ class GodActPopulationIntegrator:
     Usa una popolazione euristica (best_population.pkl) come fonte di God Acts.
     """
     def __init__(self, population):
+        print("--20")
         self.population = population
         self.rules = self._extract_rules_from_population(population)
         self.reward_shaper = GodActRewardShaper(self.rules)
@@ -191,6 +211,7 @@ class GodActPopulationIntegrator:
     # Trasforma ogni regola euristica in un oggetto GodActRule compatibile.
     # Fornisce reward shaping e replay buffer per l’ambiente.
     def _extract_rules_from_population(self, population):
+        print("---21")
         rules = []
         for ind_id, individual in population.items():
             if hasattr(individual, "rules"):
@@ -214,8 +235,10 @@ class GodActPopulationIntegrator:
         """
         Aggiunge reward shaping e replay buffer all’ambiente RL.
         """
+        print("---22")
         env.reward_shaper = self.reward_shaper
         return env
 
     def create_replay_buffer(self, capacity=50000):
+        print("---23")
         return GodActPrioritizedReplayBuffer(capacity, self.rules)
