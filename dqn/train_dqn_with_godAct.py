@@ -253,8 +253,8 @@ def train_dqn(use_godact, total_episodes=200, max_steps=2000):
 def evaluate_godact_vs_vanilla():
     results = defaultdict(list)
     total_episodes= 1000
-    print("=== Training senza GodAct ===")
-    results['vanilla'] = train_dqn(use_godact=False, total_episodes=total_episodes)
+    # print("=== Training senza GodAct ===")
+    # results['vanilla'] = train_dqn(use_godact=False, total_episodes=total_episodes)
     print("=== Training con GodAct ===")
     results['godact'] = train_dqn(use_godact=True, total_episodes=total_episodes)
 

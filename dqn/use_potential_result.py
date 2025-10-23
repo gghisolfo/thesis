@@ -4,7 +4,7 @@ from .train_dqn import ArkanoidEnv, QNetwork
 from arkanoid_game import Game, grid_width, grid_height, screen_width, screen_height
 
 
-MODEL_PATH = "./dqn/dqn_models/dqn_without_godAct.pth" # dqn_with_godAct | dqn_without_godAct |dqn_from_population_final
+MODEL_PATH = "./dqn/dqn_models/dqn_with_godAct.pth" # dqn_with_godAct | dqn_without_godAct |dqn_from_population_final
 
 
 
