@@ -6,7 +6,8 @@ import numpy as np
 import random
 import gym
 import os
-from collections import defaultdict
+from collections import deque, defaultdict
+
 
 # Import locali
 from arkanoid_game import Game, grid_width, grid_height
@@ -26,23 +27,29 @@ class ArkanoidEnv(gym.Env):
     def __init__(self):
         super().__init__()
         self.game = Game()
+        # self.game.ball_lost = False
         self.action_space = gym.spaces.Discrete(3)
         self.observation_space = gym.spaces.Box(low=-1.0, high=1.0, shape=(5,), dtype=np.float32)
         self.done = False
+
+        # Stato precedente per il reward shaping
         self._prev_bricks_alive = self.game.bricks_alive
         self._prev_ball_y = self.game.ball_y
 
     def reset(self):
         self.game = Game()
+        # self.game.ball_lost = False
         self._prev_bricks_alive = self.game.bricks_alive
         self._prev_ball_y = self.game.ball_y
         self.done = False
         return self._get_obs()
 
     def step(self, action):
+        # Salva lo stato precedente
         prev_bricks = self.game.bricks_alive
         prev_ball_y = self.game.ball_y
 
+        # Esegui azione
         if action == 0:
             self.game.set_paddle_speed(-1)
         elif action == 2:
@@ -50,17 +57,33 @@ class ArkanoidEnv(gym.Env):
         else:
             self.game.set_paddle_speed(0)
 
+        # Aggiorna il gioco
         self.game.update()
+
+        # Calcola reward PRIMA di controllare la terminazione
         reward = self._compute_reward(prev_bricks, prev_ball_y)
 
+        # Controlla condizioni di terminazione
+        # 1. Tutti i brick distrutti (VITTORIA)
         if self.game.bricks_alive == 0:
             self.done = True
             reward += 100.0
-        if self.game.ball_lost or self.game.ball_y + self.game.ball_radius >= grid_height - 3:
+            print("🎉 VITTORIA! Tutti i brick distrutti! (+100.0)")
+
+        # 2. Palla persa (SCONFITTA)
+        if self.game.ball_lost:
             self.done = True
             reward -= 50.0
+            # print("💀 GAME OVER! Palla persa! (-50.0)")
+
+        # 3. Palla troppo vicina al bordo inferiore (backup safety check)
+        if self.game.ball_y + self.game.ball_radius >= grid_height - 3:
+            self.done = True
+            reward -= 50.0
+            # print("💀 GAME OVER! Palla fuori campo! (-50.0)")
 
         return self._get_obs(), reward, self.done, {}
+
 
     def _get_obs(self):
         ball_x = self.game.ball_x / grid_width
@@ -71,10 +94,53 @@ class ArkanoidEnv(gym.Env):
         return np.array([ball_x*2-1, ball_y*2-1, vx, vy, paddle_x*2-1], dtype=np.float32)
 
     def _compute_reward(self, prev_bricks, prev_ball_y):
-        r = 0.0
+        r = 0.0  # reward base per ogni step
+        
+        # 🧱 Reward per brick distrutti
         if self.game.bricks_alive < prev_bricks:
-            r += 10.0 * (prev_bricks - self.game.bricks_alive)
+            destroyed = prev_bricks - self.game.bricks_alive
+            r += 10.0 * destroyed
+            # print(f"🧱 {destroyed} brick distrutti! (+{10.0 * destroyed})")
+
+        # 🏓 Reward per colpo sulla paddle
+        if self._check_ball_hits_paddle(prev_ball_y):
+            r += 2.0
+            # print("✅ Palla colpita dalla paddle! (+2.0)")
+
+        # 📍 Piccolo bonus per mantenere la paddle vicina alla palla (in orizzontale)
+        distance_to_paddle = abs(self.game.ball_x - self.game.paddle_x)
+        if distance_to_paddle < 10:
+            r += 0.1
+        
+        # ⚠️ Piccola penalità se la palla è molto vicina al fondo
+        # (incentiva l'agente a mantenere la palla alta)
+        if self.game.ball_y > grid_height - 15:
+            r -= 0.2
+        
         return r
+
+    def _check_ball_hits_paddle(self, prev_ball_y):
+        """
+        Rileva se la pallina ha colpito la paddle durante questo step.
+        """
+        ball = self.game.elements['ball']
+        paddle = self.game.elements['paddle_center']
+
+        # Se la palla sta andando verso l'alto dopo essere stata in basso, 
+        # probabilmente ha appena colpito la paddle
+        if self.game.ball_speed_y < 0 and prev_ball_y > self.game.ball_y:
+            # Controlla se la posizione attuale è vicina alla paddle
+            if abs(self.game.ball_y - paddle['pos_y']) < 3:
+                # Controlla sovrapposizione orizzontale
+                overlap_x = (
+                    (ball['hitbox_br_x'] >= paddle['hitbox_tl_x']) and
+                    (ball['hitbox_tl_x'] <= paddle['hitbox_br_x'])
+                )
+                if overlap_x:
+                    return True
+        
+        return False
+
 
 # === Rete Q ===
 class QNetwork(nn.Module):
@@ -91,7 +157,7 @@ class QNetwork(nn.Module):
         return self.net(x)
 
 # === Funzione di training con flag ===
-def train_dqn(use_godact=True, total_episodes=200, max_steps=2000):
+def train_dqn(use_godact, total_episodes=200, max_steps=2000):
     # Carica popolazione euristica
     with open(BEST_POPULATION_PATH, "rb") as f:
         population = pickle.load(f)
@@ -142,8 +208,11 @@ def train_dqn(use_godact=True, total_episodes=200, max_steps=2000):
 
             # Training
             if len(buffer) >= 64:
-                batch = random.sample(buffer, 64)
-                s, a, r, ns, d = zip(*batch)
+                if use_godact:
+                    s, a, r, ns, d = buffer.sample(64)
+                else:
+                    batch = random.sample(buffer, 64)
+                    s, a, r, ns, d = zip(*batch)
                 s_t = torch.tensor(np.array(s), device=device)
                 a_t = torch.tensor(a, device=device).unsqueeze(1)
                 r_t = torch.tensor(r, device=device)
@@ -170,15 +239,24 @@ def train_dqn(use_godact=True, total_episodes=200, max_steps=2000):
             q_target.load_state_dict(q_net.state_dict())
         print(f"[{'GodAct' if use_godact else 'Vanilla'}] Ep {ep} - Reward: {total_reward:.2f}")
 
+    if use_godact:
+        final_path = os.path.join(SAVE_DIR, "dqn_with_godAct.pth")
+        torch.save(q_net.state_dict(), final_path)
+    else:
+        final_path = os.path.join(SAVE_DIR, "dqn_without_godAct.pth")
+        torch.save(q_net.state_dict(), final_path)
+    
+    print("✅ Training completo, modello salvato.")
     return rewards_history
 
 # === Funzione di confronto ===
 def evaluate_godact_vs_vanilla():
     results = defaultdict(list)
+    total_episodes= 1000
     print("=== Training senza GodAct ===")
-    results['vanilla'] = train_dqn(use_godact=False, total_episodes=100)
+    results['vanilla'] = train_dqn(use_godact=False, total_episodes=total_episodes)
     print("=== Training con GodAct ===")
-    results['godact'] = train_dqn(use_godact=True, total_episodes=100)
+    results['godact'] = train_dqn(use_godact=True, total_episodes=total_episodes)
 
     avg_vanilla = np.mean(results['vanilla'])
     avg_godact = np.mean(results['godact'])
