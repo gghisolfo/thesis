@@ -103,8 +103,8 @@ def mask_rgb_to_class(mask_rgb: np.ndarray) -> np.ndarray:
 # =========================
 # PREPARA DATASET E DATALOADER
 # =========================
-images_dir = "C:/Users/user/Documents/UNI/TESI/thesis/semantic_segmentation/dataset/images"
-masks_dir  = "C:/Users/user/Documents/UNI/TESI/thesis/semantic_segmentation/dataset/masks"
+images_dir = "./dataset/images"
+masks_dir  = "./dataset/masks"
 
 image_files = sorted([os.path.join(images_dir, f) for f in os.listdir(images_dir) if f.endswith(".png")])
 mask_files  = sorted([os.path.join(masks_dir, f) for f in os.listdir(masks_dir) if f.endswith(".png")])
