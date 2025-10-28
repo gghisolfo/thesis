@@ -8,7 +8,7 @@ import torch
 from torch.utils.data import Dataset, DataLoader
 from torchvision import transforms
 import matplotlib.pyplot as plt
-from u_net import UNet
+from UNet import UNet
 from deep_labv3_plus import get_deeplabv3plus_model
 import torchvision.utils as vutils
 import torchvision.transforms.functional as TF
