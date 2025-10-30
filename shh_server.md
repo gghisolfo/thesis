@@ -1,0 +1,1 @@
+Così potrai collegarti semplicemente con:  ssh fmc-gpu
