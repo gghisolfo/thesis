@@ -6,7 +6,7 @@ from copy import deepcopy
 
 # === Config ===
 INPUT_MASKS_DIR = "../semantic_segmentation/mini_dataset/predictions"
-OUTPUT_PKL_PATH = "../logs/arkanoid_logs/prova.pkl" #"../logs/arkanoid_logs/reconstructed_log_no_reference.pkl"
+OUTPUT_PKL_PATH = "../logs/arkanoid_logs/reconstructed_log_no_reference.pkl" #"../logs/arkanoid_logs/reconstructed_log_no_reference.pkl" | "../logs/arkanoid_logs/prova.pkl"
 
 # === Parametri griglia / struttura ===
 grid_width, grid_height = 121, 71
