@@ -6,18 +6,23 @@ from tqdm import tqdm
 from segmentation import CLASS_COLORS
 
 # === Config ===
-INPUT_PKL_PATH = "../logs/arkanoid_logs/arkanoid_log_2025_04_15_09_34_43.pkl"
+INPUT_PKL_PATH = "../logs/arkanoid_logs/arkanoid_log_2025_07_15_16_30_15.pkl"
 OUTPUT_IMAGES_DIR = "./dataset/images"#"./dataset/test/images"#"./dataset/images"
 OUTPUT_MASKS_DIR = "./dataset/masks"#"./dataset/test/masks"#"./dataset/masks"
 OUTPUT_MASKS_COLOR_DIR = "./dataset/masks_color"#"./dataset/test/masks_color"#"./dataset/masks_color"
-pad = 0  # numero di partenza
+pad = 1280  # numero di partenza
+
+
+# arkanoid_log_2025_09_15_12_02_45.pkl -> 1069 
+# arkanoid_log_2025_04_15_09_35_00.pkl -> 211
+# arkanoid_log_2025_07_15_16_30_15.pkl -> 398 solo pallina e bordo
+
 
 # arkanoid_log_2025_02_07_16_03_00.pkl -> PROVA
-# arkanoid_log_2025_04_15_09_35_00.pkl -> 211
 # arkanoid_log_2025_04_15_09_34_43.pkl -> 20
 # arkanoid_log_2025_07_15_16_29_02.pkl -> 124 test
-# arkanoid_log_2025_07_15_16_30_15.pkl -> 398 solo pallina e bordo
-# arkanoid_log_2025_09_15_12_02_45.pkl -> 1069
+
+
 
 
 # Etichette semantiche
