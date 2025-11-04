@@ -6,7 +6,7 @@ from tqdm import tqdm
 from segmentation import CLASS_COLORS
 
 # === Config ===
-INPUT_PKL_PATH = "../logs/arkanoid_logs/arkanoid_log_2025_07_15_16_29_02.pkl"
+INPUT_PKL_PATH = "../logs/arkanoid_logs/arkanoid_log_2025_04_15_09_34_43.pkl"
 OUTPUT_IMAGES_DIR = "./dataset/images"#"./dataset/test/images"#"./dataset/images"
 OUTPUT_MASKS_DIR = "./dataset/masks"#"./dataset/test/masks"#"./dataset/masks"
 OUTPUT_MASKS_COLOR_DIR = "./dataset/masks_color"#"./dataset/test/masks_color"#"./dataset/masks_color"
@@ -31,38 +31,8 @@ LABELS = {
     "wall_right": 6,
     "wall_top": 7,
     "wall_bottom": 8,
-    #"bricks": (9, 34),# Bricks are from 9 to 34 
+    "bricks": (9, 34),# Bricks are from 9 to 34 
 }
-
-# === Colormap per visualizzazione (solo per masks_color) ===
-# COLOR_MAP = np.array([
-#     [0, 0, 0],         # 0 - background - environment (sfondo) - nero
-#     [255, 0, 0],       # 1 - ball - ROSSO
-#     [0, 0, 255],       # 2 - paddle_left - blu pieno
-#     [0, 100, 255],     # 3 - paddle_center - blu medio-chiaro
-#     [0, 150, 255],     # 4 - paddle_right - blu tendente al ciano
-#     [0, 255, 0],       # 5 - wall_left - verde acceso
-#     [0, 255, 50],      # 6 - wall_right - verde acesso
-#     [0, 255, 150],     # 7 - wall_top - acquamarina
-#     [0, 255, 150],     # 8 - wall_bottom - acquamarina
-#     [255, 255, 255]    # 9 - bricks - bianco
-# ], dtype=np.uint8)
-
-# NEW_COLOR_MAP = np.array([
-#     [0, 0, 0],         # 0 - background - nero
-#     [255, 128, 0],     # 1 - arancione
-#     [128, 0, 255],     # 2 - viola
-#     [0, 255, 255],     # 3 - ciano
-#     [255, 0, 128],     # 4 - rosa
-#     [0, 255, 0],       # 5 - verde acceso
-#     [128, 255, 0],     # 6 - verde-lime
-#     [0, 128, 255],     # 7 - blu cielo
-#     [255, 255, 0],     # 8 - giallo
-#     [255, 255, 255]    # 9 - bianco
-# ], dtype=np.uint8)
-
-COLOR_MAP=CLASS_COLORS
-#COLOR_MAP=NEW_COLOR_MAP
 
 os.makedirs(OUTPUT_IMAGES_DIR, exist_ok=True)
 os.makedirs(OUTPUT_MASKS_DIR, exist_ok=True)
@@ -91,6 +61,9 @@ for i, frame in tqdm(enumerate(data), total=len(data)):
         if not obj["existence"]:
             continue
 
+        # if "brick" in name:
+        #     print(name, obj["existence"], obj["hitbox_tl_x"], obj["hitbox_tl_y"])
+
         # Disegna nel frame RGB
         r, g, b = obj['color_r'], obj['color_g'], obj['color_b']
         rgb[obj['hitbox_tl_y']:obj['hitbox_br_y']+1,
@@ -101,7 +74,11 @@ for i, frame in tqdm(enumerate(data), total=len(data)):
             label = LABELS[name]
             draw_bbox(mask, obj, label)
         elif name.startswith("brick"):
-            draw_bbox(mask, obj, 9)  # fallback brick
+            # draw_bbox(mask, obj, 9)  # fallback brick
+            # Estrai l'indice numerico dal nome, es: "brick_17" → 17
+            brick_index = int(name.split("_")[1])
+            label = 9 + brick_index  # 9–34 (come definito)
+            draw_bbox(mask, obj, label)
 
     # === Salvataggi ===
     frame_id = i + pad
@@ -115,8 +92,17 @@ for i, frame in tqdm(enumerate(data), total=len(data)):
     cv2.imwrite(mask_path, mask)
 
     # Maschera colorata (per debug/visualizzazione)
-    mask_color = COLOR_MAP[mask]
+    # mask_color = CLASS_COLORS[mask]
+
+    mask_clamped = mask.copy()
+    mask_clamped[mask_clamped > 9] = 9
+    mask_color = CLASS_COLORS[mask_clamped]
+
     mask_color_path = os.path.join(OUTPUT_MASKS_COLOR_DIR, f"frame_{frame_id:04d}.png")
-    cv2.imwrite(mask_color_path, mask_color)
+    mask_color_bgr = cv2.cvtColor(mask_color, cv2.COLOR_RGB2BGR)
+    cv2.imwrite(mask_color_path, mask_color_bgr)
+
+
+
 
 print("✅ Dataset generato con successo!")

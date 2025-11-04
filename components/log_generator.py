@@ -5,8 +5,8 @@ import numpy as np
 from copy import deepcopy
 
 # === Config ===
-INPUT_MASKS_DIR = "../semantic_segmentation/predictions"
-OUTPUT_PKL_PATH = "../logs/arkanoid_logs/reconstructed_log_no_reference.pkl"
+INPUT_MASKS_DIR = "../semantic_segmentation/mini_dataset/predictions"
+OUTPUT_PKL_PATH = "../logs/arkanoid_logs/prova.pkl" #"../logs/arkanoid_logs/reconstructed_log_no_reference.pkl"
 
 # === Parametri griglia / struttura ===
 grid_width, grid_height = 121, 71
@@ -119,9 +119,13 @@ def reconstruct_log_from_masks():
         for cid in brick_classes:
             pos = extract_position_from_mask(mask, cid)
             if pos is not None:
+                
                 el_name, el_data = create_element(cid, pos)
+                print("qui")
                 frame_data['elements'][el_name] = el_data
-
+            else:
+                print("No clear position for this element")
+                
         reconstructed_frames.append(frame_data)
 
         if frame_id % 100 == 0:
