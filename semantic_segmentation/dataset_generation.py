@@ -17,9 +17,9 @@ from segmentation import CLASS_COLORS_DIFFERENT, CLASS_COLORS_ORIGINAL
 # arkanoid_log_2025_07_15_16_29_02.pkl -> 124 test
 
 # === Config ===
-INPUT_PKL_PATH = "../logs/arkanoid_logs/arkanoid_log_2025_04_15_09_34_43.pkl"
+INPUT_PKL_PATH = "../logs/arkanoid_logs/arkanoid_log_2025_09_15_12_02_45.pkl"
 PAD_START = 0  # numero di partenza
-COMPLETE = True   
+COMPLETE = False   
 
 # === Output directories ===
 if COMPLETE: #different images colors

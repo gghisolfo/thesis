@@ -5,7 +5,7 @@ import numpy as np
 from copy import deepcopy
 
 # === Config ===
-INPUT_MASKS_DIR = "../semantic_segmentation/mini_dataset/predictions"
+INPUT_MASKS_DIR = "../semantic_segmentation/dataset/masks"
 OUTPUT_PKL_PATH = "../logs/arkanoid_logs/reconstructed_log_no_reference.pkl" #"../logs/arkanoid_logs/reconstructed_log_no_reference.pkl" | "../logs/arkanoid_logs/prova.pkl"
 
 # === Parametri griglia / struttura ===
@@ -56,6 +56,8 @@ def create_element(class_id, position):
     """Crea un dizionario per un elemento del gioco"""
     cx, cy, w, h = position
     element_name = CLASS_TO_ELEMENT.get(class_id, f'brick_{class_id - 9}')
+    if class_id > 8:
+        print ("si")
     shape_x = max(1, w // 2)
     shape_y = max(1, h // 2)
     
@@ -119,9 +121,8 @@ def reconstruct_log_from_masks():
         for cid in brick_classes:
             pos = extract_position_from_mask(mask, cid)
             if pos is not None:
-                
                 el_name, el_data = create_element(cid, pos)
-                print("qui")
+                # print("qui")
                 frame_data['elements'][el_name] = el_data
             else:
                 print("No clear position for this element")
