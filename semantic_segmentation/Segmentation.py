@@ -21,7 +21,7 @@ from torch.utils.tensorboard import SummaryWriter
 
 
 # === Colormap per visualizzazione ===
-CLASS_COLORS = np.array([
+CLASS_COLORS_ORIGINAL = np.array([
     [0, 0, 0],         # 0 - background - environment (sfondo) - nero
     [255, 0, 0],       # 1 - ball - ROSSO
     [0, 0, 255],       # 2 - paddle_left - blu pieno
@@ -35,7 +35,7 @@ CLASS_COLORS = np.array([
 ], dtype=np.uint8)
 
 
-COLOR_MAP = np.array([
+CLASS_COLORS_DIFFERENT = np.array([
     [10, 10, 10],       # 0 - environment (sfondo) → grigio molto scuro, non puro nero
     [255, 60, 60],      # 1 - ball → rosso brillante (attira l’attenzione)
     [60, 100, 255],     # 2 - paddle_left → blu intenso
