@@ -10,7 +10,7 @@ INPUT_PKL_PATH = "../logs/arkanoid_logs/arkanoid_log_2025_07_15_16_30_15.pkl"
 OUTPUT_IMAGES_DIR = "./dataset/images"#"./dataset/test/images"#"./dataset/images"
 OUTPUT_MASKS_DIR = "./dataset/masks"#"./dataset/test/masks"#"./dataset/masks"
 OUTPUT_MASKS_COLOR_DIR = "./dataset/masks_color"#"./dataset/test/masks_color"#"./dataset/masks_color"
-pad = 1280  # numero di partenza
+pad = 0  # numero di partenza
 
 
 # arkanoid_log_2025_09_15_12_02_45.pkl -> 1069 
@@ -21,8 +21,6 @@ pad = 1280  # numero di partenza
 # arkanoid_log_2025_02_07_16_03_00.pkl -> PROVA
 # arkanoid_log_2025_04_15_09_34_43.pkl -> 20
 # arkanoid_log_2025_07_15_16_29_02.pkl -> 124 test
-
-
 
 
 # Etichette semantiche
@@ -66,9 +64,6 @@ for i, frame in tqdm(enumerate(data), total=len(data)):
         if not obj["existence"]:
             continue
 
-        # if "brick" in name:
-        #     print(name, obj["existence"], obj["hitbox_tl_x"], obj["hitbox_tl_y"])
-
         # Disegna nel frame RGB
         r, g, b = obj['color_r'], obj['color_g'], obj['color_b']
         rgb[obj['hitbox_tl_y']:obj['hitbox_br_y']+1,
@@ -79,7 +74,6 @@ for i, frame in tqdm(enumerate(data), total=len(data)):
             label = LABELS[name]
             draw_bbox(mask, obj, label)
         elif name.startswith("brick"):
-            # draw_bbox(mask, obj, 9)  # fallback brick
             # Estrai l'indice numerico dal nome, es: "brick_17" → 17
             brick_index = int(name.split("_")[1])
             label = 9 + brick_index  # 9–34 (come definito)
@@ -96,9 +90,6 @@ for i, frame in tqdm(enumerate(data), total=len(data)):
     mask_path = os.path.join(OUTPUT_MASKS_DIR, f"frame_{frame_id:04d}.png")
     cv2.imwrite(mask_path, mask)
 
-    # Maschera colorata (per debug/visualizzazione)
-    # mask_color = CLASS_COLORS[mask]
-
     mask_clamped = mask.copy()
     mask_clamped[mask_clamped > 9] = 9
     mask_color = CLASS_COLORS[mask_clamped]
@@ -106,8 +97,5 @@ for i, frame in tqdm(enumerate(data), total=len(data)):
     mask_color_path = os.path.join(OUTPUT_MASKS_COLOR_DIR, f"frame_{frame_id:04d}.png")
     mask_color_bgr = cv2.cvtColor(mask_color, cv2.COLOR_RGB2BGR)
     cv2.imwrite(mask_color_path, mask_color_bgr)
-
-
-
 
 print("✅ Dataset generato con successo!")

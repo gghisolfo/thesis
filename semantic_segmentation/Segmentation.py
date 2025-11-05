@@ -21,7 +21,7 @@ from torch.utils.tensorboard import SummaryWriter
 
 
 # === Colormap per visualizzazione ===
-COLOR_MAP = np.array([
+CLASS_COLORS = np.array([
     [0, 0, 0],         # 0 - background - environment (sfondo) - nero
     [255, 0, 0],       # 1 - ball - ROSSO
     [0, 0, 255],       # 2 - paddle_left - blu pieno
@@ -35,7 +35,19 @@ COLOR_MAP = np.array([
 ], dtype=np.uint8)
 
 
-CLASS_COLORS = COLOR_MAP
+COLOR_MAP = np.array([
+    [10, 10, 10],       # 0 - environment (sfondo) → grigio molto scuro, non puro nero
+    [255, 60, 60],      # 1 - ball → rosso brillante (attira l’attenzione)
+    [60, 100, 255],     # 2 - paddle_left → blu intenso
+    [60, 180, 255],     # 3 - paddle_center → azzurro vivace
+    [80, 255, 255],     # 4 - paddle_right → ciano chiaro
+    [60, 255, 100],     # 5 - wall_left → verde acceso
+    [140, 255, 60],     # 6 - wall_right → verde lime / giallo-verde
+    [255, 200, 60],     # 7 - wall_top → giallo-arancio caldo
+    [255, 120, 60],     # 8 - wall_bottom → arancione più intenso
+    [255, 255, 255],    # 9 - bricks → bianco pieno, massimo contrasto
+], dtype=np.uint8)
+
 
 def map_mask(mask):
     mapped_mask = np.zeros_like(mask)
