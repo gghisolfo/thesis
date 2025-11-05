@@ -41,19 +41,6 @@ class UNet(nn.Module):
 
         self.out = nn.Conv2d(64, out_channels, kernel_size=1) #conv 1x1
 
-    # def forward(self, x):
-    #     e1 = self.enc1(x)
-    #     e2 = self.enc2(self.pool(e1))
-    #     e3 = self.enc3(self.pool(e2))
-
-    #     m = self.middle(self.pool(e3))
-
-    #     d3 = self.dec3(torch.cat([self.up3(m), e3], dim=1))
-    #     d2 = self.dec2(torch.cat([self.up2(d3), e2], dim=1))
-    #     d1 = self.dec1(torch.cat([self.up1(d2), e1], dim=1))
-
-    #     return self.out(d1)
-
     #forward pass
     def forward(self, x):
         e1 = self.enc1(x)

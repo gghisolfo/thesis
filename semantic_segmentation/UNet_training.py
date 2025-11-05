@@ -25,8 +25,8 @@ SHOW_PLOTS = True
 SAVE_MODEL = True
 SAVE_PREDICTION = False
 
-images_path = "./dataset/images"
-masks_path = "./dataset/masks"
+images_path = "./dataset/images" # "./dataset/images" | "./dataset_complete/images"
+masks_path = "./dataset/masks" # "./dataset/images" | "./dataset_complete/images"
 
 # -----------------------
 # Utility

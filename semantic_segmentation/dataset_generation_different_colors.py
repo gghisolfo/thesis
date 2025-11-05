@@ -6,11 +6,11 @@ from tqdm import tqdm
 from segmentation import CLASS_COLORS, COLOR_MAP
 
 # === Config ===
-INPUT_PKL_PATH = "../logs/arkanoid_logs/arkanoid_log_2025_09_15_12_02_45.pkl"
+INPUT_PKL_PATH = "../logs/arkanoid_logs/arkanoid_log_2025_07_15_16_30_15.pkl"
 OUTPUT_IMAGES_DIR = "./dataset_complete/images"#"./dataset/test/images"#"./dataset/images"
 OUTPUT_MASKS_DIR = "./dataset_complete/masks"#"./dataset/test/masks"#"./dataset/masks"
 OUTPUT_MASKS_COLOR_DIR = "./dataset_complete/masks_color"#"./dataset/test/masks_color"#"./dataset/masks_color"
-pad = 1698  # numero di partenza
+pad = 2958  # numero di partenza
 
 
 # arkanoid_log_2025_09_15_12_02_45.pkl -> 1069 
