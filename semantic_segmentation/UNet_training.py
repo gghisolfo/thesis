@@ -7,7 +7,7 @@ from torchvision import transforms
 import matplotlib.pyplot as plt
 from UNet import UNet
 from deep_labv3_plus import get_deeplabv3plus_model
-from segmentation import SegmentationDataset, map_mask, CLASS_COLORS
+from segmentation import SegmentationDataset, map_mask, CLASS_COLORS_ORIGINAL
 from EarlyStopping import EarlyStopping
 from sklearn.model_selection import train_test_split
 
@@ -48,7 +48,7 @@ def show_image(image_tensor):
 
 def show_mask(mask_array, num_classes=10):
     # mask_array: numpy HxW with class ids 0..num_classes-1
-    cmap = CLASS_COLORS / 255.0
+    cmap = CLASS_COLORS_ORIGINAL / 255.0
     colored = cmap[mask_array]
     plt.imshow(colored)
     plt.axis('off')
@@ -165,8 +165,8 @@ def visualize_predictions(model, loader, max_images=5, device=DEVICE):
                 pred_mask = preds[b].cpu().numpy()
 
                 img_vis = denormalize(img.clone(), [0.485, 0.456, 0.406], [0.229, 0.224, 0.225]).permute(1,2,0).numpy()
-                color_true = CLASS_COLORS[true_mask]
-                color_pred = CLASS_COLORS[pred_mask]
+                color_true = CLASS_COLORS_ORIGINAL[true_mask]
+                color_pred = CLASS_COLORS_ORIGINAL[pred_mask]
 
                 fig, axes = plt.subplots(1,3,figsize=(12,4))
                 axes[0].imshow(img_vis)

@@ -10,24 +10,31 @@ from segmentation import CLASS_COLORS_DIFFERENT, CLASS_COLORS_ORIGINAL
 # arkanoid_log_2025_09_15_12_02_45.pkl -> 1069 
 # arkanoid_log_2025_04_15_09_35_00.pkl -> 211
 # arkanoid_log_2025_07_15_16_30_15.pkl -> 398 solo pallina e bordo
+# arkanoid_log_2025_07_15_16_29_02.pkl -> 124 test
 
 
 # arkanoid_log_2025_02_07_16_03_00.pkl -> PROVA
 # arkanoid_log_2025_04_15_09_34_43.pkl -> 20
-# arkanoid_log_2025_07_15_16_29_02.pkl -> 124 test
+
 
 # === Config ===
-INPUT_PKL_PATH = "../logs/arkanoid_logs/arkanoid_log_2025_09_15_12_02_45.pkl"
-PAD_START = 0  # numero di partenza
-COMPLETE = False   
+INPUT_PKL_PATH = "../logs/arkanoid_logs/arkanoid_log_2025_07_15_16_29_02.pkl"
+PAD_START = 1301  # numero di partenza
+COMPLETE = False 
+TEST=True  
 
 # === Output directories ===
-if COMPLETE: #different images colors
+if TEST:
+    BASE_DIR = "./dataset_test"
+    PALETTE = CLASS_COLORS_ORIGINAL
+elif COMPLETE:
     BASE_DIR = "./dataset_complete"
     PALETTE = CLASS_COLORS_DIFFERENT
 else:
     BASE_DIR = "./dataset"
     PALETTE = CLASS_COLORS_ORIGINAL
+
+
 
 OUTPUT_IMAGES_DIR = os.path.join(BASE_DIR, "images")
 OUTPUT_MASKS_DIR = os.path.join(BASE_DIR, "masks")

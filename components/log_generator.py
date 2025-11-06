@@ -5,8 +5,9 @@ import numpy as np
 from copy import deepcopy
 
 # === Config ===
-INPUT_MASKS_DIR = "../semantic_segmentation/dataset/masks"
+INPUT_MASKS_DIR = "../semantic_segmentation/mini_dataset/predictions"
 OUTPUT_PKL_PATH = "../logs/arkanoid_logs/reconstructed_log_no_reference.pkl" #"../logs/arkanoid_logs/reconstructed_log_no_reference.pkl" | "../logs/arkanoid_logs/prova.pkl"
+
 
 # === Parametri griglia / struttura ===
 grid_width, grid_height = 121, 71
@@ -25,11 +26,29 @@ CLASS_TO_ELEMENT = {
 
 # === Funzioni di supporto ===
 
-def extract_position_from_mask(mask, class_id):
+def extract_positions_from_mask(mask, class_id):
+    """Estrae la posizione e dimensioni di TUTTI gli oggetti di una certa classe nella maschera"""
+    if class_id not in np.unique(mask):
+        return []
+
+    num_labels, labels, stats, centroids = cv2.connectedComponentsWithStats(
+        (mask == class_id).astype(np.uint8), connectivity=8
+    )
+
+    positions = []
+    for i in range(1, num_labels):  # salta lo sfondo (label 0)
+        x, y, w, h, area = stats[i]
+        cx, cy = centroids[i]
+        positions.append((int(cx), int(cy), int(w), int(h)))
+
+    return positions
+
+def extract_unique_position_from_mask(mask, class_id):
     """Estrae la posizione centrale di un oggetto dalla maschera"""
     if class_id not in np.unique(mask):
         return None
     
+    # Crea un'immagine binaria dove i pixel del class_id sono 1 e gli altri 0, quindi trova componenti connesse.
     num_labels, labels, stats, centroids = cv2.connectedComponentsWithStats(
         (mask == class_id).astype(np.uint8), connectivity=8
     )
@@ -52,12 +71,12 @@ def extract_position_from_mask(mask, class_id):
     return int(cx), int(cy), int(w), int(h)
 
 
+
 def create_element(class_id, position):
     """Crea un dizionario per un elemento del gioco"""
     cx, cy, w, h = position
-    element_name = CLASS_TO_ELEMENT.get(class_id, f'brick_{class_id - 9}')
-    if class_id > 8:
-        print ("si")
+    element_name = CLASS_TO_ELEMENT.get(class_id, f'brick')#{class_id - 9}
+
     shape_x = max(1, w // 2)
     shape_y = max(1, h // 2)
     
@@ -109,23 +128,28 @@ def reconstruct_log_from_masks():
             'global_state': {},    # aggiunto
         }
 
-        # Oggetti base (classi note)
+        # Oggetti base (classi note) quii
         for class_id, name in CLASS_TO_ELEMENT.items():
-            pos = extract_position_from_mask(mask, class_id)
+            pos = extract_unique_position_from_mask(mask, class_id)
             if pos is not None:
                 el_name, el_data = create_element(class_id, pos)
                 frame_data['elements'][el_name] = el_data
         
         # Bricks (class_id >= 9)
         brick_classes = [cid for cid in np.unique(mask) if cid >= 9]
+        brick_counter = 0
+
         for cid in brick_classes:
-            pos = extract_position_from_mask(mask, cid)
-            if pos is not None:
+            positions = extract_positions_from_mask(mask, cid)
+            for pos in positions:
                 el_name, el_data = create_element(cid, pos)
-                # print("qui")
+                # dai a ciascun brick un nome unico
+                el_name = f"{el_name}_{brick_counter}" 
                 frame_data['elements'][el_name] = el_data
-            else:
-                print("No clear position for this element")
+                brick_counter += 1
+            # else:
+            #     print("No clear position for this element")
+            #     print(cid)
                 
         reconstructed_frames.append(frame_data)
 
