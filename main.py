@@ -6,7 +6,7 @@ import pickle
 
 def main():
 
-    simple_arkanoid_log_file_name ='reconstructed_log_no_reference.pkl' #'reconstructed_log.pkl'  |'arkanoid_log_2025_10_10_11_20_52.pkl' | 'reconstructed_log_clean.pkl'
+    simple_arkanoid_log_file_name ='reconstructed_log.pkl' #'reconstructed_log.pkl'  |'arkanoid_log_2025_10_10_11_20_52.pkl' | 'reconstructed_log_clean.pkl'
     complete_arkanoid_lose_log_file_name = 'arkanoid_log_2025_02_07_16_06_40.pkl'
     complete_arkanoid_win_log_file_name = 'arkanoid_log_2025_02_07_10_58_26.pkl'
     complete_arkanoid_win_2_log_file_name = 'arkanoid_log_2025_02_07_15_44_51.pkl'

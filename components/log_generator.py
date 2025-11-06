@@ -5,8 +5,8 @@ import numpy as np
 from copy import deepcopy
 
 # === Config ===
-INPUT_MASKS_DIR = "../semantic_segmentation/mini_dataset/predictions"
-OUTPUT_PKL_PATH = "../logs/arkanoid_logs/reconstructed_log_no_reference.pkl" #"../logs/arkanoid_logs/reconstructed_log_no_reference.pkl" | "../logs/arkanoid_logs/prova.pkl"
+INPUT_MASKS_DIR = "../semantic_segmentation/dataset_test/predictions"
+OUTPUT_PKL_PATH = "../logs/arkanoid_logs/reconstructed_log.pkl" #"../logs/arkanoid_logs/reconstructed_log_no_reference.pkl" | "../logs/arkanoid_logs/prova.pkl"
 
 
 # === Parametri griglia / struttura ===

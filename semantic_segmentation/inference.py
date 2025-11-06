@@ -6,17 +6,17 @@ from torch.utils.data import Dataset, DataLoader
 from PIL import Image
 import segmentation_models_pytorch as smp
 from UNet import UNet
-from segmentation import CLASS_COLORS
+from segmentation import CLASS_COLORS_ORIGINAL
 
 # ----------------------- Config -----------------------
 
 NUM_CLASSES = 10
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 BATCH_SIZE = 1
-MAX_IMAGES = 25
-IMAGES_FOLDER = "./real_images/images"
+MAX_IMAGES = 100
+IMAGES_FOLDER = "./dataset_test/images"
 SAVE_PREDICTIONS = True
-OUTPUT_DIR = "./predictions"
+OUTPUT_DIR = "./dataset_test/predictions"
 SHOW_IMAGES = False
 MODEL_TYPE = "unet"  # "unet" | "smp_unet"
 MODEL_PATH = "segmentation_model.pth" # "segmentation_model.pth" | "unet_finetuned.pth"
@@ -48,12 +48,6 @@ class InferenceDataset(Dataset):
     def __len__(self):
         return len(self.image_paths)
 
-    # def __getitem__(self, idx):
-    #     path = self.image_paths[idx]
-    #     img = Image.open(path).convert("RGB")
-    #     padded_img, orig_size = pad_to_multiple_of_32(img)
-    #     tensor_img = torch.from_numpy(np.array(padded_img)).permute(2, 0, 1).float() / 255.0
-    #     return tensor_img, path, orig_size
     def __getitem__(self, idx):
         path = self.image_paths[idx]
         img = Image.open(path).convert("RGB")
@@ -104,16 +98,9 @@ def run_inference():
                 if count >= MAX_IMAGES:
                     return
                 img_path = paths[b]
-                #orig_size = tuple(orig_sizes[b])
-                #orig_size = tuple(map(int, orig_sizes[b]))  # forza a (w,h)
-                print("DEBUG orig_sizes[b]:", orig_sizes[b])
-                # orig_size = orig_sizes[b]
-                # if isinstance(orig_size, torch.Tensor):
-                #     orig_size = orig_size.tolist()
-                # if isinstance(orig_size, (list, tuple)) and len(orig_size) == 2:
-                #     orig_size = tuple(map(int, orig_size))
-                # else:
-                #     raise ValueError(f"Formato orig_size non valido: {orig_size}")
+
+                # print("DEBUG orig_sizes[b]:", orig_sizes[b])
+
                 orig_size = orig_sizes[b].tolist()
                 if len(orig_size) == 2:
                     orig_size = tuple(map(int, orig_size))
@@ -127,15 +114,10 @@ def run_inference():
                 pred_mask = unpad(pred_mask, orig_size)
 
                 # Colora la maschera
-                color_pred = CLASS_COLORS[pred_mask]
+                color_pred = CLASS_COLORS_ORIGINAL[pred_mask]
 
                 # Salva output
                 if SAVE_PREDICTIONS:
-                    # base_name = os.path.splitext(os.path.basename(img_path))[0]
-                    # save_path = os.path.join(OUTPUT_DIR, f"{base_name}_mask.png")
-                    # Image.fromarray(color_pred.astype(np.uint8)).save(save_path)
-                    # print(f"Salvato: {save_path}")
-
                     base_name = os.path.splitext(os.path.basename(img_path))[0]
                     save_path = os.path.join(OUTPUT_DIR, f"{base_name}_mask.png")
                     Image.fromarray(pred_mask.astype(np.uint8)).save(save_path)

@@ -578,9 +578,10 @@ def summarize_into_prototypes(individual, debug= False):
         for prop_class in all_props:
             variance = False
             for i_fid in range(len(obj.frames_id) - 1):
-                if obj.properties[obj.frames_id[i_fid]][prop_class] != obj.properties[obj.frames_id[i_fid + 1]][prop_class]:
-                    variance = True
-                    break
+                if (prop_class in obj.properties[obj.frames_id[i_fid]] and prop_class in obj.properties[obj.frames_id[i_fid + 1]]):
+                    if obj.properties[obj.frames_id[i_fid]][prop_class] != obj.properties[obj.frames_id[i_fid + 1]][prop_class]:
+                        variance = True
+                        break
             prop_variance[prop_class] = variance
 
         prop_variance_signature = ''
