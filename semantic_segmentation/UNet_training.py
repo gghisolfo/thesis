@@ -6,15 +6,14 @@ from torch.utils.data import DataLoader
 from torchvision import transforms
 import matplotlib.pyplot as plt
 from UNet import UNet
-from deep_labv3_plus import get_deeplabv3plus_model
-from segmentation import SegmentationDataset, map_mask, CLASS_COLORS_ORIGINAL
+from SegmentationTools import SegmentationDataset, map_mask, CLASS_COLORS_ORIGINAL
 from EarlyStopping import EarlyStopping
 from sklearn.model_selection import train_test_split
 
 # -----------------------
 # Config
 # -----------------------
-USE_DEEPLAB = False
+
 IMAGE_SIZE = (120, 70)
 NUM_CLASSES = 10
 BATCH_SIZE = 4
@@ -99,8 +98,8 @@ def make_dataloaders(images_dir=images_path, masks_dir=masks_path, batch_size=BA
 # Model builders
 # -----------------------
 
-def build_model(num_classes=NUM_CLASSES, use_deeplab=USE_DEEPLAB, device=DEVICE):
-    model = get_deeplabv3plus_model(3, num_classes) if use_deeplab else UNet(3, num_classes)
+def build_model(num_classes=NUM_CLASSES, device=DEVICE):
+    model = UNet(3, num_classes)
     return model.to(device)
 
 
@@ -113,7 +112,7 @@ def train_one_epoch(model, loader, optimizer, criterion, device):
     running_loss = 0.0
     for images, masks in loader:
         images, masks = images.to(device), masks.to(device)
-        outputs = model(images)['out'] if USE_DEEPLAB else model(images)
+        outputs = model(images)
         loss = criterion(outputs, masks)
         optimizer.zero_grad()
         loss.backward()
@@ -131,7 +130,7 @@ def validate(model, loader, criterion, device, num_classes=NUM_CLASSES):
     with torch.no_grad():
         for images, masks in loader:
             images, masks = images.to(device), masks.to(device)
-            outputs = model(images)['out'] if USE_DEEPLAB else model(images)
+            outputs = model(images)
             loss = criterion(outputs, masks)
             val_loss += loss.item()
             preds = torch.argmax(outputs, dim=1)
@@ -157,7 +156,7 @@ def visualize_predictions(model, loader, max_images=5, device=DEVICE):
     with torch.no_grad():
         for images, masks in loader:
             images, masks = images.to(device), masks.to(device)
-            outputs = model(images)['out'] if USE_DEEPLAB else model(images)
+            outputs = model(images)
             preds = torch.argmax(outputs, dim=1)
             for b in range(images.size(0)):
                 img = images[b].cpu()

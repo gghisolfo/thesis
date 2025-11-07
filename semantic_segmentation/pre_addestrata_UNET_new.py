@@ -8,7 +8,7 @@ import numpy as np
 import random
 import os
 import matplotlib.pyplot as plt
-from segmentation import CLASS_COLORS, map_mask, SegmentationDataset
+from SegmentationTools import CLASS_COLORS_ORIGINAL, map_mask, SegmentationDataset
 
 # =========================
 # CONFIGURAZIONE
@@ -17,9 +17,11 @@ num_classes = 10
 batch_size = 4
 device = "cuda" if torch.cuda.is_available() else "cpu"
 test_split = 0.2
-num_epochs = 30 # 7 | 30
+num_epochs = 3 # 7 | 30
 training_mode = "fine_tune"  # "decoder_only" | "fine_tune" | "frozen"
 SAVE_MODEL = True
+images_dir = "./dataset_complete/images" # "./dataset/images" | "./dataset_complete/images"
+masks_dir  = "./dataset_complete/masks"
 
 # =========================
 # PAD AUTOMATICO
@@ -70,8 +72,7 @@ mask_transform = transforms.Compose([
 # =========================
 # PREPARA DATASET E DATALOADER
 # =========================
-images_dir = "./dataset/images"
-masks_dir  = "./dataset/masks"
+
 
 image_files = sorted([os.path.join(images_dir, f) for f in os.listdir(images_dir) if f.endswith(".png")])
 mask_files  = sorted([os.path.join(masks_dir, f) for f in os.listdir(masks_dir) if f.endswith(".png")])
@@ -95,7 +96,7 @@ print(f"Train: {len(train_dataset)} immagini, Test: {len(test_dataset)} immagini
 # =========================
 # CREA MODELLO U-NET
 # =========================
-#"decoder_only" parte da ImageNet, allena decoder.
+# "decoder_only" parte da ImageNet, allena decoder.
 # "fine_tune" riparte dal tuo unet_decoder.pth.
 # "frozen" carica direttamente il modello finale (per inferenza).
 
@@ -159,7 +160,7 @@ else:
 # LOSS E OTTIMIZZATORE
 # =========================
 criterion = nn.CrossEntropyLoss()
-# optimizer = torch.optim.Adam(filter(lambda p: p.requires_grad, model.parameters()), lr=LR) if training_mode != "frozen" else None
+
 if training_mode == "decoder_only":
     # Alleno SOLO il decoder, encoder congelato
     optimizer = torch.optim.Adam(
@@ -182,7 +183,9 @@ else:
     raise ValueError(f"Training mode '{training_mode}' non valido!")
 
 
-
+best_loss = float('inf')
+patience = 3
+no_improve = 0
 
 # =========================
 # TRAINING LOOP
@@ -202,13 +205,24 @@ if training_mode != "frozen":
 
             running_loss += loss.item()
 
+        
         print(f"Epoch [{epoch+1}/{num_epochs}] Loss: {running_loss/len(train_loader):.4f}")
+        val_loss = evaluate_loss(model, test_loader)
+        if val_loss < best_loss:
+            best_loss = val_loss
+            no_improve = 0
+            torch.save(model.state_dict(), "best_model.pth")
+        else:
+            no_improve += 1
+            if no_improve >= patience:
+                print("Early stopping.")
+                break
 
 
-        if SAVE_MODEL :
-            save_path = "unet_finetuned.pth"
-            torch.save(model.state_dict(), save_path)
-            print(f"Modello salvato come {save_path}")
+    if SAVE_MODEL :
+        save_path = "unet_finetuned.pth"
+        torch.save(model.state_dict(), save_path)
+        print(f"Modello salvato come {save_path}")
 
 
 # # =========================
@@ -225,7 +239,7 @@ if training_mode != "frozen":
 
 # # Pad inverso per tornare alla dimensione originale
 # seg_map_resized = np.array(Image.fromarray(seg_map.astype(np.uint8)).resize(img.size, resample=Image.NEAREST))
-# seg_rgb = CLASS_COLORS[seg_map_resized]
+# seg_rgb = CLASS_COLORS_ORIGINAL[seg_map_resized]
 
 # # =========================
 # # FUNZIONE DI VALUTAZIONE mIoU
@@ -251,8 +265,8 @@ if training_mode != "frozen":
 #                 true_mask = masks[j].cpu().numpy()
 #                 pred_mask = preds[j].cpu().numpy()
 
-#                 color_true = CLASS_COLORS[true_mask]
-#                 color_pred = CLASS_COLORS[pred_mask]
+#                 color_true = CLASS_COLORS_ORIGINAL[true_mask]
+#                 color_pred = CLASS_COLORS_ORIGINAL[pred_mask]
 
 #                 fig, axes = plt.subplots(1,3,figsize=(15,5))
 #                 axes[0].imshow(image); axes[0].set_title("Input"); axes[0].axis("off")

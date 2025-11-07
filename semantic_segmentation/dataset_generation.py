@@ -3,7 +3,7 @@ import pickle
 import numpy as np
 import cv2
 from tqdm import tqdm
-from segmentation import CLASS_COLORS_DIFFERENT, CLASS_COLORS_ORIGINAL
+from SegmentationTools import CLASS_COLORS_DIFFERENT, CLASS_COLORS_ORIGINAL
 
 
 
@@ -18,10 +18,10 @@ from segmentation import CLASS_COLORS_DIFFERENT, CLASS_COLORS_ORIGINAL
 
 
 # === Config ===
-INPUT_PKL_PATH = "../logs/arkanoid_logs/arkanoid_log_2025_07_15_16_29_02.pkl"
-PAD_START = 1301  # numero di partenza
-COMPLETE = False 
-TEST=True  
+INPUT_PKL_PATH = "../logs/arkanoid_logs/arkanoid_log_2025_09_15_12_02_45.pkl"
+PAD_START = 1699  # numero di partenza
+COMPLETE = True 
+TEST = False  
 
 # === Output directories ===
 if TEST:

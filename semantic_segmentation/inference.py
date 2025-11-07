@@ -6,7 +6,7 @@ from torch.utils.data import Dataset, DataLoader
 from PIL import Image
 import segmentation_models_pytorch as smp
 from UNet import UNet
-from segmentation import CLASS_COLORS_ORIGINAL
+from SegmentationTools import CLASS_COLORS_ORIGINAL
 
 # ----------------------- Config -----------------------
 
