@@ -17,7 +17,7 @@ from sklearn.model_selection import train_test_split
 IMAGE_SIZE = (120, 70)
 NUM_CLASSES = 10
 BATCH_SIZE = 4
-EPOCHS = 3
+EPOCHS = 10
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 SHUFFLE = False
 SHOW_PLOTS = True
