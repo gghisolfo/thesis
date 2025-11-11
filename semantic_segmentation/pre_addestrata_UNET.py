@@ -7,22 +7,24 @@ from PIL import Image
 import numpy as np
 import random
 import os
-import matplotlib.pyplot as plt
-from SegmentationTools import CLASS_COLORS, map_mask, SegmentationDataset
+from SegmentationTools import SegmentationDataset
 
 # =========================
-# CONFIGURAZIONE
+# CONFIG
 # =========================
 num_classes = 10
 batch_size = 4
 device = "cuda" if torch.cuda.is_available() else "cpu"
 test_split = 0.2
-num_epochs = 30 # 7 | 30
-training_mode = "fine_tune"  # "decoder_only" | "fine_tune" | "frozen"
-SAVE_MODEL = True
+max_epochs_decoder = 15
+max_epochs_finetune = 15
+early_stop_patience = 3
+SAVE_BEST_MODEL = True
+images_dir = "./dataset_complete/images"
+masks_dir  = "./dataset_complete/masks"
 
 # =========================
-# PAD AUTOMATICO
+# PAD E AUGMENTATION
 # =========================
 def pad_to_multiple_of_32(img):
     w, h = img.size
@@ -40,9 +42,6 @@ def pad_mask(mask):
     padded.paste(mask, (0,0))
     return padded
 
-# =========================
-# DATA AUGMENTATION
-# =========================
 def augment(img, mask):
     if random.random() > 0.5:
         img = img.transpose(Image.FLIP_LEFT_RIGHT)
@@ -53,7 +52,7 @@ def augment(img, mask):
     return img, mask
 
 # =========================
-# TRASFORMAZIONI
+# TRANSFORMS
 # =========================
 image_transform = transforms.Compose([
     transforms.Lambda(pad_to_multiple_of_32),
@@ -68,11 +67,8 @@ mask_transform = transforms.Compose([
 ])
 
 # =========================
-# PREPARA DATASET E DATALOADER
+# DATASET E DATALOADER
 # =========================
-images_dir = "./dataset/images"
-masks_dir  = "./dataset/masks"
-
 image_files = sorted([os.path.join(images_dir, f) for f in os.listdir(images_dir) if f.endswith(".png")])
 mask_files  = sorted([os.path.join(masks_dir, f) for f in os.listdir(masks_dir) if f.endswith(".png")])
 assert len(image_files) == len(mask_files), "Numero immagini e maschere non corrisponde!"
@@ -93,193 +89,93 @@ test_loader  = DataLoader(test_dataset, batch_size=1, shuffle=False)
 print(f"Train: {len(train_dataset)} immagini, Test: {len(test_dataset)} immagini")
 
 # =========================
-# CREA MODELLO U-NET
+# MODELLO BASE
 # =========================
-#"decoder_only" parte da ImageNet, allena decoder.
-# "fine_tune" riparte dal tuo unet_decoder.pth.
-# "frozen" carica direttamente il modello finale (per inferenza).
+model = smp.Unet(
+    encoder_name="resnet34",
+    encoder_weights="imagenet",
+    classes=num_classes,
+    activation=None
+).to(device)
 
-if training_mode == "decoder_only":
-    model = smp.Unet(
-        encoder_name="resnet34",
-        encoder_weights="imagenet",
-        classes=num_classes,
-        activation=None
-    ).to(device)
-
-elif training_mode == "fine_tune":
-    model = smp.Unet(
-        encoder_name="resnet34",
-        encoder_weights=None,   # non ricaricare da ImageNet
-        classes=num_classes,
-        activation=None
-    ).to(device)
-
-    checkpoint_path = "unet_finetuned.pth"
-    assert os.path.exists(checkpoint_path), f"{checkpoint_path} non trovato!"
-    model.load_state_dict(torch.load(checkpoint_path, map_location=device))
-
-elif training_mode == "frozen":
-    model = smp.Unet(
-        encoder_name="resnet34",
-        encoder_weights=None,
-        classes=num_classes,
-        activation=None
-    ).to(device)
-
-    checkpoint_path = "unet_finetuned.pth"
-    assert os.path.exists(checkpoint_path), f"{checkpoint_path} non trovato!"
-    model.load_state_dict(torch.load(checkpoint_path, map_location=device))
-
-else:
-    raise ValueError(f"Training mode '{training_mode}' non valido!")
-
-
-
-
-# =========================
-# MODALITÀ TRAINING
-# =========================
-if training_mode == "decoder_only":
-    print("Modalità: alleno SOLO il decoder, encoder congelato.")
-    for param in model.encoder.parameters():
-        param.requires_grad = False
-elif training_mode == "fine_tune":
-    print("Modalità: fine-tuning completo.")
-    for param in model.parameters():
-        param.requires_grad = True
-elif training_mode == "frozen":
-    print("Modalità: rete congelata.")
-    for param in model.parameters():
-        param.requires_grad = False
-else:
-    raise ValueError(f"Training mode '{training_mode}' non valido!")
-
-# =========================
-# LOSS E OTTIMIZZATORE
-# =========================
 criterion = nn.CrossEntropyLoss()
-# optimizer = torch.optim.Adam(filter(lambda p: p.requires_grad, model.parameters()), lr=LR) if training_mode != "frozen" else None
-if training_mode == "decoder_only":
-    # Alleno SOLO il decoder, encoder congelato
-    optimizer = torch.optim.Adam(
-        filter(lambda p: p.requires_grad, model.parameters()),
-        lr=1e-3
-    )
-
-elif training_mode == "fine_tune":
-    # Alleno encoder + decoder, con LR diversi
-    optimizer = torch.optim.Adam([
-        {"params": model.encoder.parameters(), "lr": 1e-5},   # encoder più lento
-        {"params": model.decoder.parameters(), "lr": 1e-4},   # decoder più veloce
-    ])
-
-elif training_mode == "frozen":
-    # Nessun training → niente optimizer
-    optimizer = None
-
-else:
-    raise ValueError(f"Training mode '{training_mode}' non valido!")
-
-
-
 
 # =========================
-# TRAINING LOOP
+# FUNZIONI DI SUPPORTO
 # =========================
-if training_mode != "frozen":
-    for epoch in range(num_epochs):
+def evaluate_loss(model, dataloader):
+    model.eval()
+    total_loss = 0.0
+    with torch.no_grad():
+        for imgs, masks in dataloader:
+            imgs, masks = imgs.to(device), masks.to(device)
+            outputs = model(imgs)
+            loss = criterion(outputs, masks)
+            total_loss += loss.item()
+    return total_loss / len(dataloader)
+
+def train_phase(model, optimizer, max_epochs, phase_name, unfreeze_encoder=False):
+    print(f"\n============================")
+    print(f"INIZIO FASE: {phase_name}")
+    print(f"============================")
+
+    if unfreeze_encoder:
+        for p in model.encoder.parameters():
+            p.requires_grad = True
+    else:
+        for p in model.encoder.parameters():
+            p.requires_grad = False
+
+    best_val_loss = float("inf")
+    no_improve = 0
+
+    for epoch in range(max_epochs):
         model.train()
         running_loss = 0.0
         for imgs, masks in train_loader:
             imgs, masks = imgs.to(device), masks.to(device)
-
             optimizer.zero_grad()
             outputs = model(imgs)
             loss = criterion(outputs, masks)
             loss.backward()
             optimizer.step()
-
             running_loss += loss.item()
 
-        print(f"Epoch [{epoch+1}/{num_epochs}] Loss: {running_loss/len(train_loader):.4f}")
+        train_loss = running_loss / len(train_loader)
+        val_loss = evaluate_loss(model, test_loader)
 
+        print(f"Epoch [{epoch+1}/{max_epochs}] "
+              f"Train Loss: {train_loss:.4f} | Val Loss: {val_loss:.4f}")
 
-        if SAVE_MODEL :
-            save_path = "unet_finetuned.pth"
-            torch.save(model.state_dict(), save_path)
-            print(f"Modello salvato come {save_path}")
+        # Early stopping
+        if val_loss < best_val_loss:
+            best_val_loss = val_loss
+            no_improve = 0
+            if SAVE_BEST_MODEL:
+                torch.save(model.state_dict(), f"best_{phase_name}.pth")
+                print(f"✅ Miglior modello salvato (val_loss={val_loss:.4f})")
+        else:
+            no_improve += 1
+            if no_improve >= early_stop_patience:
+                print("⏹ Early stopping per mancanza di miglioramento.")
+                break
 
+# =========================
+# FASE 1: TRAIN DECODER
+# =========================
+optimizer_decoder = torch.optim.Adam(
+    filter(lambda p: p.requires_grad, model.parameters()),
+    lr=1e-3
+)
+train_phase(model, optimizer_decoder, max_epochs_decoder, phase_name="decoder_only", unfreeze_encoder=False)
 
-# # =========================
-# # INFERENZA SU UNA IMMAGINE
-# # =========================
-# model.eval()
-# test_img_path = test_images[0]
-# img = Image.open(test_img_path).convert("RGB")
-# img_tensor = image_transform(img).unsqueeze(0).to(device)
+# =========================
+# FASE 2: FINE-TUNING COMPLETO
+# =========================
+optimizer_finetune = torch.optim.Adam([
+    {"params": model.encoder.parameters(), "lr": 1e-5},
+    {"params": model.decoder.parameters(), "lr": 1e-4},
+])
+train_phase(model, optimizer_finetune, max_epochs_finetune, phase_name="fine_tune", unfreeze_encoder=True)
 
-# with torch.no_grad():
-#     output = model(img_tensor)
-#     seg_map = torch.argmax(output, dim=1)[0].cpu().numpy()
-
-# # Pad inverso per tornare alla dimensione originale
-# seg_map_resized = np.array(Image.fromarray(seg_map.astype(np.uint8)).resize(img.size, resample=Image.NEAREST))
-# seg_rgb = CLASS_COLORS[seg_map_resized]
-
-# # =========================
-# # FUNZIONE DI VALUTAZIONE mIoU
-# # =========================
-# def evaluate_miou_and_visualization(model, dataloader, num_classes, device="cpu", max_samples=3):
-#     print("Valutazione mIoU ...")
-#     model.eval()
-    
-#     intersection_per_class = np.zeros(num_classes, dtype=np.float64)
-#     union_per_class = np.zeros(num_classes, dtype=np.float64)
-    
-#     samples_processed = 0
-#     with torch.no_grad():
-#         for imgs, masks in dataloader:
-#             imgs, masks = imgs.to(device), masks.to(device)
-#             outputs = model(imgs)
-#             preds = torch.argmax(outputs, dim=1)
-
-#             for j in range(imgs.size(0)):
-#                 image = imgs[j].cpu().permute(1,2,0).numpy()
-#                 image = (image - image.min()) / (image.max() - image.min() + 1e-8)
-
-#                 true_mask = masks[j].cpu().numpy()
-#                 pred_mask = preds[j].cpu().numpy()
-
-#                 color_true = CLASS_COLORS[true_mask]
-#                 color_pred = CLASS_COLORS[pred_mask]
-
-#                 fig, axes = plt.subplots(1,3,figsize=(15,5))
-#                 axes[0].imshow(image); axes[0].set_title("Input"); axes[0].axis("off")
-#                 axes[1].imshow(color_true); axes[1].set_title("Ground Truth"); axes[1].axis("off")
-#                 axes[2].imshow(color_pred); axes[2].set_title("Prediction"); axes[2].axis("off")
-#                 plt.show()
-
-#                 for c in range(num_classes):
-#                     pred_c = (pred_mask == c)
-#                     mask_c = (true_mask == c)
-#                     intersection_per_class[c] += np.logical_and(pred_c, mask_c).sum()
-#                     union_per_class[c] += np.logical_or(pred_c, mask_c).sum()
-
-#                 samples_processed += 1
-#                 if max_samples is not None and samples_processed >= max_samples:
-#                     break
-#             if max_samples is not None and samples_processed >= max_samples:
-#                 break
-
-#     iou_per_class = intersection_per_class / (union_per_class + 1e-8)
-#     miou = np.mean(iou_per_class[union_per_class>0])
-#     return miou, iou_per_class
-
-# # =========================
-# # VALUTAZIONE
-# # =========================
-# miou, iou_classes = evaluate_miou_and_visualization(model, test_loader, num_classes, device)
-# print(f"\nTest mIoU: {miou:.4f}")
-# for i, val in enumerate(iou_classes):
-#     print(f"Classe {i}: IoU = {val:.4f}")
+print("\n✅ Addestramento completato.")
