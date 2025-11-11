@@ -18,8 +18,9 @@ MASKS_FOLDER = "./dataset_test/masks"     # <--- nuovo
 SAVE_PREDICTIONS = True
 OUTPUT_DIR = "./dataset_test/predictions"
 SHOW_IMAGES = False
-MODEL_TYPE = "smp_unet"  # "unet" | "smp_unet"
-MODEL_PATH = "best_fine_tune.pth"
+SAVE_VISIBLE_MASK = False
+MODEL_TYPE = "unet"  # "unet" | "smp_unet" 
+MODEL_PATH = "segmentation_model.pth" # per best_fine_tune ->  smp_unet
 
 # ----------------------- Utils -----------------------
 def pad_to_multiple_of_32(img: Image.Image):
@@ -139,7 +140,7 @@ def run_inference():
                     Image.fromarray(pred_mask.astype(np.uint8)).save(save_path)
                     # print(f"Salvato (maschera grezza): {save_path}")
                 
-                if i<2:
+                if i<2 and SAVE_VISIBLE_MASK:
                     i=i+1
                     base_name = os.path.splitext(os.path.basename(img_path))[0]
                     save_path = os.path.join(OUTPUT_DIR, f"{base_name}_mask_overlay.png")
