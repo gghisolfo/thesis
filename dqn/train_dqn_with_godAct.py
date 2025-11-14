@@ -4,9 +4,12 @@ import torch.nn as nn
 import torch.optim as optim
 import numpy as np
 import random
-import gym
+import gymnasium as gym
+
 import os
 from collections import deque, defaultdict
+
+# python -m dqn.train_dqn_with_godAct 
 
 
 # Import locali

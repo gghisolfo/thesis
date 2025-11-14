@@ -18,10 +18,12 @@ from SegmentationTools import CLASS_COLORS_DIFFERENT, CLASS_COLORS_ORIGINAL
 
 
 # === Config ===
-INPUT_PKL_PATH = "../logs/arkanoid_logs/arkanoid_log_2025_09_15_12_02_45.pkl"
-PAD_START = 1699  # numero di partenza
-COMPLETE = True 
-TEST = False  
+INPUT_PKL_PATH = "../logs/arkanoid_logs/arkanoid_log_2025_04_15_09_34_43.pkl"
+PAD_START = 0  # numero di partenza
+COMPLETE = False 
+TEST = False 
+different_bricks = True 
+PROVA = True 
 
 # === Output directories ===
 if TEST:
@@ -30,6 +32,9 @@ if TEST:
 elif COMPLETE:
     BASE_DIR = "./dataset_complete"
     PALETTE = CLASS_COLORS_DIFFERENT
+elif PROVA:
+    BASE_DIR = "./dataset_cellpose"
+    PALETTE = CLASS_COLORS_ORIGINAL
 else:
     BASE_DIR = "./dataset"
     PALETTE = CLASS_COLORS_ORIGINAL
@@ -92,7 +97,10 @@ for i, frame in tqdm(enumerate(data), total=len(data), desc="Generazione frame")
             label = LABELS[name]
         elif name.startswith("brick_"):
             brick_index = int(name.split("_")[1])
-            label = 9 #+ brick_index  # 9–34 (come definito)
+            if different_bricks:
+                label = 9 + brick_index  # 9–34 (come definito)
+            else:
+                label = 9 # tutti i bricks stessa classe
         else:
             continue
 
