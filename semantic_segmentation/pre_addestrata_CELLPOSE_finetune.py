@@ -3,6 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import shutil
 from cellpose import io, models, train, core
+from SegmentationTools import CLASS_COLORS_ORIGINAL
 
 # Cartelle separate per train e test
 train_mask_dir = "./dataset_cellpose/masks"
@@ -12,6 +13,7 @@ test_images_dir = "./dataset_test/images"
 
 output_dir = "./dataset_cellpose/predictions"
 os.makedirs(output_dir, exist_ok=True)
+gpu_mode=True
 
 
 def prepare_data(img_dir, mask_dir, temp_dir, dataset_name="dataset"):
@@ -109,7 +111,7 @@ def train_custom_model(train_img_dir, train_mask_dir,
     print("="*50)
     
     # Inizializza il modello
-    model = models.CellposeModel(gpu=False, model_type=model_type)
+    model = models.CellposeModel(gpu=gpu_mode, model_type=model_type)
     
     # Converti le maschere nel formato corretto se necessario
     train_labels_proc = []
@@ -165,6 +167,13 @@ def train_custom_model(train_img_dir, train_mask_dir,
     
     return cpmodel_path
 
+def generate_color_palette(n_colors=30):
+    """
+    Genera una palette di n_colors vividi, usando un colormap di matplotlib.
+    """
+    colormap = cm.get_cmap('tab20', n_colors)  # 'tab20' ha colori distinti
+    palette = (colormap(range(n_colors))[:, :3] * 255).astype(np.uint8)
+    return palette
 
 def test_custom_model(model_path, test_img_dir, output_dir):
     """
@@ -175,7 +184,7 @@ def test_custom_model(model_path, test_img_dir, output_dir):
     print("="*50)
     
     # Carica modello custom
-    model = models.CellposeModel(gpu=False, pretrained_model=model_path)
+    model = models.CellposeModel(gpu=gpu_mode, pretrained_model=model_path)
     
     os.makedirs(output_dir, exist_ok=True)
     
@@ -196,26 +205,43 @@ def test_custom_model(model_path, test_img_dir, output_dir):
         masks, flows, styles = model.eval(img, channels=[0,0], diameter=None)
         
         # Salva maschera colorata
-        if masks.max() > 0:
-            mask_color = plt.get_cmap("nipy_spectral")(masks.astype(np.float32) / masks.max())
-            mask_color = (mask_color[:, :, :3] * 255).astype(np.uint8)
-        else:
-            mask_color = np.zeros((masks.shape[0], masks.shape[1], 3), dtype=np.uint8)
+        # if masks.max() > 0:
+        #     mask_color = plt.get_cmap("nipy_spectral")(masks.astype(np.float32) / masks.max())
+        #     mask_color = (mask_color[:, :, :3] * 255).astype(np.uint8)
+        # else:
+        #     mask_color = np.zeros((masks.shape[0], masks.shape[1], 3), dtype=np.uint8)
             
-        mask_out = os.path.join(output_dir, 
-                               os.path.splitext(img_name)[0] + "_prediction.png")
-        cv2.imwrite(mask_out, cv2.cvtColor(mask_color, cv2.COLOR_RGB2BGR))
+        # mask_out = os.path.join(output_dir, 
+        #                        os.path.splitext(img_name)[0] + "_prediction.png")
+        # cv2.imwrite(mask_out, cv2.cvtColor(mask_color, cv2.COLOR_RGB2BGR))
         
-        # Salva overlay
-        img_norm = cv2.normalize(img, None, 0, 255, cv2.NORM_MINMAX)
-        img_rgb = cv2.cvtColor(img_norm.astype(np.uint8), cv2.COLOR_GRAY2RGB)
-        overlay = img_rgb.copy()
-        overlay_mask = (masks > 0).astype(np.uint8) * 255
-        overlay[:, :, 0] = np.maximum(overlay[:, :, 0], overlay_mask)
-        overlay_out = os.path.join(output_dir, 
-                                   os.path.splitext(img_name)[0] + "_overlay.png")
-        cv2.imwrite(overlay_out, overlay)
+        # # Salva overlay
+        # img_norm = cv2.normalize(img, None, 0, 255, cv2.NORM_MINMAX)
+        # img_rgb = cv2.cvtColor(img_norm.astype(np.uint8), cv2.COLOR_GRAY2RGB)
+        # overlay = img_rgb.copy()
+        # overlay_mask = (masks > 0).astype(np.uint8) * 255
+        # overlay[:, :, 0] = np.maximum(overlay[:, :, 0], overlay_mask)
+        # overlay_out = os.path.join(output_dir, 
+        #                            os.path.splitext(img_name)[0] + "_overlay.png")
+        # cv2.imwrite(overlay_out, overlay)
         
+        # Inizializza immagine RGB
+        # Inizializza immagine RGB per maschera colorata
+        h, w = masks.shape
+        mask_color = np.zeros((h, w, 3), dtype=np.uint8)
+
+        unique_labels = np.unique(masks)
+        for label in unique_labels:
+            if label == 0:
+                continue  # sfondo nero
+            # Cicla tra i colori della palette se ci sono più di n_colors etichette
+            mask_color[masks == label] = palette[label % len(palette)]
+
+        # Salva maschera colorata
+        mask_out = os.path.join(output_dir,
+                                os.path.splitext(img_name)[0] + "_prediction.png")
+        cv2.imwrite(mask_out, mask_color)
+
         print(f"✅ {img_name} → {mask_out}")
     
     print(f"\n🎉 Predizioni salvate in: {output_dir}")
