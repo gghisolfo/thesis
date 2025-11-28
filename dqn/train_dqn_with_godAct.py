@@ -165,10 +165,15 @@ def train_dqn(use_godact, total_episodes=200, max_steps=2000):
     with open(BEST_POPULATION_PATH, "rb") as f:
         population = pickle.load(f)
 
+    # print("----------")
+    # print(population)
+    # print("----------")
+
     # Setup ambiente
     env = ArkanoidEnv()
     if use_godact:
-        integrator = GodActDQNIntegrator(rules_dict=population)
+        # integrator = GodActDQNIntegrator(rules_dict=population)
+        integrator = GodActPopulationIntegrator(population)
         env = integrator.wrap_environment(env)
         buffer = integrator.create_replay_buffer(50000)
     else:
@@ -256,14 +261,15 @@ def train_dqn(use_godact, total_episodes=200, max_steps=2000):
 def evaluate_godact_vs_vanilla():
     results = defaultdict(list)
     total_episodes= 1000
+
     # print("=== Training senza GodAct ===")
     # results['vanilla'] = train_dqn(use_godact=False, total_episodes=total_episodes)
-    print("=== Training con GodAct ===")
-    results['godact'] = train_dqn(use_godact=True, total_episodes=total_episodes)
+    # avg_vanilla = np.mean(results['vanilla'])
+    # print(f"\n✅ Reward medio senza GodAct: {avg_vanilla:.2f}")
 
-    avg_vanilla = np.mean(results['vanilla'])
+    print("=== Training con GodAct ===")
+    results['godact'] = train_dqn(use_godact=True, total_episodes=total_episodes)   
     avg_godact = np.mean(results['godact'])
-    print(f"\n✅ Reward medio senza GodAct: {avg_vanilla:.2f}")
     print(f"✅ Reward medio con GodAct: {avg_godact:.2f}")
 
     return results
