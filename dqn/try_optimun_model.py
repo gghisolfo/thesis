@@ -3,6 +3,7 @@ import numpy as np
 import time
 import gymnasium as gym
 from .train_dqn_from_population import ArkanoidEnv, QNetwork
+# python -m dqn.try_optimun_model 
 
 # Ricrea la rete QNetwork (uguale a quella usata in training)
 import torch.nn as nn
@@ -15,7 +16,7 @@ state_dim = env.observation_space.shape[0]
 action_dim = env.action_space.n
 
 model = QNetwork(state_dim, action_dim)
-model.load_state_dict(torch.load("./dqn/dqn_models/dqn_from_population_final.pth", map_location="cpu"))
+model.load_state_dict(torch.load("./dqn/dqn_models/dqn_generic_symbolic.pth", map_location="cpu"))
 model.eval()
 
 # Esegui un episodio

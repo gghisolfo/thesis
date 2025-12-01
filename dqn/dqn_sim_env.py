@@ -40,6 +40,7 @@ class EventChainTracker:
             'index': len(self.events)
         })
         self.chain_length += 1
+        # print("Event append: ", self.chain_length)
     
     def get_chain_reward(self):
         """
@@ -118,16 +119,16 @@ class SymbolicPhysicsEnv(gym.Env):
         self._prev_state = current_state
         
         # Controlla condizioni di terminazione
-        if self.game.bricks_alive == 0:
-            self.done = True
-            reward += 100.0
-            self.event_tracker.add_event('victory')
-            print(f"🎉 VITTORIA! Catena finale: {self.event_tracker.chain_length} eventi")
+        # if self.game.bricks_alive == 0:
+        #     self.done = True
+        #     reward += 100.0
+        #     self.event_tracker.add_event('victory')
+        #     print(f"🎉 VITTORIA! Catena finale: {self.event_tracker.chain_length} eventi")
 
-        if self.game.ball_lost or self.game.ball_y + self.game.ball_radius >= grid_height - 3:
-            self.done = True
-            reward -= 50.0
-            self.event_tracker.add_event('ball_lost')
+        # if self.game.ball_lost or self.game.ball_y + self.game.ball_radius >= grid_height - 3:
+        #     self.done = True
+        #     reward -= 50.0
+        #     self.event_tracker.add_event('ball_lost')
 
         # Debug output per catene interessanti
         if self.event_tracker.chain_length > 2:
