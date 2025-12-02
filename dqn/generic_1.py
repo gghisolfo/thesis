@@ -9,7 +9,7 @@ import os
 from collections import deque, defaultdict
 from typing import Any, Dict, List, Tuple, Callable
 
-# python -m dqn.dqn_sim_env_generic 
+# python -m dqn.generic_1 
 
 # Import locali 
 from arkanoid_game import Game, grid_width, grid_height
@@ -56,24 +56,28 @@ class GenericEventDetector:
     Rileva automaticamente QUALSIASI cambiamento di stato come un evento.
     Non richiede conoscenza del dominio.
     """
-    def __init__(self, threshold_for_change: float = 1e-6):
+    def __init__(self, 
+                 threshold_for_change: float = 0.3,    # Soglia intermedia
+                 min_relative_change: float = 0.03):   # 3% minimo
         self.threshold = threshold_for_change
+        self.min_relative_change = min_relative_change
         self.event_types = {
-            'value_change': self._detect_value_change,
-            'sign_flip': self._detect_sign_flip,
-            'threshold_cross': self._detect_threshold_cross,
+            'sign_flip': self._detect_sign_flip,           # Prima i più importanti
             'discrete_change': self._detect_discrete_change,
+            'threshold_cross': self._detect_threshold_cross,
+            'value_change': self._detect_value_change,     # Ultimo (più comune)
         }
     
     def detect_events(self, prev_state: Dict, curr_state: Dict) -> List[Dict]:
         """
         Rileva tutti gli eventi confrontando due stati.
-        Ritorna una lista di eventi rilevati.
+        Ritorna una lista di eventi rilevati (SENZA duplicati).
         """
         events = []
+        seen_attributes = set()  # Previeni eventi multipli per stesso attributo
         
         for key in prev_state.keys():
-            if key not in curr_state:
+            if key not in curr_state or key in seen_attributes:
                 continue
             
             prev_val = prev_state[key]
@@ -83,27 +87,39 @@ class GenericEventDetector:
             if prev_val is None or curr_val is None:
                 continue
             
-            # Applica tutti i rilevatori di eventi
+            # Applica rilevatori in ordine di priorità (ritorna al primo match)
             for event_type, detector in self.event_types.items():
                 detected = detector(key, prev_val, curr_val)
                 if detected:
                     events.append(detected)
+                    seen_attributes.add(key)  # Blocca altri eventi per questo attributo
+                    break  # IMPORTANTE: un solo evento per attributo
         
         return events
     
     def _detect_value_change(self, key: str, prev: Any, curr: Any) -> Dict:
-        """Rileva qualsiasi cambiamento significativo di valore."""
+        """Rileva SOLO cambiamenti significativi (assoluti E relativi)."""
         if isinstance(prev, (int, float)) and isinstance(curr, (int, float)):
             delta = abs(curr - prev)
-            if delta > self.threshold:
-                return {
-                    'type': 'value_change',
-                    'attribute': key,
-                    'delta': delta,
-                    'prev': prev,
-                    'curr': curr,
-                    'timestamp': None  # Sarà assegnato dal tracker
-                }
+            
+            # Richiede ENTRAMBI:
+            # 1. Soglia assoluta
+            if delta < self.threshold:
+                return None
+            
+            # 2. Soglia relativa (5% del valore precedente)
+            relative_change = delta / (abs(prev) + 1e-9)
+            if relative_change < self.min_relative_change:
+                return None
+            
+            return {
+                'type': 'value_change',
+                'attribute': key,
+                'delta': delta,
+                'prev': prev,
+                'curr': curr,
+                'timestamp': None
+            }
         return None
     
     def _detect_sign_flip(self, key: str, prev: Any, curr: Any) -> Dict:
@@ -158,19 +174,19 @@ class CausalEventChainTracker:
     
     Esempio Arkanoid:
     - Rimbalzo muro (1 evento) → reward = 1.0
-    - Rimbalzo + cambio velocità (2 eventi simultanei) → reward = 2^1.5 ≈ 2.8
-    - Rimbalzo + velocità + brick distrutto (3 eventi) → reward = 3^1.5 ≈ 5.2
+    - Rimbalzo + cambio velocità (2 eventi simultanei) → reward = 2^1.2 ≈ 2.3
+    - Rimbalzo + velocità + brick distrutto (3 eventi) → reward = 3^1.2 ≈ 3.7
     """
     
     def __init__(self, 
                  causal_window: int = 3,
                  base_reward: float = 1.0,
-                 chain_exponent: float = 1.5):
+                 chain_exponent: float = 1.2):  # Ridotto da 1.5 a 1.2
         """
         Args:
             causal_window: Numero di step in cui eventi sono considerati causali
             base_reward: Reward base per ogni evento singolo
-            chain_exponent: Esponente per reward catena (>1 = crescita super-lineare)
+            chain_exponent: Esponente per reward catena (1.2 = crescita moderata)
         """
         self.causal_window = causal_window
         self.base_reward = base_reward
@@ -218,11 +234,12 @@ class CausalEventChainTracker:
         
         Formula: R = base_reward * (chain_length ^ exponent)
         
-        Esempi con exponent=1.5:
-        - 1 evento  → 1.0^1.5 = 1.0
-        - 2 eventi  → 2.0^1.5 ≈ 2.8  (quasi 3x)
-        - 3 eventi  → 3.0^1.5 ≈ 5.2  (5x)
-        - 5 eventi  → 5.0^1.5 ≈ 11.2 (11x)
+        Esempi con exponent=1.2:
+        - 1 evento  → 1.0^1.2 = 1.0
+        - 2 eventi  → 2.0^1.2 ≈ 2.3  
+        - 3 eventi  → 3.0^1.2 ≈ 3.7  
+        - 5 eventi  → 5.0^1.2 ≈ 6.9  
+        - 10 eventi → 10.0^1.2 ≈ 15.8
         """
         if chain_length == 0:
             return 0.0
@@ -284,7 +301,10 @@ class GenericSymbolicEnv(gym.Env):
         
         # Estrazione stato e rilevamento eventi
         self.state_extractor = GenericStateExtractor(sim_object)
-        self.event_detector = GenericEventDetector(threshold_for_change=0.1)
+        self.event_detector = GenericEventDetector(
+            threshold_for_change=0.3,      # Soglia intermedia (era 1.0, troppo alta)
+            min_relative_change=0.03       # 3% minimo (era 0.1, troppo alto)
+        )
         self.event_tracker = CausalEventChainTracker(
             causal_window=causal_window,
             chain_exponent=chain_exponent
@@ -329,7 +349,24 @@ class GenericSymbolicEnv(gym.Env):
         self.event_tracker.add_events(detected_events)
         
         # Il reward è calcolato dalla catena causale
-        reward = len(detected_events) ** self.event_tracker.chain_exponent if detected_events else 0.0
+        event_reward = len(detected_events) ** self.event_tracker.chain_exponent if detected_events else 0.0
+        
+        # REWARD SHAPING (opzionale): piccolo bonus per comportamento base
+        # Aiuta esplorazione iniziale senza dominare il reward da eventi
+        shaping_reward = 0.0
+        if hasattr(self.sim, 'ball_y') and hasattr(self.sim, 'paddle_x'):
+            # Piccolo bonus per essere vicino alla palla (solo asse X)
+            ball_x = getattr(self.sim, 'ball_x', 0)
+            paddle_x = getattr(self.sim, 'paddle_x', 0)
+            distance = abs(ball_x - paddle_x)
+            
+            # Normalizza e scala: max 0.1 quando perfettamente allineato
+            max_distance = getattr(self.sim, 'grid_width', 100)
+            proximity_bonus = 0.1 * (1.0 - min(distance / max_distance, 1.0))
+            shaping_reward = proximity_bonus
+        
+        # Reward totale: eventi (dominante) + shaping (minore)
+        reward = event_reward + shaping_reward * 0.1  # Shaping è solo 10% del peso
         
         # Aggiorna stato precedente
         self._prev_state = current_state
@@ -346,6 +383,8 @@ class GenericSymbolicEnv(gym.Env):
             {
                 'events': detected_events,
                 'chain_length': len(detected_events),
+                'event_reward': event_reward,
+                'shaping_reward': shaping_reward,
                 'step_reward': reward,
                 **stats
             }
@@ -403,30 +442,38 @@ def create_arkanoid_env():
         observation_extractor=obs_extractor,
         termination_check=termination_check,
         causal_window=3,
-        chain_exponent=1.5  # Crescita super-lineare per catene
+        chain_exponent=1.2  # Esponente più basso per reward moderati
     )
 
 
-def train_generic_dqn(env_factory: Callable, total_episodes=1000, max_steps=2000):
+def train_generic_dqn(env_factory: Callable, total_episodes=10000, max_steps=3000):
     """
     Training DQN completamente generico con reward causale.
+    
+    Per Arkanoid con reward solo da eventi:
+    - 5,000-10,000 episodi per comportamento base (non perdere subito)
+    - 10,000-20,000 episodi per giocare decentemente (>1 minuto)
+    - 50,000+ episodi per padronanza completa
     """
     env = env_factory()
-    buffer = deque(maxlen=50000)
+    buffer = deque(maxlen=100000)  # Buffer più grande
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     q_net = QNetwork(env.observation_space.shape[0], env.action_space.n).to(device)
     q_target = QNetwork(env.observation_space.shape[0], env.action_space.n).to(device)
     q_target.load_state_dict(q_net.state_dict())
-    optimizer = optim.Adam(q_net.parameters(), lr=1e-4)
+    optimizer = optim.Adam(q_net.parameters(), lr=5e-5)  # Learning rate più basso
 
     gamma = 0.99
     epsilon = 1.0
-    epsilon_min = 0.02
-    epsilon_decay = 0.995
-
+    epsilon_min = 0.05  # Epsilon minimo più alto per continuare esplorazione
+    epsilon_decay = 0.9995  # Decay più lento
+    
+    # Metriche per tracking
     rewards_history = []
     chain_stats_history = []
+    survival_times = []  # Nuovo: traccia quanto sopravvive
+    best_survival = 0
 
     for ep in range(total_episodes):
         state = env.reset()
@@ -448,9 +495,9 @@ def train_generic_dqn(env_factory: Callable, total_episodes=1000, max_steps=2000
             
             buffer.append((state, action, reward, next_state, done))
 
-            # Training
-            if len(buffer) >= 64:
-                batch = random.sample(buffer, 64)
+            # Training - batch più grande e più frequente
+            if len(buffer) >= 128:
+                batch = random.sample(buffer, 128)  # Batch size aumentato
                 s, a, r, ns, d = zip(*batch)
                 
                 s_t = torch.tensor(np.array(s), device=device)
@@ -468,6 +515,7 @@ def train_generic_dqn(env_factory: Callable, total_episodes=1000, max_steps=2000
                 
                 optimizer.zero_grad()
                 loss.backward()
+                torch.nn.utils.clip_grad_norm_(q_net.parameters(), 1.0)  # Gradient clipping
                 optimizer.step()
 
             total_reward += reward
@@ -476,29 +524,57 @@ def train_generic_dqn(env_factory: Callable, total_episodes=1000, max_steps=2000
 
         epsilon = max(epsilon_min, epsilon * epsilon_decay)
         
-        if ep % 10 == 0:
+        # Update target network più frequentemente all'inizio
+        if ep < 1000 and ep % 5 == 0:
             q_target.load_state_dict(q_net.state_dict())
+        elif ep % 20 == 0:
+            q_target.load_state_dict(q_net.state_dict())
+        
+        # Traccia survival time (steps = tempo in vita)
+        survival_time = steps / 60.0  # Converti in secondi (60 fps)
+        survival_times.append(survival_time)
+        if survival_time > best_survival:
+            best_survival = survival_time
+            print(f"🏆 Nuovo record! Sopravvissuto {best_survival:.1f}s (ep {ep})")
         
         rewards_history.append(total_reward)
         stats = env.event_tracker.get_statistics()
         chain_stats_history.append(stats)
         
-        if ep % 10 == 0:
-            avg_reward = np.mean(rewards_history[-10:])
-            avg_chains = np.mean([s['total_chains'] for s in chain_stats_history[-10:]])
-            avg_chain_len = np.mean([s['avg_chain_length'] for s in chain_stats_history[-10:]])
-            max_chain = max([s['max_chain'] for s in chain_stats_history[-10:]])
+        # Logging più dettagliato
+        if ep % 50 == 0:
+            avg_reward = np.mean(rewards_history[-50:])
+            avg_survival = np.mean(survival_times[-50:])
+            avg_chains = np.mean([s['total_chains'] for s in chain_stats_history[-50:]])
+            avg_chain_len = np.mean([s['avg_chain_length'] for s in chain_stats_history[-50:]])
             
-            print(f"[Ep {ep}] R: {total_reward:.2f} | Avg R: {avg_reward:.2f} | "
-                  f"Chains: {stats['total_chains']} | Avg len: {avg_chain_len:.2f} | "
-                  f"Max: {max_chain}")
+            print(f"[Ep {ep:5d}] ε={epsilon:.3f} | R: {total_reward:6.1f} (avg {avg_reward:6.1f}) | "
+                  f"Survived: {survival_time:4.1f}s (avg {avg_survival:4.1f}s) | "
+                  f"Chains: {stats['total_chains']:3d} (len {avg_chain_len:.1f})")
+        
+        # Milestone checks
+        if ep == 1000:
+            avg_surv_1k = np.mean(survival_times[-100:])
+            print(f"\n📊 Milestone 1000 episodi: Sopravvivenza media = {avg_surv_1k:.1f}s")
+            if avg_surv_1k < 5.0:
+                print("⚠️  Agente ancora debole. Potrebbe servire più training.")
+        
+        if ep == 5000:
+            avg_surv_5k = np.mean(survival_times[-100:])
+            print(f"\n📊 Milestone 5000 episodi: Sopravvivenza media = {avg_surv_5k:.1f}s")
+            if avg_surv_5k > 60.0:
+                print("🎉 Obiettivo 1 minuto raggiunto!")
+            else:
+                print(f"   Mancano ~{60 - avg_surv_5k:.1f}s per 1 minuto")
 
     # Salva modello
-    model_path = os.path.join(SAVE_DIR, "dqn_causal_events.pth")
+    model_path = os.path.join(SAVE_DIR, "generic_1.pth")
     torch.save(q_net.state_dict(), model_path)
     
     print(f"\n✅ Training completo! Modello: {model_path}")
-    print(f"📊 Reward medio: {np.mean(rewards_history):.2f}")
+    print(f"📊 Reward medio finale: {np.mean(rewards_history[-100:]):.2f}")
+    print(f"⏱️  Sopravvivenza media finale: {np.mean(survival_times[-100:]):.1f}s")
+    print(f"🏆 Record sopravvivenza: {best_survival:.1f}s")
     
     # Statistiche catene
     final_stats = chain_stats_history[-1]
@@ -507,9 +583,8 @@ def train_generic_dqn(env_factory: Callable, total_episodes=1000, max_steps=2000
     print(f"   Catene totali: {final_stats['total_chains']}")
     print(f"   Lunghezza media: {final_stats['avg_chain_length']:.2f}")
     print(f"   Catena massima: {final_stats['max_chain']}")
-    print(f"   Distribuzione: {final_stats['chain_distribution']}")
     
-    return rewards_history, chain_stats_history
+    return rewards_history, chain_stats_history, survival_times
 
 
 if __name__ == "__main__":
@@ -518,14 +593,37 @@ if __name__ == "__main__":
     print("PRINCIPIO: Tutti gli eventi hanno peso uguale,")
     print("           ma catene causali hanno reward esponenziale")
     print("=" * 70)
+    print("\n📋 Piano di training:")
+    print("   - 1,000 ep:   Apprendimento base (aspettati ~5-10s sopravvivenza)")
+    print("   - 5,000 ep:   Comportamento decente (~20-40s)")
+    print("   - 10,000 ep:  Target 1 minuto (60s+)")
+    print("   - 20,000 ep:  Padronanza completa")
+    print("=" * 70 + "\n")
     
-    rewards, stats = train_generic_dqn(
+    rewards, stats, survival = train_generic_dqn(
         env_factory=create_arkanoid_env,
-        total_episodes=1000,
-        max_steps=2000
+        total_episodes=10000,  # Default per 1 minuto
+        max_steps=3600  # 60 secondi * 60 fps
     )
     
     print("\n" + "=" * 70)
     print("📈 Statistiche finali:")
     print(f"   Reward max: {max(rewards):.2f}")
     print(f"   Performance ultimi 100: {np.mean(rewards[-100:]):.2f}")
+    print(f"   Sopravvivenza media ultimi 100: {np.mean(survival[-100:]):.1f}s")
+    print(f"   Record assoluto: {max(survival):.1f}s")
+    
+    # Analisi milestone
+    if len(survival) >= 1000:
+        print(f"\n📊 Progressione apprendimento:")
+        print(f"   Primi 100 ep:    {np.mean(survival[:100]):.1f}s")
+        print(f"   1000 ep:         {np.mean(survival[900:1000]):.1f}s")
+        if len(survival) >= 5000:
+            print(f"   5000 ep:         {np.mean(survival[4900:5000]):.1f}s")
+        print(f"   Ultimi 100 ep:   {np.mean(survival[-100:]):.1f}s")
+    
+    # Suggerimenti
+    avg_final = np.mean(survival[-100:])
+    if avg_final < 60:
+        additional_eps = int((60 - avg_final) / avg_final * 10000)
+        print(f"\n💡 Suggerimento: Prova altri {additional_eps:,} episodi per raggiungere 1 minuto")

@@ -9,7 +9,7 @@ import os
 from collections import deque, defaultdict
 from typing import Any, Dict, List, Tuple, Callable
 
-# python -m dqn.dqn_sim_env_generic 
+# python -m dqn.generic_0 
 
 # Import locali 
 from arkanoid_game import Game, grid_width, grid_height
@@ -56,24 +56,29 @@ class GenericEventDetector:
     Rileva automaticamente QUALSIASI cambiamento di stato come un evento.
     Non richiede conoscenza del dominio.
     """
-    def __init__(self, threshold_for_change: float = 1e-6):
+    def __init__(self, 
+                 threshold_for_change: float = 0.5,  # Aumentato da 1e-6
+                 min_relative_change: float = 0.05):  # 5% minimo
         self.threshold = threshold_for_change
+        self.min_relative_change = min_relative_change
         self.event_types = {
-            'value_change': self._detect_value_change,
-            'sign_flip': self._detect_sign_flip,
-            'threshold_cross': self._detect_threshold_cross,
+            'sign_flip': self._detect_sign_flip,           # Prima i più importanti
             'discrete_change': self._detect_discrete_change,
+            'threshold_cross': self._detect_threshold_cross,
+            'value_change': self._detect_value_change,     # Ultimo (più comune)
         }
+        self.last_event_per_attr = {}  # Anti-spam per attributo
     
     def detect_events(self, prev_state: Dict, curr_state: Dict) -> List[Dict]:
         """
         Rileva tutti gli eventi confrontando due stati.
-        Ritorna una lista di eventi rilevati.
+        Ritorna una lista di eventi rilevati (SENZA duplicati).
         """
         events = []
+        seen_attributes = set()  # Previeni eventi multipli per stesso attributo
         
         for key in prev_state.keys():
-            if key not in curr_state:
+            if key not in curr_state or key in seen_attributes:
                 continue
             
             prev_val = prev_state[key]
@@ -83,27 +88,39 @@ class GenericEventDetector:
             if prev_val is None or curr_val is None:
                 continue
             
-            # Applica tutti i rilevatori di eventi
+            # Applica rilevatori in ordine di priorità (ritorna al primo match)
             for event_type, detector in self.event_types.items():
                 detected = detector(key, prev_val, curr_val)
                 if detected:
                     events.append(detected)
+                    seen_attributes.add(key)  # Blocca altri eventi per questo attributo
+                    break  # IMPORTANTE: un solo evento per attributo
         
         return events
     
     def _detect_value_change(self, key: str, prev: Any, curr: Any) -> Dict:
-        """Rileva qualsiasi cambiamento significativo di valore."""
+        """Rileva SOLO cambiamenti significativi (assoluti E relativi)."""
         if isinstance(prev, (int, float)) and isinstance(curr, (int, float)):
             delta = abs(curr - prev)
-            if delta > self.threshold:
-                return {
-                    'type': 'value_change',
-                    'attribute': key,
-                    'delta': delta,
-                    'prev': prev,
-                    'curr': curr,
-                    'timestamp': None  # Sarà assegnato dal tracker
-                }
+            
+            # Richiede ENTRAMBI:
+            # 1. Soglia assoluta
+            if delta < self.threshold:
+                return None
+            
+            # 2. Soglia relativa (5% del valore precedente)
+            relative_change = delta / (abs(prev) + 1e-9)
+            if relative_change < self.min_relative_change:
+                return None
+            
+            return {
+                'type': 'value_change',
+                'attribute': key,
+                'delta': delta,
+                'prev': prev,
+                'curr': curr,
+                'timestamp': None
+            }
         return None
     
     def _detect_sign_flip(self, key: str, prev: Any, curr: Any) -> Dict:
@@ -158,19 +175,19 @@ class CausalEventChainTracker:
     
     Esempio Arkanoid:
     - Rimbalzo muro (1 evento) → reward = 1.0
-    - Rimbalzo + cambio velocità (2 eventi simultanei) → reward = 2^1.5 ≈ 2.8
-    - Rimbalzo + velocità + brick distrutto (3 eventi) → reward = 3^1.5 ≈ 5.2
+    - Rimbalzo + cambio velocità (2 eventi simultanei) → reward = 2^1.2 ≈ 2.3
+    - Rimbalzo + velocità + brick distrutto (3 eventi) → reward = 3^1.2 ≈ 3.7
     """
     
     def __init__(self, 
                  causal_window: int = 3,
                  base_reward: float = 1.0,
-                 chain_exponent: float = 1.5):
+                 chain_exponent: float = 1.2):  # Ridotto da 1.5 a 1.2
         """
         Args:
             causal_window: Numero di step in cui eventi sono considerati causali
             base_reward: Reward base per ogni evento singolo
-            chain_exponent: Esponente per reward catena (>1 = crescita super-lineare)
+            chain_exponent: Esponente per reward catena (1.2 = crescita moderata)
         """
         self.causal_window = causal_window
         self.base_reward = base_reward
@@ -494,7 +511,7 @@ def train_generic_dqn(env_factory: Callable, total_episodes=1000, max_steps=2000
                   f"Max: {max_chain}")
 
     # Salva modello
-    model_path = os.path.join(SAVE_DIR, "dqn_causal_events.pth")
+    model_path = os.path.join(SAVE_DIR, "generic_0.pth")
     torch.save(q_net.state_dict(), model_path)
     
     print(f"\n✅ Training completo! Modello: {model_path}")
