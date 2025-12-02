@@ -9,13 +9,16 @@ import os
 from collections import deque, defaultdict
 from typing import Any, Dict, List, Tuple, Callable
 
-# python -m dqn.generic_1 
-
 # Import locali 
 from arkanoid_game import Game, grid_width, grid_height
 
+
+# python -m dqn.generic_3 
+
+
 SAVE_DIR = "./dqn/dqn_models"
 os.makedirs(SAVE_DIR, exist_ok=True)
+PRINT_MODE = False
 
 
 class GenericStateExtractor:
@@ -61,108 +64,73 @@ class GenericEventDetector:
                  min_relative_change: float = 0.03):   # 3% minimo
         self.threshold = threshold_for_change
         self.min_relative_change = min_relative_change
-        self.event_types = {
-            'sign_flip': self._detect_sign_flip,           # Prima i più importanti
-            'discrete_change': self._detect_discrete_change,
-            'threshold_cross': self._detect_threshold_cross,
-            'value_change': self._detect_value_change,     # Ultimo (più comune)
-        }
+
     
     def detect_events(self, prev_state: Dict, curr_state: Dict) -> List[Dict]:
         """
-        Rileva tutti gli eventi confrontando due stati.
-        Ritorna una lista di eventi rilevati (SENZA duplicati).
+        Rileva TUTTI i cambiamenti significativi.
+        Ogni attributo genera AL PIÙ un evento per step.
+        
+        IMPORTANTE: Nessuna priorità o classificazione degli eventi.
         """
         events = []
-        seen_attributes = set()  # Previeni eventi multipli per stesso attributo
         
         for key in prev_state.keys():
-            if key not in curr_state or key in seen_attributes:
+            if key not in curr_state:
                 continue
             
             prev_val = prev_state[key]
             curr_val = curr_state[key]
             
-            # Salta se uno dei due è None
+            # Salta valori None
             if prev_val is None or curr_val is None:
                 continue
             
-            # Applica rilevatori in ordine di priorità (ritorna al primo match)
-            for event_type, detector in self.event_types.items():
-                detected = detector(key, prev_val, curr_val)
-                if detected:
-                    events.append(detected)
-                    seen_attributes.add(key)  # Blocca altri eventi per questo attributo
-                    break  # IMPORTANTE: un solo evento per attributo
+            # Rileva cambiamento generico (senza classificazione)
+            event = self._detect_change(key, prev_val, curr_val)
+            if event:
+                events.append(event)
         
         return events
     
-    def _detect_value_change(self, key: str, prev: Any, curr: Any) -> Dict:
-        """Rileva SOLO cambiamenti significativi (assoluti E relativi)."""
+    def _detect_change(self, key: str, prev: Any, curr: Any) -> Dict:
+        """
+        Rileva cambiamento generico senza conoscere la natura.
+        Ritorna evento SOLO se significativo.
+        """
+        # Case 1: Valori numerici (float, int grandi)
         if isinstance(prev, (int, float)) and isinstance(curr, (int, float)):
             delta = abs(curr - prev)
             
-            # Richiede ENTRAMBI:
-            # 1. Soglia assoluta
+            # Soglia assoluta
             if delta < self.threshold:
                 return None
             
-            # 2. Soglia relativa (5% del valore precedente)
-            relative_change = delta / (abs(prev) + 1e-9)
-            if relative_change < self.min_relative_change:
+            # Soglia relativa (5% minimo)
+            relative = delta / (abs(prev) + 1e-9)
+            if relative < self.min_relative_change:
                 return None
             
             return {
-                'type': 'value_change',
                 'attribute': key,
-                'delta': delta,
                 'prev': prev,
                 'curr': curr,
+                'delta': delta,
                 'timestamp': None
             }
-        return None
-    
-    def _detect_sign_flip(self, key: str, prev: Any, curr: Any) -> Dict:
-        """Rileva inversioni di segno (indica collisioni, rimbalzi, etc.)."""
-        if isinstance(prev, (int, float)) and isinstance(curr, (int, float)):
-            if prev * curr < 0:  # Segni opposti
-                return {
-                    'type': 'sign_flip',
-                    'attribute': key,
-                    'prev': prev,
-                    'curr': curr,
-                    'timestamp': None
-                }
-        return None
-    
-    def _detect_threshold_cross(self, key: str, prev: Any, curr: Any) -> Dict:
-        """Rileva attraversamenti di soglie specifiche (0, min, max)."""
-        if isinstance(prev, (int, float)) and isinstance(curr, (int, float)):
-            # Attraversamento dello zero
-            if (prev < 0 < curr) or (prev > 0 > curr):
-                return {
-                    'type': 'zero_crossing',
-                    'attribute': key,
-                    'prev': prev,
-                    'curr': curr,
-                    'timestamp': None
-                }
-        return None
-    
-    def _detect_discrete_change(self, key: str, prev: Any, curr: Any) -> Dict:
-        """Rileva cambiamenti in variabili discrete (contatori, flag)."""
-        if isinstance(prev, (int, bool)) and isinstance(curr, (int, bool)):
+        
+        # Case 2: Valori discreti (bool, int piccoli)
+        elif isinstance(prev, (bool, int)) and isinstance(curr, (bool, int)):
             if prev != curr:
                 return {
-                    'type': 'discrete_change',
                     'attribute': key,
                     'prev': prev,
                     'curr': curr,
-                    'direction': 'increase' if curr > prev else 'decrease',
+                    'delta': abs(curr - prev) if isinstance(prev, int) else 1,
                     'timestamp': None
                 }
+        
         return None
-
 
 class CausalEventChainTracker:
     """
@@ -223,10 +191,11 @@ class CausalEventChainTracker:
         self.chain_stats[chain_length] += 1
         
         # Debug per catene interessanti
-        if chain_length >= 2:
-            print(f"⛓️  Catena causale: {chain_length} eventi → R: {chain_reward:.2f}")
-            for evt in events:
-                print(f"   - {evt['type']}: {evt['attribute']}")
+        if chain_length >= 2 and PRINT_MODE:
+            print(f"⛓️ Catena lunga: {chain_length} eventi → Reward: {chain_reward:.2f}")
+            for e in events:
+                print(f"  - {e['attribute']} : {e['prev']} -> {e['curr']}")
+
         
         self.step_counter += 1
     
@@ -494,6 +463,9 @@ def train_generic_dqn(env_factory: Callable, total_episodes=10000, max_steps=300
                     action = int(q_vals.argmax(1).item())
 
             next_state, reward, done, info = env.step(action)
+
+            # for evt in info['events']:
+            #     print(f"Evento: {evt['attribute']} | prev: {evt['prev']} -> curr: {evt['curr']}")
             
             buffer.append((state, action, reward, next_state, done))
 
@@ -537,7 +509,8 @@ def train_generic_dqn(env_factory: Callable, total_episodes=10000, max_steps=300
         survival_times.append(survival_time)
         if survival_time > best_survival:
             best_survival = survival_time
-            print(f"🏆 Nuovo record! Sopravvissuto {best_survival:.1f}s (ep {ep})")
+            if PRINT_MODE:
+                print(f"🏆 Nuovo record! Sopravvissuto {best_survival:.1f}s (ep {ep})")
         
         rewards_history.append(total_reward)
         stats = env.event_tracker.get_statistics()
@@ -570,7 +543,7 @@ def train_generic_dqn(env_factory: Callable, total_episodes=10000, max_steps=300
                 print(f"   Mancano ~{60 - avg_surv_5k:.1f}s per 1 minuto")
 
     # Salva modello
-    model_path = os.path.join(SAVE_DIR, "generic_1.pth")
+    model_path = os.path.join(SAVE_DIR, "generic_3.pth")
     torch.save(q_net.state_dict(), model_path)
     
     print(f"\n✅ Training completo! Modello: {model_path}")
@@ -590,21 +563,23 @@ def train_generic_dqn(env_factory: Callable, total_episodes=10000, max_steps=300
 
 
 if __name__ == "__main__":
-    print("🚀 Training DQN con Causal Event Chains")
-    print("=" * 70)
-    print("PRINCIPIO: Tutti gli eventi hanno peso uguale,")
-    print("           ma catene causali hanno reward esponenziale")
-    print("=" * 70)
-    print("\n📋 Piano di training:")
-    print("   - 1,000 ep:   Apprendimento base (aspettati ~5-10s sopravvivenza)")
-    print("   - 5,000 ep:   Comportamento decente (~20-40s)")
-    print("   - 10,000 ep:  Target 1 minuto (60s+)")
-    print("   - 20,000 ep:  Padronanza completa")
-    print("=" * 70 + "\n")
+    # print("🚀 Training DQN con Causal Event Chains")
+    # print("=" * 70)
+    # print("PRINCIPIO: Tutti gli eventi hanno peso uguale,")
+    # print("           ma catene causali hanno reward esponenziale")
+    # print("=" * 70)
+    # print("\n📋 Piano di training:")
+    # print("   - 1,000 ep:   Apprendimento base (aspettati ~5-10s sopravvivenza)")
+    # print("   - 5,000 ep:   Comportamento decente (~20-40s)")
+    # print("   - 10,000 ep:  Target 1 minuto (60s+)")
+    # print("   - 20,000 ep:  Padronanza completa")
+    # print("=" * 70 + "\n")
     
+    total_episodes = 1000 #10000
+
     rewards, stats, survival = train_generic_dqn(
         env_factory=create_arkanoid_env,
-        total_episodes=10000,  # Default per 1 minuto
+        total_episodes=total_episodes,  # Default per 1 minuto
         max_steps=3600  # 60 secondi * 60 fps
     )
     
@@ -625,7 +600,7 @@ if __name__ == "__main__":
         print(f"   Ultimi 100 ep:   {np.mean(survival[-100:]):.1f}s")
     
     # Suggerimenti
-    avg_final = np.mean(survival[-100:])
-    if avg_final < 60:
-        additional_eps = int((60 - avg_final) / avg_final * 10000)
-        print(f"\n💡 Suggerimento: Prova altri {additional_eps:,} episodi per raggiungere 1 minuto")
+    # avg_final = np.mean(survival[-100:])
+    # if avg_final < 60:
+    #     additional_eps = int((60 - avg_final) / avg_final * 10000)
+    #     print(f"\n💡 Suggerimento: Prova altri {additional_eps:,} episodi per raggiungere 1 minuto")

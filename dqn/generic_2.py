@@ -1,6 +1,3 @@
-# modello scarso e comunque suppone una conoscenza del dominio
-
-
 import pickle
 import torch
 import torch.nn as nn
@@ -54,240 +51,203 @@ class GenericStateExtractor:
         return state
 
 
-class GenericEventDetector:
+class AgnosticEventDetector:
     """
-    Rileva automaticamente QUALSIASI cambiamento di stato come un evento.
-    Non richiede conoscenza del dominio.
+    Rileva eventi SENZA priorità o classificazione.
+    Tutti i cambiamenti significativi hanno uguale importanza.
+    
+    ZERO conoscenza del dominio: non sa cosa sia un "rimbalzo" o un "brick".
     """
     def __init__(self, 
-                 threshold_for_change: float = 0.5,  # Aumentato da 1e-6
-                 min_relative_change: float = 0.05):  # 5% minimo
-        self.threshold = threshold_for_change
-        self.min_relative_change = min_relative_change
-        self.event_types = {
-            'sign_flip': self._detect_sign_flip,           # Prima i più importanti
-            'discrete_change': self._detect_discrete_change,
-            'threshold_cross': self._detect_threshold_cross,
-            'value_change': self._detect_value_change,     # Ultimo (più comune)
-        }
-        self.last_event_per_attr = {}  # Anti-spam per attributo
+                 threshold_absolute: float = 0.1,
+                 threshold_relative: float = 0.05):
+        """
+        Args:
+            threshold_absolute: Soglia assoluta per cambiamenti numerici
+            threshold_relative: Soglia relativa (5% minimo)
+        """
+        self.threshold_abs = threshold_absolute
+        self.threshold_rel = threshold_relative
     
     def detect_events(self, prev_state: Dict, curr_state: Dict) -> List[Dict]:
         """
-        Rileva tutti gli eventi confrontando due stati.
-        Ritorna una lista di eventi rilevati (SENZA duplicati).
+        Rileva TUTTI i cambiamenti significativi.
+        Ogni attributo genera AL PIÙ un evento per step.
+        
+        IMPORTANTE: Nessuna priorità o classificazione degli eventi.
         """
         events = []
-        seen_attributes = set()  # Previeni eventi multipli per stesso attributo
         
         for key in prev_state.keys():
-            if key not in curr_state or key in seen_attributes:
+            if key not in curr_state:
                 continue
             
             prev_val = prev_state[key]
             curr_val = curr_state[key]
             
-            # Salta se uno dei due è None
+            # Salta valori None
             if prev_val is None or curr_val is None:
                 continue
             
-            # Applica rilevatori in ordine di priorità (ritorna al primo match)
-            for event_type, detector in self.event_types.items():
-                detected = detector(key, prev_val, curr_val)
-                if detected:
-                    events.append(detected)
-                    seen_attributes.add(key)  # Blocca altri eventi per questo attributo
-                    break  # IMPORTANTE: un solo evento per attributo
+            # Rileva cambiamento generico (senza classificazione)
+            event = self._detect_change(key, prev_val, curr_val)
+            if event:
+                events.append(event)
         
         return events
     
-    def _detect_value_change(self, key: str, prev: Any, curr: Any) -> Dict:
-        """Rileva SOLO cambiamenti significativi (assoluti E relativi)."""
+    def _detect_change(self, key: str, prev: Any, curr: Any) -> Dict:
+        """
+        Rileva cambiamento generico senza conoscere la natura.
+        Ritorna evento SOLO se significativo.
+        """
+        # Case 1: Valori numerici (float, int grandi)
         if isinstance(prev, (int, float)) and isinstance(curr, (int, float)):
             delta = abs(curr - prev)
             
-            # Richiede ENTRAMBI:
-            # 1. Soglia assoluta
-            if delta < self.threshold:
+            # Soglia assoluta
+            if delta < self.threshold_abs:
                 return None
             
-            # 2. Soglia relativa (5% del valore precedente)
-            relative_change = delta / (abs(prev) + 1e-9)
-            if relative_change < self.min_relative_change:
+            # Soglia relativa (5% minimo)
+            relative = delta / (abs(prev) + 1e-9)
+            if relative < self.threshold_rel:
                 return None
             
             return {
-                'type': 'value_change',
                 'attribute': key,
-                'delta': delta,
                 'prev': prev,
                 'curr': curr,
+                'delta': delta,
                 'timestamp': None
             }
-        return None
-    
-    def _detect_sign_flip(self, key: str, prev: Any, curr: Any) -> Dict:
-        """Rileva inversioni di segno (indica collisioni, rimbalzi, etc.)."""
-        if isinstance(prev, (int, float)) and isinstance(curr, (int, float)):
-            if prev * curr < 0:  # Segni opposti
-                return {
-                    'type': 'sign_flip',
-                    'attribute': key,
-                    'prev': prev,
-                    'curr': curr,
-                    'timestamp': None
-                }
-        return None
-    
-    def _detect_threshold_cross(self, key: str, prev: Any, curr: Any) -> Dict:
-        """Rileva attraversamenti di soglie specifiche (0, min, max)."""
-        if isinstance(prev, (int, float)) and isinstance(curr, (int, float)):
-            # Attraversamento dello zero
-            if (prev < 0 < curr) or (prev > 0 > curr):
-                return {
-                    'type': 'zero_crossing',
-                    'attribute': key,
-                    'prev': prev,
-                    'curr': curr,
-                    'timestamp': None
-                }
-        return None
-    
-    def _detect_discrete_change(self, key: str, prev: Any, curr: Any) -> Dict:
-        """Rileva cambiamenti in variabili discrete (contatori, flag)."""
-        if isinstance(prev, (int, bool)) and isinstance(curr, (int, bool)):
+        
+        # Case 2: Valori discreti (bool, int piccoli)
+        elif isinstance(prev, (bool, int)) and isinstance(curr, (bool, int)):
             if prev != curr:
                 return {
-                    'type': 'discrete_change',
                     'attribute': key,
                     'prev': prev,
                     'curr': curr,
-                    'direction': 'increase' if curr > prev else 'decrease',
+                    'delta': abs(curr - prev) if isinstance(prev, int) else 1,
                     'timestamp': None
                 }
+        
         return None
 
 
-class CausalEventChainTracker:
+class AgnosticRewardCalculator:
     """
-    Traccia catene causali di eventi.
+    Calcola reward SOLO basandosi su:
+    1. Numero di eventi (più eventi = stato più "interessante")
+    2. Sopravvivenza (più step vivo = meglio)
     
-    PRINCIPIO: Tutti gli eventi hanno peso uguale (1.0), ma eventi che 
-    scatenano altri eventi ricevono reward esponenziale in base alla 
-    lunghezza della catena causale che generano.
-    
-    Esempio Arkanoid:
-    - Rimbalzo muro (1 evento) → reward = 1.0
-    - Rimbalzo + cambio velocità (2 eventi simultanei) → reward = 2^1.2 ≈ 2.3
-    - Rimbalzo + velocità + brick distrutto (3 eventi) → reward = 3^1.2 ≈ 3.7
+    ZERO conoscenza sulla semantica degli eventi.
     """
-    
     def __init__(self, 
-                 causal_window: int = 3,
-                 base_reward: float = 1.0,
-                 chain_exponent: float = 1.2):  # Ridotto da 1.5 a 1.2
+                 survival_reward_per_step: float = 0.01,
+                 event_reward_base: float = 1.0,
+                 chain_exponent: float = 1.3):
         """
         Args:
-            causal_window: Numero di step in cui eventi sono considerati causali
-            base_reward: Reward base per ogni evento singolo
-            chain_exponent: Esponente per reward catena (1.2 = crescita moderata)
+            survival_reward_per_step: Piccolo bonus per ogni step vivo
+            event_reward_base: Reward base per evento
+            chain_exponent: Esponente per crescita super-lineare
         """
-        self.causal_window = causal_window
-        self.base_reward = base_reward
-        self.chain_exponent = chain_exponent
+        self.survival_reward = survival_reward_per_step
+        self.event_base = event_reward_base
+        self.chain_exp = chain_exponent
+    
+    def calculate_step_reward(self, num_events: int, is_terminal: bool) -> float:
+        """
+        Calcola reward per uno step.
+        
+        Formula:
+        - R_survival = 0.01 (se vivo)
+        - R_events = base * (num_events ^ exponent)
+        - R_death = -10.0 (se terminato)
+        - R_total = R_survival + R_events + R_death
+        """
+        # Componente sopravvivenza
+        survival = 0 if is_terminal else self.survival_reward
+        
+        # Componente eventi (crescita super-lineare)
+        events = self.event_base * (num_events ** self.chain_exp) if num_events > 0 else 0
+        
+        # Penalità morte
+        death_penalty = -10.0 if is_terminal else 0.0
+        
+        return survival + events + death_penalty
+
+
+class EventTracker:
+    """
+    Tracker agnostico che conta eventi senza classificarli.
+    """
+    def __init__(self, history_size: int = 1000):
+        self.history_size = history_size
         self.reset()
     
     def reset(self):
-        """Reset completo del tracker."""
-        self.event_history = []  # Lista di (timestamp, evento)
+        """Reset completo."""
+        self.event_history = deque(maxlen=self.history_size)
         self.step_counter = 0
-        self.total_reward = 0.0
-        self.chain_stats = defaultdict(int)  # Statistiche per lunghezza catena
-    
-    def add_events(self, events: List[Dict]):
-        """
-        Aggiunge eventi rilevati in questo step e calcola reward causale.
-        """
-        if not events:
-            self.step_counter += 1
-            return
+        self.total_events = 0
+        self.events_per_step = []
+        self.event_distribution = defaultdict(int)  # Per chain length
         
-        # Assegna timestamp a tutti gli eventi
+    def add_events(self, events: List[Dict]) -> int:
+        """
+        Aggiunge eventi e ritorna il numero rilevato.
+        """
+        num_events = len(events)
+        
+        # Assegna timestamp
         for event in events:
             event['timestamp'] = self.step_counter
             self.event_history.append(event)
         
-        # Calcola reward per questa catena causale
-        chain_length = len(events)
-        chain_reward = self._calculate_chain_reward(chain_length)
-        
-        self.total_reward += chain_reward
-        self.chain_stats[chain_length] += 1
-        
-        # Debug per catene interessanti
-        # if chain_length >= 2:
-        #     print(f"⛓️  Catena causale: {chain_length} eventi → R: {chain_reward:.2f}")
-        #     for evt in events:
-        #         print(f"   - {evt['type']}: {evt['attribute']}")
-        
+        self.total_events += num_events
+        self.events_per_step.append(num_events)
+        self.event_distribution[num_events] += 1
         self.step_counter += 1
-    
-    def _calculate_chain_reward(self, chain_length: int) -> float:
-        """
-        Calcola reward per una catena causale.
         
-        Formula: R = base_reward * (chain_length ^ exponent)
-        
-        Esempi con exponent=1.5:
-        - 1 evento  → 1.0^1.5 = 1.0
-        - 2 eventi  → 2.0^1.5 ≈ 2.8  (quasi 3x)
-        - 3 eventi  → 3.0^1.5 ≈ 5.2  (5x)
-        - 5 eventi  → 5.0^1.5 ≈ 11.2 (11x)
-        """
-        if chain_length == 0:
-            return 0.0
-        
-        return self.base_reward * (chain_length ** self.chain_exponent)
-    
-    def get_total_reward(self) -> float:
-        """Ritorna il reward totale accumulato."""
-        return self.total_reward
+        return num_events
     
     def get_statistics(self) -> Dict:
-        """Ritorna statistiche sulle catene."""
-        total_events = sum(length * count for length, count in self.chain_stats.items())
-        total_chains = sum(self.chain_stats.values())
-        
+        """Statistiche aggregate."""
         return {
-            'total_reward': self.total_reward,
-            'total_events': total_events,
-            'total_chains': total_chains,
-            'avg_chain_length': total_events / max(total_chains, 1),
-            'chain_distribution': dict(self.chain_stats),
-            'max_chain': max(self.chain_stats.keys()) if self.chain_stats else 0
+            'total_events': self.total_events,
+            'total_steps': self.step_counter,
+            'avg_events_per_step': self.total_events / max(self.step_counter, 1),
+            'max_events_in_step': max(self.events_per_step) if self.events_per_step else 0,
+            'event_frequency': np.mean(self.events_per_step) if self.events_per_step else 0,
+            'event_distribution': dict(self.event_distribution)
         }
 
 
 class GenericSymbolicEnv(gym.Env):
     """
-    Ambiente completamente generico che funziona con QUALSIASI simulazione fisica.
-    Estrae automaticamente lo stato e rileva eventi senza conoscenza del dominio.
+    Ambiente completamente generico con reward agnostico.
+    Funziona con QUALSIASI simulazione fisica senza conoscenza del dominio.
     """
     metadata = {"render_modes": ["human"], "render_fps": 60}
 
     def __init__(self, sim_object, action_map: Dict[int, Callable], 
                  observation_extractor: Callable = None,
                  termination_check: Callable = None,
-                 causal_window: int = 3,
-                 chain_exponent: float = 1.5):
+                 survival_reward: float = 0.01,
+                 event_base_reward: float = 1.0,
+                 chain_exponent: float = 1.3):
         """
         Args:
             sim_object: Oggetto simulazione (es. Game())
-            action_map: Dizionario {action_id: lambda sim: ...} per eseguire azioni
-            observation_extractor: Funzione per estrarre osservazione (opzionale)
-            termination_check: Funzione per controllare terminazione (opzionale)
-            causal_window: Finestra temporale per eventi causali
-            chain_exponent: Esponente per reward catena
+            action_map: Dizionario {action_id: lambda sim: ...}
+            observation_extractor: Funzione per estrarre osservazione
+            termination_check: Funzione per controllare terminazione
+            survival_reward: Bonus per ogni step vivo
+            event_base_reward: Reward base per evento
+            chain_exponent: Esponente per catene di eventi
         """
         super().__init__()
         self.sim = sim_object
@@ -302,11 +262,16 @@ class GenericSymbolicEnv(gym.Env):
             low=-np.inf, high=np.inf, shape=obs_sample.shape, dtype=np.float32
         )
         
-        # Estrazione stato e rilevamento eventi
+        # Componenti AGNOSTICI
         self.state_extractor = GenericStateExtractor(sim_object)
-        self.event_detector = GenericEventDetector(threshold_for_change=0.1)
-        self.event_tracker = CausalEventChainTracker(
-            causal_window=causal_window,
+        self.event_detector = AgnosticEventDetector(
+            threshold_absolute=0.1,
+            threshold_relative=0.05
+        )
+        self.event_tracker = EventTracker()
+        self.reward_calculator = AgnosticRewardCalculator(
+            survival_reward_per_step=survival_reward,
+            event_reward_base=event_base_reward,
             chain_exponent=chain_exponent
         )
         
@@ -314,11 +279,10 @@ class GenericSymbolicEnv(gym.Env):
         self.done = False
     
     def reset(self):
-        # Ricrea simulazione (o resetta se ha metodo reset)
+        # Ricrea o resetta simulazione
         if hasattr(self.sim, 'reset'):
             self.sim.reset()
         else:
-            # Se non ha reset, ricrea l'oggetto
             self.sim = type(self.sim)()
         
         self.done = False
@@ -331,31 +295,34 @@ class GenericSymbolicEnv(gym.Env):
         # Cattura stato precedente
         prev_state = self._prev_state
         
-        # Esegui azione sulla simulazione
+        # Esegui azione
         if action in self.action_map:
             self.action_map[action](self.sim)
         
-        # Aggiorna simulazione (assume che abbia metodo update)
+        # Aggiorna simulazione
         if hasattr(self.sim, 'update'):
             self.sim.update()
         
         # Cattura nuovo stato
         current_state = self.state_extractor.extract(self.sim)
         
-        # Rileva TUTTI gli eventi automaticamente
+        # Rileva eventi (SENZA priorità o classificazione)
         detected_events = self.event_detector.detect_events(prev_state, current_state)
         
-        # Aggiungi eventi al tracker (calcola reward causale automaticamente)
-        self.event_tracker.add_events(detected_events)
-        
-        # Il reward è calcolato dalla catena causale
-        reward = len(detected_events) ** self.event_tracker.chain_exponent if detected_events else 0.0
-        
-        # Aggiorna stato precedente
-        self._prev_state = current_state
+        # Traccia eventi (solo conteggio)
+        num_events = self.event_tracker.add_events(detected_events)
         
         # Controlla terminazione
         self.done = self.termination_check(self.sim)
+        
+        # Calcola reward AGNOSTICO
+        reward = self.reward_calculator.calculate_step_reward(
+            num_events=num_events,
+            is_terminal=self.done
+        )
+        
+        # Aggiorna stato
+        self._prev_state = current_state
         
         stats = self.event_tracker.get_statistics()
         
@@ -365,17 +332,17 @@ class GenericSymbolicEnv(gym.Env):
             self.done,
             {
                 'events': detected_events,
-                'chain_length': len(detected_events),
+                'num_events': num_events,
                 'step_reward': reward,
                 **stats
             }
         )
     
     def _default_obs_extractor(self, sim):
-        """Estrae osservazione di default (primi N attributi numerici)."""
+        """Estrae osservazione di default."""
         state = self.state_extractor.extract(sim)
         values = [v for v in state.values() if isinstance(v, (int, float))]
-        return np.array(values[:10], dtype=np.float32)  # Limita a 10 per semplicità
+        return np.array(values[:10], dtype=np.float32)
 
 
 class QNetwork(nn.Module):
@@ -395,7 +362,7 @@ class QNetwork(nn.Module):
 
 
 def create_arkanoid_env():
-    """Factory per creare l'ambiente Arkanoid con configurazione generica."""
+    """Factory per creare l'ambiente Arkanoid con configurazione agnostica."""
     
     # Mappa azioni generiche
     action_map = {
@@ -422,14 +389,15 @@ def create_arkanoid_env():
         action_map=action_map,
         observation_extractor=obs_extractor,
         termination_check=termination_check,
-        causal_window=3,
-        chain_exponent=1.5  # Crescita super-lineare per catene
+        survival_reward=0.01,      # Piccolo bonus per sopravvivere
+        event_base_reward=1.0,     # Reward base per evento
+        chain_exponent=1.3         # Crescita moderata per catene
     )
 
 
 def train_generic_dqn(env_factory: Callable, total_episodes=1000, max_steps=2000):
     """
-    Training DQN completamente generico con reward causale.
+    Training DQN con reward completamente agnostico.
     """
     env = env_factory()
     buffer = deque(maxlen=50000)
@@ -446,7 +414,7 @@ def train_generic_dqn(env_factory: Callable, total_episodes=1000, max_steps=2000
     epsilon_decay = 0.995
 
     rewards_history = []
-    chain_stats_history = []
+    stats_history = []
 
     for ep in range(total_episodes):
         state = env.reset()
@@ -501,42 +469,42 @@ def train_generic_dqn(env_factory: Callable, total_episodes=1000, max_steps=2000
         
         rewards_history.append(total_reward)
         stats = env.event_tracker.get_statistics()
-        chain_stats_history.append(stats)
+        stats_history.append(stats)
         
         if ep % 10 == 0:
             avg_reward = np.mean(rewards_history[-10:])
-            avg_chains = np.mean([s['total_chains'] for s in chain_stats_history[-10:]])
-            avg_chain_len = np.mean([s['avg_chain_length'] for s in chain_stats_history[-10:]])
-            max_chain = max([s['max_chain'] for s in chain_stats_history[-10:]])
+            avg_events = np.mean([s['total_events'] for s in stats_history[-10:]])
+            avg_freq = np.mean([s['event_frequency'] for s in stats_history[-10:]])
+            max_events = max([s['max_events_in_step'] for s in stats_history[-10:]])
             
             print(f"[Ep {ep}] R: {total_reward:.2f} | Avg R: {avg_reward:.2f} | "
-                  f"Chains: {stats['total_chains']} | Avg len: {avg_chain_len:.2f} | "
-                  f"Max: {max_chain}")
+                  f"Events: {stats['total_events']} | Freq: {avg_freq:.2f} | "
+                  f"Max: {max_events}")
 
     # Salva modello
-    model_path = os.path.join(SAVE_DIR, "generic_0.pth")
+    model_path = os.path.join(SAVE_DIR, "generic_agnostic.pth")
     torch.save(q_net.state_dict(), model_path)
     
     print(f"\n✅ Training completo! Modello: {model_path}")
     print(f"📊 Reward medio: {np.mean(rewards_history):.2f}")
     
-    # Statistiche catene
-    final_stats = chain_stats_history[-1]
-    print(f"\n⛓️  Statistiche catene causali:")
+    # Statistiche eventi
+    final_stats = stats_history[-1]
+    print(f"\n📈 Statistiche eventi:")
     print(f"   Eventi totali: {final_stats['total_events']}")
-    print(f"   Catene totali: {final_stats['total_chains']}")
-    print(f"   Lunghezza media: {final_stats['avg_chain_length']:.2f}")
-    print(f"   Catena massima: {final_stats['max_chain']}")
-    print(f"   Distribuzione: {final_stats['chain_distribution']}")
+    print(f"   Step totali: {final_stats['total_steps']}")
+    print(f"   Frequenza media: {final_stats['event_frequency']:.2f} eventi/step")
+    print(f"   Max eventi/step: {final_stats['max_events_in_step']}")
+    print(f"   Distribuzione: {final_stats['event_distribution']}")
     
-    return rewards_history, chain_stats_history
+    return rewards_history, stats_history
 
 
 if __name__ == "__main__":
-    print("🚀 Training DQN con Causal Event Chains")
+    print("🚀 Training DQN con Reward COMPLETAMENTE Agnostico")
     print("=" * 70)
-    print("PRINCIPIO: Tutti gli eventi hanno peso uguale,")
-    print("           ma catene causali hanno reward esponenziale")
+    print("PRINCIPIO: Massimizza eventi + sopravvivenza")
+    print("           ZERO conoscenza sulla natura degli eventi")
     print("=" * 70)
     
     rewards, stats = train_generic_dqn(
