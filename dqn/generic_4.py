@@ -703,7 +703,7 @@ def train_generic_dqn(env_factory: Callable, total_episodes=10000, max_steps=300
 
 
 if __name__ == "__main__":
-    total_episodes = 100 #10000
+    total_episodes = 5000 #10000
 
     rewards, stats, survival = train_generic_dqn(
         env_factory=create_arkanoid_env,
