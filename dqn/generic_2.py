@@ -9,7 +9,7 @@ import os
 from collections import deque, defaultdict
 from typing import Any, Dict, List, Tuple, Callable
 
-# python -m dqn.generic_0 
+# python -m dqn.generic_2
 
 # Import locali 
 from arkanoid_game import Game, grid_width, grid_height
@@ -482,7 +482,7 @@ def train_generic_dqn(env_factory: Callable, total_episodes=1000, max_steps=2000
                   f"Max: {max_events}")
 
     # Salva modello
-    model_path = os.path.join(SAVE_DIR, "generic_agnostic.pth")
+    model_path = os.path.join(SAVE_DIR, "generic_2.pth")
     torch.save(q_net.state_dict(), model_path)
     
     print(f"\n✅ Training completo! Modello: {model_path}")
@@ -509,8 +509,8 @@ if __name__ == "__main__":
     
     rewards, stats = train_generic_dqn(
         env_factory=create_arkanoid_env,
-        total_episodes=1000,
-        max_steps=2000
+        total_episodes=5000,
+        max_steps=5000
     )
     
     print("\n" + "=" * 70)

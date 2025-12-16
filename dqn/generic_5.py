@@ -815,7 +815,7 @@ if __name__ == "__main__":
     # print("   - 20,000 ep:  Padronanza completa")
     # print("=" * 70 + "\n")
     
-    total_episodes = 1000 #10000
+    total_episodes = 5000 #10000
 
     rewards, stats, survival = train_generic_dqn(
         env_factory=create_arkanoid_env,
