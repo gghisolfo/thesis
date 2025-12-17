@@ -14,7 +14,7 @@ from typing import Any, Dict, List, Tuple, Callable
 from arkanoid_game import Game, grid_width, grid_height
 
 
-# python -m dqn.generic_4_rare_states
+# python -m dqn.generic_6
 
 
 SAVE_DIR = "./dqn/dqn_models"
@@ -760,7 +760,7 @@ def train_generic_dqn(env_factory: Callable, total_episodes=10000, max_steps=300
                 print("🎉 Obiettivo 1 minuto raggiunto!")
 
     # Salva modello
-    model_path = os.path.join(SAVE_DIR, "generic_4_rare_states.pth")
+    model_path = os.path.join(SAVE_DIR, "generic_6.pth")
     torch.save(q_net.state_dict(), model_path)
     
     print(f"\n✅ Training completo! Modello: {model_path}")

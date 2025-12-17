@@ -5,7 +5,7 @@ from arkanoid_game import Game, grid_width, grid_height, screen_width, screen_he
 
 
 
-MODEL_PATH = "./dqn/dqn_models/generic_5.pth" # dqn_generic_symbolic | generic_0
+MODEL_PATH = "./dqn/dqn_models/generic_2.pth" # dqn_generic_symbolic | generic_0
 
 # from_generic_4_ending_loop
 
