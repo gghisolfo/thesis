@@ -71,7 +71,7 @@ class ArkanoidEnv(gym.Env):
         if self.game.bricks_alive == 0:
             self.done = True
             reward += 100.0
-            print("🎉 VITTORIA! Tutti i brick distrutti! (+100.0)")
+            # print("🎉 VITTORIA! Tutti i brick distrutti!")
 
         # 2. Palla persa (SCONFITTA)
         if self.game.ball_lost:

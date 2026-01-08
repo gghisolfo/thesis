@@ -20,6 +20,8 @@ from arkanoid_game import Game, grid_width, grid_height
 SAVE_DIR = "./dqn/dqn_models"
 os.makedirs(SAVE_DIR, exist_ok=True)
 PRINT_MODE = False
+SHAPING = False
+EVENT_DENSITY = False
 
 
 class GenericStateExtractor:
@@ -446,35 +448,43 @@ class GenericSymbolicEnv(gym.Env):
                 curiosity_bonus = 0.0
 
         # ---------------------------
-        # 3) EVENT DENSITY (magnitudo di cambiamento di stato)
+        # 3) EVENT DENSITY (magnitudo di cambiamento di stato) 
         # ---------------------------
         density_bonus = 0.0
-        try:
-            density = float(np.sum(np.abs(current_state_vec - prev_state_vec)))
-            density_bonus = self.w_density * density
-        except Exception:
-            density_bonus = 0.0
+        if EVENT_DENSITY:
+            try:
+                density = float(np.sum(np.abs(current_state_vec - prev_state_vec)))
+                density_bonus = self.w_density * density
+            except Exception:
+                density_bonus = 0.0
+
 
         # REWARD SHAPING (opzionale): piccolo bonus per comportamento base
         shaping_reward = 0.0
-        if hasattr(self.sim, 'ball_y') and hasattr(self.sim, 'paddle_x'):
-            # Piccolo bonus per essere vicino alla palla (solo asse X)
-            ball_x = getattr(self.sim, 'ball_x', 0)
-            paddle_x = getattr(self.sim, 'paddle_x', 0)
-            distance = abs(ball_x - paddle_x)
+        if SHAPING:
             
-            # Normalizza e scala: max 0.1 quando perfettamente allineato
-            max_distance = getattr(self.sim, 'grid_width', 100)
-            proximity_bonus = 0.1 * (1.0 - min(distance / max_distance, 1.0))
-            shaping_reward = proximity_bonus
+            if hasattr(self.sim, 'ball_y') and hasattr(self.sim, 'paddle_x'):
+                # Piccolo bonus per essere vicino alla palla (solo asse X)
+                ball_x = getattr(self.sim, 'ball_x', 0)
+                paddle_x = getattr(self.sim, 'paddle_x', 0)
+                distance = abs(ball_x - paddle_x)
+                
+                # Normalizza e scala: max 0.1 quando perfettamente allineato
+                max_distance = getattr(self.sim, 'grid_width', 100)
+                proximity_bonus = 0.1 * (1.0 - min(distance / max_distance, 1.0))
+                shaping_reward = proximity_bonus
+            # Reward totale: eventi (dominante) + shaping (minore) + nuovi bonus generici
+            reward = event_reward + shaping_reward * 0.1 + causal_bonus + curiosity_bonus + density_bonus
+        
         
         # Reward totale: eventi (dominante) + shaping (minore) + nuovi bonus generici
-        reward = event_reward + shaping_reward * 0.1 + causal_bonus + curiosity_bonus + density_bonus
+        reward = event_reward + causal_bonus + curiosity_bonus + density_bonus
         
         # (Debug printing)
         if PRINT_MODE:
             print(f"R_comp: events={event_reward:.3f} causal={causal_bonus:.3f} curious={curiosity_bonus:.3f} density={density_bonus:.3f} shaping={shaping_reward*0.1:.3f} => total={reward:.3f}")
         
+
         # Aggiorna stato precedente
         self._prev_state = current_state
         self._prev_state_vec = current_state_vec.copy()
