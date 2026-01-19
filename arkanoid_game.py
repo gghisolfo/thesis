@@ -55,7 +55,7 @@ class Game:
         self.init_walls()
 
         self.first_brick = 11, 10
-        self.brick_nrow, self.brick_ncol = 3, 8
+        self.brick_nrow, self.brick_ncol = 3, 8 # 3, 8
         self.brick_distance = 14, 10
         self.brick_halfwidth, self.brick_halfheight = 5, 2
 
@@ -63,13 +63,13 @@ class Game:
 
         self.paddle_x, self.paddle_y = 60, 60
         self.paddle_halfwidth, self.paddle_halfheight = 5, 1
-        self.paddle_base_speed = 2
+        self.paddle_base_speed = 2 # 2
 
         self.init_paddle()
 
         self.ball_x, self.ball_y = 40 + random.randint(0, 10), 40 + random.randint(0, 10)
         self.ball_radius = 1
-        self.ball_speed_x, self.ball_speed_y = 1, 1
+        self.ball_speed_x, self.ball_speed_y = 1, 1 #1,1
 
         self.init_ball()
 
