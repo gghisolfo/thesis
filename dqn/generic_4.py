@@ -604,15 +604,17 @@ def train_generic_dqn(env_factory: Callable, total_episodes=10000, max_steps=300
 
         while not done and steps < max_steps:
             # Epsilon-greedy
-            if random.random() < epsilon:
+            if random.random() < epsilon: # 🎯 EXPLORATION - ogni quanto ignoro la rete e scelgo un'azione a caso
                 action = env.action_space.sample()
             else:
-                with torch.no_grad():
+                with torch.no_grad(): #  # 🎯 EXPLOITATION sceglie azione con q-value massimo
                     s_t = torch.tensor(state, dtype=torch.float32, device=device).unsqueeze(0)
                     q_vals = q_net(s_t)
                     action = int(q_vals.argmax(1).item())
 
-            next_state, reward, done, info = env.step(action)
+            next_state, reward, done, info = env.step(action) #reward = R(t+1)
+
+
 
             # for evt in info['events']:
             #     print(f"Evento: {evt['attribute']} | prev: {evt['prev']} -> curr: {evt['curr']}")
@@ -630,17 +632,22 @@ def train_generic_dqn(env_factory: Callable, total_episodes=10000, max_steps=300
                 ns_t = torch.tensor(np.array(ns), device=device)
                 d_t = torch.tensor(d, dtype=torch.float32, device=device)
 
-                with torch.no_grad():
-                    max_next_q = q_target(ns_t).max(1)[0]
-                    target_q = r_t + gamma * (1 - d_t) * max_next_q
 
-                current_q = q_net(s_t).gather(1, a_t).squeeze(1)
-                loss = nn.functional.mse_loss(current_q, target_q)
+                # Q(st​,at​)    ←    Q(st​,at​)   +   α[Rt+1​+γamax​Q(st+1​,a)  −  Q(st​,at​)]
+                with torch.no_grad():
+                    max_next_q = q_target(ns_t).max(1)[0] # max ​Q(st+1​,a)
+                    target_q = r_t + gamma * (1 - d_t) * max_next_q # target - parte dx
+
+                current_q = q_net(s_t).gather(1, a_t).squeeze(1) # Q(st, at) parte sx
+                loss = nn.functional.mse_loss(current_q, target_q) #minimizzare questa loss equivale a Q←Q+α(target−Q)
                 
+
                 optimizer.zero_grad()
+
+                # Q[s,a] += alpha * (reward + gamma * max(Q[s_next]) - Q[s,a])
                 loss.backward()
                 torch.nn.utils.clip_grad_norm_(q_net.parameters(), 1.0)  # Gradient clipping
-                optimizer.step()
+                optimizer.step() #contine alpha
 
             total_reward += reward
             state = next_state
