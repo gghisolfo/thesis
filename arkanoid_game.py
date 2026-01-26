@@ -394,6 +394,7 @@ class Game:
             if invert_speed_y:
                 #self.event_pending.append((self.bounce_y, None, 1))
                 self.ball_speed_y = -self.ball_speed_y
+
                 
             self.ball_old_x = self.ball_x
             self.ball_old_y = self.ball_y
