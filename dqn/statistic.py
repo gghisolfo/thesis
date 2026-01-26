@@ -9,22 +9,29 @@ from .train_dqn_with_godAct import ArkanoidEnv, QNetwork
 
 MODEL_LIST = [
     "./dqn/dqn_models/WINNING_MODEL.pth",
-    "./dqn/dqn_models/generic_2.pth",
-    "./dqn/dqn_models/generic_3.pth",
+    "./dqn/dqn_models/generic_4_metrix",
     "./dqn/dqn_models/generic_4_original.pth",
     "./dqn/dqn_models/generic_4_no_shaping_no_density.pth",
     "./dqn/dqn_models/generic_4_no_shaping_yes_density.pth",
-    "./dqn/dqn_models/generic_5.pth",
-    "./dqn/dqn_models/generic_6.pth",
-
-
-
-
-
 ]
 
-N_EPISODES = 50
-TIME_LIMIT = 45  # secondi
+# MODEL_LIST = [
+#     "./dqn/dqn_models/WINNING_MODEL.pth",
+#     "./dqn/dqn_models/generic_2.pth",
+#     "./dqn/dqn_models/generic_3.pth",
+#     "./dqn/dqn_models/generic_4_original.pth",
+#     "./dqn/dqn_models/generic_4_no_shaping_no_density.pth",
+#     "./dqn/dqn_models/generic_4_no_shaping_yes_density.pth",
+#     "./dqn/dqn_models/generic_5.pth",
+#     "./dqn/dqn_models/generic_6.pth",
+
+
+# ]
+
+
+
+N_EPISODES = 100
+TIME_LIMIT = 60  # secondi
 
 # =====================
 # SETUP
