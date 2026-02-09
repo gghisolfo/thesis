@@ -1,7 +1,10 @@
 import time
 import torch
 import numpy as np
-from .train_dqn_with_godAct import ArkanoidEnv, QNetwork
+
+from .generic_4_multi_game import QNetwork
+from .game_env import ArkanoidEnv
+
 
 # =====================
 # CONFIG
@@ -9,24 +12,16 @@ from .train_dqn_with_godAct import ArkanoidEnv, QNetwork
 
 MODEL_LIST = [
     "./dqn/dqn_models/WINNING_MODEL.pth",
-    "./dqn/dqn_models/generic_4_metrix",
+    "./dqn/dqn_models/generic_2.pth",
+    "./dqn/dqn_models/generic_3.pth",
     "./dqn/dqn_models/generic_4_original.pth",
     "./dqn/dqn_models/generic_4_no_shaping_no_density.pth",
     "./dqn/dqn_models/generic_4_no_shaping_yes_density.pth",
+    "./dqn/dqn_models/generic_5.pth",
+    "./dqn/dqn_models/generic_6.pth",
+
+
 ]
-
-# MODEL_LIST = [
-#     "./dqn/dqn_models/WINNING_MODEL.pth",
-#     "./dqn/dqn_models/generic_2.pth",
-#     "./dqn/dqn_models/generic_3.pth",
-#     "./dqn/dqn_models/generic_4_original.pth",
-#     "./dqn/dqn_models/generic_4_no_shaping_no_density.pth",
-#     "./dqn/dqn_models/generic_4_no_shaping_yes_density.pth",
-#     "./dqn/dqn_models/generic_5.pth",
-#     "./dqn/dqn_models/generic_6.pth",
-
-
-# ]
 
 
 

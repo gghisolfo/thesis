@@ -455,6 +455,7 @@ class Game:
         self.draw_ball()
 
         event_log = self.event_log
+        # print(event_log)
         self.event_log = []
 
         return self.elements, event_log, (self.bricks_alive == 0)
@@ -493,6 +494,7 @@ screen_running = True
 game_running = False
 
 element_log, event_log = game.get_log()
+# print(event_log)
 
 frame_id = 0
 frames = []

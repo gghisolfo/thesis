@@ -1,31 +1,48 @@
 import pygame
 import torch
-from .train_dqn_with_godAct import ArkanoidEnv, QNetwork
-from arkanoid_game import Game, grid_width, grid_height, screen_width, screen_height
 
+from .generic_4_multi_game import QNetwork
 
+from .game_env import CatchEnv, ArkanoidEnv
 
-MODEL_PATH = "./dqn/dqn_models/generic_4_metrix.pth" # WINNING_MODEL | generic_4 | generic_4_no_shaping_no_density
+from arkanoid_game import screen_width, screen_height
 
-# from_generic_4_ending_loop
+MODEL_PATH = "./dqn/dqn_models/generic_multi.pth" # WINNING_MODEL | generic_multi | generic_4 | generic_4_no_shaping_no_density  
 
-
+# -----------------------------
 # Setup Pygame
+# -----------------------------
 pygame.init()
 screen = pygame.display.set_mode((screen_width, screen_height))
 clock = pygame.time.Clock()
 FRAME_RATE = 60
 
-env = ArkanoidEnv()
+# -----------------------------
+# Scegli il tipo di gioco
+# -----------------------------
+GAME_TYPE = "catch"  # "arkanoid" o "catch"
+
+if GAME_TYPE == "arkanoid":
+    env = ArkanoidEnv()
+    
+elif GAME_TYPE == "catch":
+    env = CatchEnv()
+    
 obs = env.reset()
 done = False
 
+# -----------------------------
+# Carica Q-Network
+# -----------------------------
 state_dim = env.observation_space.shape[0]
 action_dim = env.action_space.n
 q_net = QNetwork(state_dim, action_dim)
 q_net.load_state_dict(torch.load(MODEL_PATH, map_location="cpu"))
 q_net.eval()
 
+# -----------------------------
+# Loop principale
+# -----------------------------
 while not done:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -36,9 +53,9 @@ while not done:
         q_values = q_net(obs_tensor)
         action = int(torch.argmax(q_values, dim=1).item())
 
-    obs, reward, done, _ = env.step(action)
+    obs, done, _ = env.step(action)
 
-    # Rendering manuale
+    # Rendering
     grid_surface = pygame.surfarray.make_surface(env.game.get_grid())
     scaled_surface = pygame.transform.scale(grid_surface, (screen_width, screen_height))
     screen.blit(scaled_surface, (0, 0))
