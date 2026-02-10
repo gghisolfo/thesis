@@ -312,8 +312,8 @@ class GenericSymbolicEnv(gym.Env):
         # Estrazione stato e rilevamento eventi
         self.state_extractor = GenericStateExtractor(sim_object)
         self.event_detector = GenericEventDetector(
-            threshold_for_change=0.3,      # Soglia intermedia (era 1.0, troppo alta)
-            min_relative_change=0.03       # 3% minimo (era 0.1, troppo alto)
+            threshold_for_change=0.5,      # Soglia intermedia #
+            min_relative_change=0.1       # 3% minimo 
         )
         self.event_tracker = CausalEventChainTracker(
             causal_window=causal_window,
@@ -574,7 +574,7 @@ def create_generic_env(sim_type="arkanoid"):
 
         def termination_check(game):
             # Termina se tutte le vite sono finite
-            return game.lives <= 0
+            return game.lives_left <= 0
 
     else:
         raise ValueError(f"Sim type {sim_type} non supportato")
@@ -603,7 +603,7 @@ def train_generic_dqn(env_factory: Callable,sim_name: str, total_episodes=10000,
     q_net = QNetwork(env.observation_space.shape[0], env.action_space.n).to(device)
     q_target = QNetwork(env.observation_space.shape[0], env.action_space.n).to(device)
     q_target.load_state_dict(q_net.state_dict())
-    optimizer = optim.Adam(q_net.parameters(), lr=5e-5)  # Learning rate più basso
+    optimizer = optim.Adam(q_net.parameters(), lr=1e-4)  # Learning rate più basso lr = 5e-5
 
     gamma = 0.99
     epsilon = 1.0
@@ -765,9 +765,9 @@ def train_generic_dqn(env_factory: Callable,sim_name: str, total_episodes=10000,
 
 
 if __name__ == "__main__":
-    total_episodes = 50 #10000
+    total_episodes = 5000 #10000
 
-    sim_to_train = "catch"  # "arkanoid" o "pong"
+    sim_to_train = "pong"  # "arkanoid" o "pong"
 
     rewards, stats, survival = train_generic_dqn(
         env_factory=lambda: create_generic_env(sim_type=sim_to_train),

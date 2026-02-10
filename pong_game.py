@@ -44,6 +44,48 @@ class PongGame:
     def set_paddle(self, direction):
         self.pending_action = direction  # -1 left, 0 stop, 1 right
 
+    # def update(self):
+    #     # Muovi paddle giocatore
+    #     self.player_x += self.pending_action * 5
+    #     self.player_x = np.clip(self.player_x, self.paddle_w//2, self.width - self.paddle_w//2)
+
+    #     # Muovi paddle avversario
+    #     if self.ball_x > self.enemy_x:
+    #         self.enemy_x += 3
+    #     else:
+    #         self.enemy_x -= 3
+    #     self.enemy_x = np.clip(self.enemy_x, self.paddle_w//2, self.width - self.paddle_w//2)
+
+    #     # Muovi palla
+    #     self.ball_x += self.ball_vx
+    #     self.ball_y += self.ball_vy
+
+    #     # Collisioni pareti
+    #     if self.ball_x - self.ball_radius <= 0 or self.ball_x + self.ball_radius >= self.width:
+    #         self.ball_vx *= -1
+    #     if self.ball_y - self.ball_radius <= 0:
+    #         self.ball_vy *= -1
+
+    #     # Collisione paddle giocatore
+    #     if (
+    #         self.ball_y + self.ball_radius >= self.player_y and
+    #         abs(self.ball_x - self.player_x) < self.paddle_w // 2
+    #     ):
+    #         self.ball_vy *= -1
+
+    #     # Collisione paddle avversario
+    #     if (
+    #         self.ball_y - self.ball_radius <= self.enemy_y + self.paddle_h and
+    #         abs(self.ball_x - self.enemy_x) < self.paddle_w // 2
+    #     ):
+    #         self.ball_vy *= -1
+
+    #     # Perdita palla
+    #     if self.ball_y - self.ball_radius > self.height:
+    #         self.lives_left -= 1
+    #         self.done = True
+
+
     def update(self):
         # Muovi paddle giocatore
         self.player_x += self.pending_action * 5
@@ -56,28 +98,34 @@ class PongGame:
             self.enemy_x -= 3
         self.enemy_x = np.clip(self.enemy_x, self.paddle_w//2, self.width - self.paddle_w//2)
 
+        # Salva posizione precedente della palla
+        prev_ball_x = self.ball_x
+        prev_ball_y = self.ball_y
+
         # Muovi palla
         self.ball_x += self.ball_vx
         self.ball_y += self.ball_vy
 
-        # Collisioni pareti
+        # Collisioni pareti laterali
         if self.ball_x - self.ball_radius <= 0 or self.ball_x + self.ball_radius >= self.width:
             self.ball_vx *= -1
-        if self.ball_y - self.ball_radius <= 0:
-            self.ball_vy *= -1
 
         # Collisione paddle giocatore
-        if (
-            self.ball_y + self.ball_radius >= self.player_y and
-            abs(self.ball_x - self.player_x) < self.paddle_w // 2
-        ):
-            self.ball_vy *= -1
+        if self.ball_vy > 0:  # palla verso il basso
+            if prev_ball_y + self.ball_radius < self.player_y <= self.ball_y + self.ball_radius:
+                if abs(self.ball_x - self.player_x) < self.paddle_w // 2:
+                    self.ball_vy *= -1
+                    self.ball_y = self.player_y - self.ball_radius
 
         # Collisione paddle avversario
-        if (
-            self.ball_y - self.ball_radius <= self.enemy_y + self.paddle_h and
-            abs(self.ball_x - self.enemy_x) < self.paddle_w // 2
-        ):
+        if self.ball_vy < 0:  # palla verso l'alto
+            if prev_ball_y - self.ball_radius > self.enemy_y + self.paddle_h >= self.ball_y - self.ball_radius:
+                if abs(self.ball_x - self.enemy_x) < self.paddle_w // 2:
+                    self.ball_vy *= -1
+                    self.ball_y = self.enemy_y + self.paddle_h + self.ball_radius
+
+        # Collisione parete superiore
+        if self.ball_y - self.ball_radius <= 0:
             self.ball_vy *= -1
 
         # Perdita palla
@@ -147,10 +195,10 @@ class PongGame:
 # # =====================
 # pygame.init()
 # screen = pygame.display.set_mode((WIDTH, HEIGHT))
-# pygame.display.set_caption("Pong – Single Player")
+# pygame.display.set_caption("Pong - Single Player")
 # clock = pygame.time.Clock()
 
-# game = PongGame(LIVES)
+# game = PongGame()
 
 # left = False
 # right = False

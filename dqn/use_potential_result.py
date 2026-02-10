@@ -4,13 +4,15 @@ import numpy as np
 
 from .generic_multi_game import QNetwork
 
+from .game_env import ArkanoidEnv, PongEnv
+
 from arkanoid_game import screen_width, screen_height
 
 from pong_game import LIVES
 
-MODEL_PATH = "./dqn/dqn_models/best_reward_catch.pth" 
+MODEL_PATH = "./dqn/dqn_models/best_time_pong.pth" 
 
-# WINNING_MODEL | generic_multi | generic_4 | generic_4_no_shaping_no_density | best_reward_catch 
+# WINNING_MODEL | generic_multi | generic_4 | generic_4_no_shaping_no_density | best_time_pong 
 
 # -----------------------------
 # Setup Pygame
@@ -23,11 +25,11 @@ FRAME_RATE = 60
 # -----------------------------
 # Scegli il tipo di gioco
 # -----------------------------
-GAME_TYPE = "arkanoid"  # "arkanoid" o 
+GAME_TYPE = "pong"  # "arkanoid" o "pong"
 
 if GAME_TYPE == "arkanoid":
     env = ArkanoidEnv()
-    
+
 elif GAME_TYPE == "pong":
     env = PongEnv(lives=LIVES)  # puoi cambiare il numero di vite
 
