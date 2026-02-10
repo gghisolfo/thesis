@@ -2,15 +2,15 @@ import pygame
 import torch
 import numpy as np
 
-from .generic_4_multi_game import QNetwork
-
-from .game_env import CatchEnv, ArkanoidEnv, PongEnv
+from .generic_multi_game import QNetwork
 
 from arkanoid_game import screen_width, screen_height
 
 from pong_game import LIVES
 
-MODEL_PATH = "./dqn/dqn_models/generic_multi_pong.pth" # WINNING_MODEL | generic_multi | generic_4 | generic_4_no_shaping_no_density  
+MODEL_PATH = "./dqn/dqn_models/best_reward_catch.pth" 
+
+# WINNING_MODEL | generic_multi | generic_4 | generic_4_no_shaping_no_density | best_reward_catch 
 
 # -----------------------------
 # Setup Pygame
@@ -23,14 +23,11 @@ FRAME_RATE = 60
 # -----------------------------
 # Scegli il tipo di gioco
 # -----------------------------
-GAME_TYPE = "pong"  # "arkanoid" o "catch"
+GAME_TYPE = "arkanoid"  # "arkanoid" o 
 
 if GAME_TYPE == "arkanoid":
     env = ArkanoidEnv()
     
-elif GAME_TYPE == "catch":
-    env = CatchEnv()
-
 elif GAME_TYPE == "pong":
     env = PongEnv(lives=LIVES)  # puoi cambiare il numero di vite
 
@@ -65,11 +62,11 @@ while not done:
 
     # Rendering con debug
     grid = env.game.get_grid()
-    print(f"Grid shape: {grid.shape}, dtype: {grid.dtype}")  # DEBUG
+    # print(f"Grid shape: {grid.shape}, dtype: {grid.dtype}")  # DEBUG
     
     # Trasponi da (H, W, 3) a (W, H, 3)
     grid_transposed = np.transpose(grid, (1, 0, 2))
-    print(f"Grid transposed shape: {grid_transposed.shape}")  # DEBUG
+    # print(f"Grid transposed shape: {grid_transposed.shape}")  # DEBUG
 
     # Rendering
     # print(env.game.get_grid())

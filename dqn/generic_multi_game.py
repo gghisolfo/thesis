@@ -12,140 +12,16 @@ from typing import Any, Dict, List, Tuple, Callable
 
 # Import locali 
 from arkanoid_game import Game, grid_width, grid_height
+from pong_game import PongGame, WIDTH, HEIGHT, LIVES
 
-
-# python -m dqn.generic_6
+# python -m dqn.generic_4
 
 
 SAVE_DIR = "./dqn/dqn_models"
 os.makedirs(SAVE_DIR, exist_ok=True)
 PRINT_MODE = False
-
-
-class StateVisitationTracker:
-    """
-    Traccia la frequenza di visita degli stati per incentivare l'esplorazione
-    di stati rari e penalizzare stati che portano rapidamente alla morte.
-    """
-    def __init__(self, 
-                 discretization_bins: int = 10,
-                 rare_bonus_scale: float = 2.0,
-                 death_memory_size: int = 100,
-                 death_penalty: float = -5.0,
-                 death_proximity_threshold: float = 0.3):
-        """
-        Args:
-            discretization_bins: Numero di bin per discretizzare ogni dimensione
-            rare_bonus_scale: Scala del bonus per stati rari (reward = scale / sqrt(visit_count))
-            death_memory_size: Quanti stati pre-morte ricordare
-            death_penalty: Penalità per stati simili a quelli che hanno portato a morte
-            death_proximity_threshold: Soglia di distanza per considerare uno stato "vicino" a morte
-        """
-        self.bins = discretization_bins
-        self.rare_bonus_scale = rare_bonus_scale
-        self.death_penalty = death_penalty
-        self.death_threshold = death_proximity_threshold
-        
-        # Contatori
-        self.visit_counts = defaultdict(int)  # state_hash -> count
-        self.death_states = deque(maxlen=death_memory_size)  # Lista di stati pre-morte
-        
-        # Statistiche
-        self.total_visits = 0
-        self.unique_states = 0
-        self.death_penalties_given = 0
-        self.rare_bonuses_given = 0
-    
-    def _discretize_state(self, state_vector: np.ndarray) -> tuple:
-        """
-        Discretizza uno stato continuo in bin per creare un hash.
-        Usa percentili invece di range fissi per robustezza.
-        """
-        # Normalizza in [0, 1] usando tanh (gestisce meglio outliers)
-        normalized = (np.tanh(state_vector) + 1) / 2
-        # Discretizza in bin
-        discretized = (normalized * self.bins).astype(int)
-        # Clamp per sicurezza
-        discretized = np.clip(discretized, 0, self.bins - 1)
-        return tuple(discretized)
-    
-    def _state_distance(self, state1: np.ndarray, state2: np.ndarray) -> float:
-        """Calcola distanza normalizzata tra due stati."""
-        return np.linalg.norm(state1 - state2) / (np.sqrt(len(state1)) + 1e-9)
-    
-    def record_visit(self, state_vector: np.ndarray) -> float:
-        """
-        Registra la visita di uno stato e calcola il rare state bonus.
-        
-        Returns:
-            rare_bonus: Bonus positivo per stati rari, 0 per stati comuni
-        """
-        state_hash = self._discretize_state(state_vector)
-        self.visit_counts[state_hash] += 1
-        self.total_visits += 1
-        
-        if self.visit_counts[state_hash] == 1:
-            self.unique_states += 1
-        
-        # Calcola bonus: inversamente proporzionale a sqrt(visit_count)
-        # Stati mai visti: bonus massimo
-        # Stati visti molte volte: bonus minimo
-        visit_count = self.visit_counts[state_hash]
-        rare_bonus = self.rare_bonus_scale / np.sqrt(visit_count)
-        
-        if rare_bonus > 0.5:  # Soglia arbitraria per "raro"
-            self.rare_bonuses_given += 1
-        
-        return rare_bonus
-    
-    def check_death_proximity(self, state_vector: np.ndarray) -> float:
-        """
-        Controlla se lo stato è vicino a stati che hanno portato a morte.
-        
-        Returns:
-            penalty: Penalità negativa se vicino a morte, 0 altrimenti
-        """
-        if not self.death_states:
-            return 0.0
-        
-        # Calcola distanza minima da tutti gli stati di morte
-        min_distance = min(
-            self._state_distance(state_vector, death_state)
-            for death_state in self.death_states
-        )
-        
-        # Se troppo vicino, applica penalità
-        if min_distance < self.death_threshold:
-            # Penalità proporzionale alla vicinanza
-            proximity_factor = 1.0 - (min_distance / self.death_threshold)
-            penalty = self.death_penalty * proximity_factor
-            self.death_penalties_given += 1
-            return penalty
-        
-        return 0.0
-    
-    def record_death(self, state_vector: np.ndarray):
-        """Registra uno stato che ha portato a morte del gioco."""
-        self.death_states.append(state_vector.copy())
-    
-    def get_statistics(self) -> Dict:
-        """Ritorna statistiche sull'esplorazione."""
-        exploration_ratio = self.unique_states / max(self.total_visits, 1)
-        
-        return {
-            'total_visits': self.total_visits,
-            'unique_states': self.unique_states,
-            'exploration_ratio': exploration_ratio,
-            'death_states_recorded': len(self.death_states),
-            'death_penalties_given': self.death_penalties_given,
-            'rare_bonuses_given': self.rare_bonuses_given,
-            'avg_revisit_rate': self.total_visits / max(self.unique_states, 1)
-        }
-    
-    def reset_episode(self):
-        """Reset per nuovo episodio (mantiene memoria tra episodi)."""
-        # Non resettiamo visit_counts né death_states - vogliamo memoria persistente!
-        pass
+SHAPING = False
+EVENT_DENSITY = False
 
 
 class GenericStateExtractor:
@@ -181,7 +57,7 @@ class GenericStateExtractor:
         return state
 
     def to_vector(self, state_dict: Dict[str, Any]) -> np.ndarray:
-        """Converte un dizionario di stato in vettore numpy numerico."""
+        """Converte un dizionario di stato (basato su tracked_attributes) in vettore numpy numerico."""
         vec = []
         for k in self.tracked_attributes:
             v = state_dict.get(k, 0.0)
@@ -204,13 +80,19 @@ class GenericEventDetector:
     Non richiede conoscenza del dominio.
     """
     def __init__(self, 
-                 threshold_for_change: float = 0.3,
-                 min_relative_change: float = 0.03):
+                 threshold_for_change: float = 0.3,    # Soglia intermedia
+                 min_relative_change: float = 0.03):   # 3% minimo
         self.threshold = threshold_for_change
         self.min_relative_change = min_relative_change
 
+    
     def detect_events(self, prev_state: Dict, curr_state: Dict) -> List[Dict]:
-        """Rileva TUTTI i cambiamenti significativi."""
+        """
+        Rileva TUTTI i cambiamenti significativi.
+        Ogni attributo genera AL PIÙ un evento per step.
+        
+        IMPORTANTE: Nessuna priorità o classificazione degli eventi.
+        """
         events = []
         
         for key in prev_state.keys():
@@ -220,9 +102,11 @@ class GenericEventDetector:
             prev_val = prev_state[key]
             curr_val = curr_state[key]
             
+            # Salta valori None
             if prev_val is None or curr_val is None:
                 continue
             
+            # Rileva cambiamento generico (senza classificazione)
             event = self._detect_change(key, prev_val, curr_val)
             if event:
                 events.append(event)
@@ -230,13 +114,19 @@ class GenericEventDetector:
         return events
     
     def _detect_change(self, key: str, prev: Any, curr: Any) -> Dict:
-        """Rileva cambiamento generico senza conoscere la natura."""
+        """
+        Rileva cambiamento generico senza conoscere la natura.
+        Ritorna evento SOLO se significativo.
+        """
+        # Case 1: Valori numerici (float, int grandi)
         if isinstance(prev, (int, float)) and isinstance(curr, (int, float)):
             delta = abs(curr - prev)
             
+            # Soglia assoluta
             if delta < self.threshold:
                 return None
             
+            # Soglia relativa 
             relative = delta / (abs(prev) + 1e-9)
             if relative < self.min_relative_change:
                 return None
@@ -249,6 +139,7 @@ class GenericEventDetector:
                 'timestamp': None
             }
         
+        # Case 2: Valori discreti (bool, int piccoli)
         elif isinstance(prev, (bool, int)) and isinstance(curr, (bool, int)):
             if prev != curr:
                 return {
@@ -261,9 +152,14 @@ class GenericEventDetector:
         
         return None
 
-
+# ----------------------------
+# Forward model (curiosity)
+# ----------------------------
 class ForwardModel(nn.Module):
-    """Forward model per curiosity-driven learning."""
+    """
+    Piccolo modello che predice next_state_vector a partire da (state_vector, action_onehot).
+    Allenato online con passo SGD ogni transizione osservata.
+    """
     def __init__(self, state_dim: int, action_dim: int, hidden: int = 128):
         super().__init__()
         self.net = nn.Sequential(
@@ -279,53 +175,82 @@ class ForwardModel(nn.Module):
 
 
 class CausalEventChainTracker:
-    """Traccia catene causali di eventi."""
+    """
+    Traccia catene causali di eventi.
+    
+    PRINCIPIO: Tutti gli eventi hanno peso uguale (1.0), ma eventi che 
+    scatenano altri eventi ricevono reward esponenziale in base alla 
+    lunghezza della catena causale che generano.
+    """
+    
     def __init__(self, 
                  causal_window: int = 3,
                  base_reward: float = 1.0,
-                 chain_exponent: float = 1.2):
+                 chain_exponent: float = 1.2):  # Ridotto da 1.5 a 1.2
+        """
+        Args:
+            causal_window: Numero di step in cui eventi sono considerati causali
+            base_reward: Reward base per ogni evento singolo
+            chain_exponent: Esponente per reward catena (1.2 = crescita moderata)
+        """
         self.causal_window = causal_window
         self.base_reward = base_reward
         self.chain_exponent = chain_exponent
         self.reset()
     
     def reset(self):
-        self.event_history = []
+        """Reset completo del tracker."""
+        self.event_history = []  # Lista di (timestamp, evento)
         self.step_counter = 0
         self.total_reward = 0.0
-        self.chain_stats = defaultdict(int)
+        self.chain_stats = defaultdict(int)  # Statistiche per lunghezza catena
     
     def add_events(self, events: List[Dict]):
+        """
+        Aggiunge eventi rilevati in questo step e calcola reward causale.
+        """
         if not events:
             self.step_counter += 1
             return
         
+        # Assegna timestamp a tutti gli eventi
         for event in events:
             event['timestamp'] = self.step_counter
             self.event_history.append(event)
         
+        # Calcola reward per questa catena causale
         chain_length = len(events)
+        # print("chain_length:", chain_length)
+        
         chain_reward = self._calculate_chain_reward(chain_length)
         
         self.total_reward += chain_reward
         self.chain_stats[chain_length] += 1
         
+        # Debug per catene interessanti
         if chain_length >= 2 and PRINT_MODE:
             print(f"⛓️ Catena lunga: {chain_length} eventi → Reward: {chain_reward:.2f}")
             for e in events:
                 print(f"  - {e['attribute']} : {e['prev']} -> {e['curr']}")
+
         
         self.step_counter += 1
     
     def _calculate_chain_reward(self, chain_length: int) -> float:
+        """
+        Calcola reward per una catena causale.
+        """
         if chain_length == 0:
             return 0.0
+        
         return self.base_reward * (chain_length ** self.chain_exponent)
     
     def get_total_reward(self) -> float:
+        """Ritorna il reward totale accumulato."""
         return self.total_reward
     
     def get_statistics(self) -> Dict:
+        """Ritorna statistiche sulle catene."""
         total_events = sum(length * count for length, count in self.chain_stats.items())
         total_chains = sum(self.chain_stats.values())
         
@@ -341,7 +266,13 @@ class CausalEventChainTracker:
 
 class GenericSymbolicEnv(gym.Env):
     """
-    Ambiente completamente generico con supporto per rare state exploration.
+    Ambiente completamente generico che funziona con QUALSIASI simulazione fisica.
+    Estrae automaticamente lo stato e rileva eventi senza conoscenza del dominio.
+    Inoltre fornisce reward generico basato su:
+      - catene di eventi (già presente)
+      - impatto causale (no-op baseline)
+      - curiosity (forward model)
+      - event density (magnitudo dei cambi nello stato)
     """
     metadata = {"render_modes": ["human"], "render_fps": 60}
 
@@ -350,12 +281,21 @@ class GenericSymbolicEnv(gym.Env):
                  termination_check: Callable = None,
                  causal_window: int = 3,
                  chain_exponent: float = 1.5,
+                 # nuovi iperparametri per i bonus generici
                  w_causal: float = 1.0,
                  w_curiosity: float = 0.5,
                  w_density: float = 0.5,
-                 w_rare: float = 1.0,  # NUOVO: peso per rare state bonus
-                 forward_lr: float = 1e-3,
-                 rare_state_config: Dict = None):  # NUOVO: config per rare states
+                 forward_lr: float = 1e-3):
+        """
+        Args:
+            sim_object: Oggetto simulazione (es. Game())
+            action_map: Dizionario {action_id: lambda sim: ...} per eseguire azioni
+            observation_extractor: Funzione per estrarre osservazione (opzionale)
+            termination_check: Funzione per controllare terminazione (opzionale)
+            causal_window: Finestra temporale per eventi causali
+            chain_exponent: Esponente per reward catena
+            w_causal/w_curiosity/w_density: pesi per i componenti aggiuntivi
+        """
         super().__init__()
         self.sim = sim_object
         self.action_map = action_map
@@ -372,31 +312,20 @@ class GenericSymbolicEnv(gym.Env):
         # Estrazione stato e rilevamento eventi
         self.state_extractor = GenericStateExtractor(sim_object)
         self.event_detector = GenericEventDetector(
-            threshold_for_change=0.3,
-            min_relative_change=0.03
+            threshold_for_change=0.3,      # Soglia intermedia (era 1.0, troppo alta)
+            min_relative_change=0.03       # 3% minimo (era 0.1, troppo alto)
         )
         self.event_tracker = CausalEventChainTracker(
             causal_window=causal_window,
             chain_exponent=chain_exponent
         )
         
-        # NUOVO: Tracker per stati rari
-        rare_config = rare_state_config or {}
-        self.state_tracker = StateVisitationTracker(
-            discretization_bins=rare_config.get('bins', 10),
-            rare_bonus_scale=rare_config.get('rare_bonus_scale', 2.0),
-            death_memory_size=rare_config.get('death_memory', 100),
-            death_penalty=rare_config.get('death_penalty', -5.0),
-            death_proximity_threshold=rare_config.get('death_threshold', 0.3)
-        )
-        
-        # Pesi componenti reward
+        # Nuove componenti per reward generico
         self.w_causal = w_causal
         self.w_curiosity = w_curiosity
         self.w_density = w_density
-        self.w_rare = w_rare  # NUOVO
 
-        # Forward model (curiosity)
+        # forward model (curiosity) - inizializzato dopo che conosciamo state_dim
         self._forward_model = None
         self._forward_opt = None
         self._forward_lr = forward_lr
@@ -405,9 +334,11 @@ class GenericSymbolicEnv(gym.Env):
         self._prev_state_vec = None
         self.done = False
 
+        # se vogliamo inizializzare forward model subito:
         self._maybe_init_forward_model()
     
     def _maybe_init_forward_model(self):
+        # inizializza il forward model se possibile (dipende dalla lunghezza degli attributi osservati)
         state_dim = len(self.state_extractor.tracked_attributes)
         action_dim = len(self.action_map)
         if state_dim > 0 and action_dim > 0 and self._forward_model is None:
@@ -415,17 +346,18 @@ class GenericSymbolicEnv(gym.Env):
             self._forward_opt = optim.Adam(self._forward_model.parameters(), lr=self._forward_lr)
 
     def reset(self):
+        # Ricrea simulazione (o resetta se ha metodo reset)
         if hasattr(self.sim, 'reset'):
             self.sim.reset()
         else:
+            # Se non ha reset, ricrea l'oggetto
             self.sim = type(self.sim)()
         
         self.done = False
         self.event_tracker.reset()
-        self.state_tracker.reset_episode()  # NUOVO
-        
         self._prev_state = self.state_extractor.extract(self.sim)
         self._prev_state_vec = self.state_extractor.to_vector(self._prev_state)
+        # eventualmente inizializza forward model (se non fatto)
         self._maybe_init_forward_model()
         
         return self.observation_extractor(self.sim)
@@ -435,10 +367,11 @@ class GenericSymbolicEnv(gym.Env):
         prev_state = self._prev_state
         prev_state_vec = self._prev_state_vec.copy() if self._prev_state_vec is not None else None
         
-        # Esegui azione
+        # Esegui azione sulla simulazione
         if action in self.action_map:
             self.action_map[action](self.sim)
         
+        # Aggiorna simulazione (assume che abbia metodo update)
         if hasattr(self.sim, 'update'):
             self.sim.update()
         
@@ -446,33 +379,49 @@ class GenericSymbolicEnv(gym.Env):
         current_state = self.state_extractor.extract(self.sim)
         current_state_vec = self.state_extractor.to_vector(current_state)
         
-        # Rileva eventi
+        # Rileva TUTTI gli eventi automaticamente
         detected_events = self.event_detector.detect_events(prev_state, current_state)
+        
+        # Aggiungi eventi al tracker (calcola reward causale automaticamente)
         self.event_tracker.add_events(detected_events)
         
-        # === REWARD COMPONENTS ===
-        
-        # 1) Eventi (catene causali)
+        # REWARD: catena eventi (tua logica originale)
         event_reward = len(detected_events) ** self.event_tracker.chain_exponent if detected_events else 0.0
 
-        # 2) Impatto causale (no-op baseline)
+        # ---------------------------
+        # 1) IMPATTO CAUSALE (no-op baseline)
+        # ---------------------------
         causal_bonus = 0.0
         try:
-            sim_copy = copy.deepcopy(self.sim) if not hasattr(self.sim, 'clone') else self.sim.clone()
+            # Proviamo a simulare "no-op": copia lo stato, non applicare azione, chiami update() e leggi next state.
+            sim_copy = None
+            if hasattr(self.sim, 'clone'):  # se Game implementa clone, usalo
+                sim_copy = self.sim.clone()
+            else:
+                # fallback generico: deepcopy (potrebbe essere lento ma è generico)
+                sim_copy = copy.deepcopy(self.sim)
+            
+            # non eseguire la action_map su sim_copy (no-op)
             if hasattr(sim_copy, 'update'):
                 sim_copy.update()
             noop_state = self.state_extractor.extract(sim_copy)
             noop_vec = self.state_extractor.to_vector(noop_state)
-            causal_impact = float(np.linalg.norm(current_state_vec - noop_vec, ord=1))
+            # causal impact = differenza fra stato ottenuto con action vs no-op
+            causal_impact = float(np.linalg.norm(current_state_vec - noop_vec, ord=1))  # L1
             causal_bonus = self.w_causal * causal_impact
         except Exception as e:
+            # se la simulazione non supporta deepcopy o è pesante, ignoriamo causal baseline (0.0)
             if PRINT_MODE:
                 print("Causal baseline failed:", e)
+            causal_bonus = 0.0
 
-        # 3) Curiosity (forward model)
+        # ---------------------------
+        # 2) CURIOSITY (forward model prediction error)
+        # ---------------------------
         curiosity_bonus = 0.0
         if self._forward_model is not None and prev_state_vec is not None:
             try:
+                # build input = [prev_state_vec, action_onehot]
                 state_t = torch.tensor(prev_state_vec, dtype=torch.float32).unsqueeze(0)
                 a_onehot = np.zeros(len(self.action_map), dtype=np.float32)
                 a_onehot[action] = 1.0
@@ -480,13 +429,15 @@ class GenericSymbolicEnv(gym.Env):
                 inp = torch.cat([state_t, act_t], dim=1)
                 
                 self._forward_model.train()
-                pred = self._forward_model(inp)
+                pred = self._forward_model(inp)  # predicts next state vector
                 target = torch.tensor(current_state_vec, dtype=torch.float32).unsqueeze(0)
-                loss = nn.functional.mse_loss(pred, target, reduction='none').mean(1)
+                loss = nn.functional.mse_loss(pred, target, reduction='none').mean(1)  # per-batch error
                 err = float(loss.item())
                 
+                # piccolo training step online (1 step)
                 self._forward_opt.zero_grad()
                 loss.mean().backward()
+                # gradient clipping to be safe
                 torch.nn.utils.clip_grad_norm_(self._forward_model.parameters(), 1.0)
                 self._forward_opt.step()
                 
@@ -494,47 +445,51 @@ class GenericSymbolicEnv(gym.Env):
             except Exception as e:
                 if PRINT_MODE:
                     print("Curiosity failed:", e)
+                curiosity_bonus = 0.0
 
-        # 4) Event density
+        # ---------------------------
+        # 3) EVENT DENSITY (magnitudo di cambiamento di stato) 
+        # ---------------------------
         density_bonus = 0.0
-        try:
-            density = float(np.sum(np.abs(current_state_vec - prev_state_vec)))
-            density_bonus = self.w_density * density
-        except Exception:
-            pass
+        if EVENT_DENSITY:
+            try:
+                density = float(np.sum(np.abs(current_state_vec - prev_state_vec)))
+                density_bonus = self.w_density * density
+            except Exception:
+                density_bonus = 0.0
 
-        # === NUOVO: 5) RARE STATE EXPLORATION ===
-        rare_state_bonus = self.state_tracker.record_visit(current_state_vec) * self.w_rare
-        death_proximity_penalty = self.state_tracker.check_death_proximity(current_state_vec)
-        
-        # 6) Reward shaping (opzionale)
+
+        # REWARD SHAPING (opzionale): piccolo bonus per comportamento base
         shaping_reward = 0.0
-        if hasattr(self.sim, 'ball_y') and hasattr(self.sim, 'paddle_x'):
-            ball_x = getattr(self.sim, 'ball_x', 0)
-            paddle_x = getattr(self.sim, 'paddle_x', 0)
-            distance = abs(ball_x - paddle_x)
-            max_distance = getattr(self.sim, 'grid_width', 100)
-            proximity_bonus = 0.1 * (1.0 - min(distance / max_distance, 1.0))
-            shaping_reward = proximity_bonus
+        if SHAPING:
+            
+            if hasattr(self.sim, 'ball_y') and hasattr(self.sim, 'paddle_x'):
+                # Piccolo bonus per essere vicino alla palla (solo asse X)
+                ball_x = getattr(self.sim, 'ball_x', 0)
+                paddle_x = getattr(self.sim, 'paddle_x', 0)
+                distance = abs(ball_x - paddle_x)
+                
+                # Normalizza e scala: max 0.1 quando perfettamente allineato
+                max_distance = getattr(self.sim, 'grid_width', 100)
+                proximity_bonus = 0.1 * (1.0 - min(distance / max_distance, 1.0))
+                shaping_reward = proximity_bonus
+            # Reward totale: eventi (dominante) + shaping (minore) + nuovi bonus generici
+            reward = event_reward + shaping_reward * 0.1 + causal_bonus + curiosity_bonus + density_bonus
         
-        # === REWARD TOTALE ===
-        reward = (event_reward + 
-                  shaping_reward * 0.1 + 
-                  causal_bonus + 
-                  curiosity_bonus + 
-                  density_bonus +
-                  rare_state_bonus +  # NUOVO
-                  death_proximity_penalty)  # NUOVO
         
-        # Debug printing
-        if PRINT_MODE and (rare_state_bonus > 0.5 or death_proximity_penalty < -1.0):
-            print(f"🔍 RARE STATE: bonus={rare_state_bonus:.2f} | death_penalty={death_proximity_penalty:.2f}")
+        # Reward totale: eventi (dominante) + shaping (minore) + nuovi bonus generici
+        reward = event_reward + causal_bonus + curiosity_bonus + density_bonus
         
+        # (Debug printing)
+        if PRINT_MODE:
+            print(f"R_comp: events={event_reward:.3f} causal={causal_bonus:.3f} curious={curiosity_bonus:.3f} density={density_bonus:.3f} shaping={shaping_reward*0.1:.3f} => total={reward:.3f}")
+        
+
         # Aggiorna stato precedente
         self._prev_state = current_state
         self._prev_state_vec = current_state_vec.copy()
         
-        # Info per debug
+        # Aggiungi info per debug / replay
         extra_info = {
             'events': detected_events,
             'chain_length': len(detected_events),
@@ -543,21 +498,12 @@ class GenericSymbolicEnv(gym.Env):
             'causal_bonus': causal_bonus,
             'curiosity_bonus': curiosity_bonus,
             'density_bonus': density_bonus,
-            'rare_state_bonus': rare_state_bonus,  # NUOVO
-            'death_proximity_penalty': death_proximity_penalty,  # NUOVO
             'step_reward': reward,
-            **self.event_tracker.get_statistics(),
-            **self.state_tracker.get_statistics()  # NUOVO
+            **self.event_tracker.get_statistics()
         }
         
         # Controlla terminazione
         self.done = self.termination_check(self.sim)
-        
-        # NUOVO: Se il gioco è finito per morte, registra lo stato pre-morte
-        if self.done and hasattr(self.sim, 'ball_lost') and self.sim.ball_lost:
-            self.state_tracker.record_death(current_state_vec)
-            if PRINT_MODE:
-                print(f"💀 Morte registrata! Stati di morte totali: {len(self.state_tracker.death_states)}")
         
         return (
             self.observation_extractor(self.sim),
@@ -567,9 +513,10 @@ class GenericSymbolicEnv(gym.Env):
         )
     
     def _default_obs_extractor(self, sim):
+        """Estrae osservazione di default (primi N attributi numerici)."""
         state = self.state_extractor.extract(sim)
         values = [v for v in state.values() if isinstance(v, (int, float))]
-        return np.array(values[:10], dtype=np.float32)
+        return np.array(values[:10], dtype=np.float32)  # Limita a 10 per semplicità
 
 
 class QNetwork(nn.Module):
@@ -587,38 +534,53 @@ class QNetwork(nn.Module):
     def forward(self, x):
         return self.net(x)
 
+def create_generic_env(sim_type="arkanoid"):
+    """
+    Factory generica per Arkanoid o 
+    sim_type: "arkanoid" | 
+    """
+    if sim_type == "arkanoid":
+        sim_obj = Game()
+        action_map = {
+            0: lambda game: game.set_paddle_speed(-1),  # Sinistra
+            1: lambda game: game.set_paddle_speed(0),   # Fermo
+            2: lambda game: game.set_paddle_speed(1),   # Destra
+        }
+        def obs_extractor(game):
+            ball_x = game.ball_x / grid_width
+            ball_y = game.ball_y / grid_height
+            vx = game.ball_speed_x / 10.0
+            vy = game.ball_speed_y / 10.0
+            paddle_x = game.paddle_x / grid_width
+            return np.array([ball_x*2-1, ball_y*2-1, vx, vy, paddle_x*2-1], dtype=np.float32)
+        
+        def termination_check(game):
+            return game.ball_lost or game.bricks_alive == 0
 
-def create_arkanoid_env():
-    """Factory per creare l'ambiente Arkanoid con rare state exploration."""
-    
-    action_map = {
-        0: lambda game: game.set_paddle_speed(-1),
-        1: lambda game: game.set_paddle_speed(0),
-        2: lambda game: game.set_paddle_speed(1),
-    }
-    
-    def obs_extractor(game):
-        ball_x = game.ball_x / grid_width
-        ball_y = game.ball_y / grid_height
-        vx = game.ball_speed_x / 10.0
-        vy = game.ball_speed_y / 10.0
-        paddle_x = game.paddle_x / grid_width
-        return np.array([ball_x*2-1, ball_y*2-1, vx, vy, paddle_x*2-1], dtype=np.float32)
-    
-    def termination_check(game):
-        return game.ball_lost or game.bricks_alive == 0
-    
-    # NUOVO: Configurazione rare state exploration
-    rare_config = {
-        'bins': 15,  # Più granularità per distinguere meglio gli stati
-        'rare_bonus_scale': 3.0,  # Bonus significativo per stati rari
-        'death_memory': 200,  # Ricorda molti stati di morte
-        'death_penalty': -8.0,  # Penalità forte per avvicinarsi a morte
-        'death_threshold': 0.25  # Distanza sotto cui scatta la penalità
-    }
-    
+    elif sim_type == "pong":
+        sim_obj = PongGame()  # Inizializza Pong con 3 vite
+        action_map = {
+            0: lambda game: game.set_paddle(-1),  # Sinistra
+            1: lambda game: game.set_paddle(0),   # Fermo
+            2: lambda game: game.set_paddle(1),   # Destra
+        }
+        def obs_extractor(game):
+            ball_x = game.ball_x / game.width
+            ball_y = game.ball_y / game.height
+            vx = game.ball_vx / 10.0
+            vy = game.ball_vy / 10.0
+            paddle_x = game.player_x / game.width
+            return np.array([ball_x*2-1, ball_y*2-1, vx, vy, paddle_x*2-1], dtype=np.float32)
+
+        def termination_check(game):
+            # Termina se tutte le vite sono finite
+            return game.lives <= 0
+
+    else:
+        raise ValueError(f"Sim type {sim_type} non supportato")
+
     return GenericSymbolicEnv(
-        sim_object=Game(),
+        sim_object=sim_obj,
         action_map=action_map,
         observation_extractor=obs_extractor,
         termination_check=termination_check,
@@ -627,34 +589,38 @@ def create_arkanoid_env():
         w_causal=0.8,
         w_curiosity=0.5,
         w_density=0.3,
-        w_rare=1.5,  # NUOVO: Peso alto per incentivare esplorazione
-        forward_lr=1e-3,
-        rare_state_config=rare_config  # NUOVO
+        forward_lr=1e-3
     )
 
-
-def train_generic_dqn(env_factory: Callable, total_episodes=10000, max_steps=3000):
-    """Training DQN con rare state exploration."""
+def train_generic_dqn(env_factory: Callable,sim_name: str, total_episodes=10000, max_steps=3000):
+    """
+    Training DQN completamente generico con reward causale.
+    """
     env = env_factory()
-    buffer = deque(maxlen=100000)
+    buffer = deque(maxlen=100000)  # Buffer più grande
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     q_net = QNetwork(env.observation_space.shape[0], env.action_space.n).to(device)
     q_target = QNetwork(env.observation_space.shape[0], env.action_space.n).to(device)
     q_target.load_state_dict(q_net.state_dict())
-    optimizer = optim.Adam(q_net.parameters(), lr=5e-5)
+    optimizer = optim.Adam(q_net.parameters(), lr=5e-5)  # Learning rate più basso
 
     gamma = 0.99
     epsilon = 1.0
-    epsilon_min = 0.05
-    epsilon_decay = 0.9995
+    epsilon_min = 0.05  # Epsilon minimo più alto per continuare esplorazione
+    epsilon_decay = 0.9995  # Decay più lento
     
-    # Metriche
+    # Metriche per tracking
     rewards_history = []
     chain_stats_history = []
-    survival_times = []
-    exploration_stats = []  # NUOVO
+    survival_times = []  # Nuovo: traccia quanto sopravvive
+
+    model_path = os.path.join(SAVE_DIR, f"last_generic_{sim_name}.pth")
+    best_model_time_path = os.path.join(SAVE_DIR, f"best_time_{sim_name}.pth")
+    best_model_reward_path = os.path.join(SAVE_DIR, f"best_reward_{sim_name}.pth")
+
     best_survival = 0
+    best_reward = -float("inf")
 
     for ep in range(total_episodes):
         state = env.reset()
@@ -664,41 +630,45 @@ def train_generic_dqn(env_factory: Callable, total_episodes=10000, max_steps=300
 
         while not done and steps < max_steps:
             # Epsilon-greedy
-            if random.random() < epsilon:
+            if random.random() < epsilon: # 🎯 EXPLORATION - ogni quanto ignoro la rete e scelgo un'azione a caso
                 action = env.action_space.sample()
             else:
-                with torch.no_grad():
+                with torch.no_grad(): #  # 🎯 EXPLOITATION sceglie azione con q-value massimo
                     s_t = torch.tensor(state, dtype=torch.float32, device=device).unsqueeze(0)
                     q_vals = q_net(s_t)
                     action = int(q_vals.argmax(1).item())
 
-            next_state, reward, done, info = env.step(action)
-            
+            next_state, reward, done, info = env.step(action) #reward = R(t+1)
+
             buffer.append((state, action, reward, next_state, done))
 
-            # Training
+            # Training - batch più grande e più frequente
             if len(buffer) >= 128:
-                batch = random.sample(buffer, 128)
+                batch = random.sample(buffer, 128)  # Batch size aumentato
                 s, a, r, ns, d = zip(*batch)
                 
-                s_t = torch.tensor(np.array(s), dtype=torch.float32, device=device)
-                a_t = torch.tensor(a, dtype=torch.long, device=device).unsqueeze(1)
-                r_t = torch.tensor(r, dtype=torch.float32, device=device)
-                ns_t = torch.tensor(np.array(ns), dtype=torch.float32, device=device)
+                s_t = torch.tensor(np.array(s), device=device)
+                a_t = torch.tensor(a, device=device).unsqueeze(1)
+                r_t = torch.tensor(r, device=device)
+                ns_t = torch.tensor(np.array(ns), device=device)
                 d_t = torch.tensor(d, dtype=torch.float32, device=device)
 
 
+                # Q(st​,at​)    ←    Q(st​,at​)   +   α[Rt+1​+γamax​Q(st+1​,a)  −  Q(st​,at​)]
                 with torch.no_grad():
-                    max_next_q = q_target(ns_t).max(1)[0]
-                    target_q = r_t + gamma * (1 - d_t) * max_next_q
+                    max_next_q = q_target(ns_t).max(1)[0] # max ​Q(st+1​,a)
+                    target_q = r_t + gamma * (1 - d_t) * max_next_q # target - parte dx
 
-                current_q = q_net(s_t).gather(1, a_t).squeeze(1)
-                loss = nn.functional.mse_loss(current_q, target_q)
+                current_q = q_net(s_t).gather(1, a_t).squeeze(1) # Q(st, at) parte sx
+                loss = nn.functional.mse_loss(current_q, target_q) #minimizzare questa loss equivale a Q←Q+α(target−Q)
                 
+
                 optimizer.zero_grad()
+
+                # Q[s,a] += alpha * (reward + gamma * max(Q[s_next]) - Q[s,a])
                 loss.backward()
-                torch.nn.utils.clip_grad_norm_(q_net.parameters(), 1.0)
-                optimizer.step()
+                torch.nn.utils.clip_grad_norm_(q_net.parameters(), 1.0)  # Gradient clipping
+                optimizer.step() #contine alpha
 
             total_reward += reward
             state = next_state
@@ -706,61 +676,76 @@ def train_generic_dqn(env_factory: Callable, total_episodes=10000, max_steps=300
 
         epsilon = max(epsilon_min, epsilon * epsilon_decay)
         
-        # Update target network
+        # Update target network più frequentemente all'inizio
         if ep < 1000 and ep % 5 == 0:
             q_target.load_state_dict(q_net.state_dict())
         elif ep % 20 == 0:
             q_target.load_state_dict(q_net.state_dict())
         
-        # Traccia statistiche
-        survival_time = steps / 60.0
+        # Traccia survival time (steps = tempo in vita)
+        survival_time = steps / 60.0  # Converti in secondi (60 fps)
         survival_times.append(survival_time)
+
+        #analize improvment
         if survival_time > best_survival:
             best_survival = survival_time
-            if PRINT_MODE:
-                print(f"🏆 Nuovo record! Sopravvissuto {best_survival:.1f}s (ep {ep})")
+            torch.save(q_net.state_dict(), best_model_time_path)
+
+            # torch.save({
+            #         "episode": ep,
+            #         "model_state_dict": q_net.state_dict(),
+            #         "optimizer_state_dict": optimizer.state_dict(),
+            #         "best_survival": best_survival,
+            #         "epsilon": epsilon,
+            #     }, best_model_time_path)
+
+
+            # if PRINT_MODE:
+            #     print(f"🏆 Nuovo record! Sopravvissuto {best_survival:.1f}s (ep {ep})")
         
+        if reward > best_reward:
+            best_reward = reward
+            torch.save(q_net.state_dict(), best_model_reward_path)
+            # torch.save({
+            #         "episode": ep,
+            #         "model_state_dict": q_net.state_dict(),
+            #         "optimizer_state_dict": optimizer.state_dict(),
+            #         "best_survival": best_reward,
+            #         "epsilon": epsilon,
+            #     }, best_model_reward_path)
+
         rewards_history.append(total_reward)
-        chain_stats_history.append(env.event_tracker.get_statistics())
-        exploration_stats.append(env.state_tracker.get_statistics())  # NUOVO
+        stats = env.event_tracker.get_statistics()
+        chain_stats_history.append(stats)
         
-        # Logging dettagliato
+        # Logging più dettagliato
         if ep % 50 == 0:
             avg_reward = np.mean(rewards_history[-50:]) if rewards_history else 0.0
             avg_survival = np.mean(survival_times[-50:]) if survival_times else 0.0
-            
-            # NUOVO: Statistiche esplorazione
-            recent_exploration = exploration_stats[-50:] if len(exploration_stats) >= 50 else exploration_stats
-            avg_unique_states = np.mean([s['unique_states'] for s in recent_exploration]) if recent_exploration else 0
-            avg_exploration_ratio = np.mean([s['exploration_ratio'] for s in recent_exploration]) if recent_exploration else 0
-            total_death_states = exploration_stats[-1]['death_states_recorded'] if exploration_stats else 0
+            avg_chains = np.mean([s['total_chains'] for s in chain_stats_history[-50:]]) if chain_stats_history else 0.0
+            avg_chain_len = np.mean([s['avg_chain_length'] for s in chain_stats_history[-50:]]) if chain_stats_history else 0.0
             
             print(f"[Ep {ep:5d}] ε={epsilon:.3f} | R: {total_reward:6.1f} (avg {avg_reward:6.1f}) | "
                   f"Survived: {survival_time:4.1f}s (avg {avg_survival:4.1f}s) | "
-                  f"Explored: {avg_unique_states:.0f} states ({avg_exploration_ratio:.2%}) | "
-                  f"Deaths: {total_death_states}")
+                  f"Chains: {stats['total_chains']:3d} (len {avg_chain_len:.1f})")
         
         # Milestone checks
         if ep == 1000:
-            stats = exploration_stats[-1]
-            print(f"\n📊 Milestone 1000 episodi:")
-            print(f"   Sopravvivenza media: {np.mean(survival_times[-100:]):.1f}s")
-            print(f"   Stati unici scoperti: {stats['unique_states']}")
-            print(f"   Esplorazione ratio: {stats['exploration_ratio']:.2%}")
-            print(f"   Stati di morte memorizzati: {stats['death_states_recorded']}")
+            avg_surv_1k = np.mean(survival_times[-100:]) if len(survival_times) >= 100 else np.mean(survival_times)
+            print(f"\n📊 Milestone 1000 episodi: Sopravvivenza media = {avg_surv_1k:.1f}s")
+            if avg_surv_1k < 5.0:
+                print("⚠️  Agente ancora debole. Potrebbe servire più training.")
         
         if ep == 5000:
-            avg_surv = np.mean(survival_times[-100:])
-            stats = exploration_stats[-1]
-            print(f"\n📊 Milestone 5000 episodi:")
-            print(f"   Sopravvivenza media: {avg_surv:.1f}s")
-            print(f"   Stati unici scoperti: {stats['unique_states']}")
-            print(f"   Tasso di rivisitazione: {stats['avg_revisit_rate']:.1f}x")
-            if avg_surv > 60.0:
+            avg_surv_5k = np.mean(survival_times[-100:]) if len(survival_times) >= 100 else np.mean(survival_times)
+            print(f"\n📊 Milestone 5000 episodi: Sopravvivenza media = {avg_surv_5k:.1f}s")
+            if avg_surv_5k > 60.0:
                 print("🎉 Obiettivo 1 minuto raggiunto!")
+            else:
+                print(f"   Mancano ~{60 - avg_surv_5k:.1f}s per 1 minuto")
 
     # Salva modello
-    model_path = os.path.join(SAVE_DIR, "generic_6.pth")
+    
     torch.save(q_net.state_dict(), model_path)
     
     print(f"\n✅ Training completo! Modello: {model_path}")
@@ -768,24 +753,25 @@ def train_generic_dqn(env_factory: Callable, total_episodes=10000, max_steps=300
     print(f"⏱️  Sopravvivenza media finale: {np.mean(survival_times[-100:]):.1f}s")
     print(f"🏆 Record sopravvivenza: {best_survival:.1f}s")
     
-    # NUOVO: Statistiche esplorazione finali
-    final_exploration = exploration_stats[-1]
-    print(f"\n🔍 Statistiche esplorazione:")
-    print(f"   Visite totali: {final_exploration['total_visits']}")
-    print(f"   Stati unici: {final_exploration['unique_states']}")
-    print(f"   Exploration ratio: {final_exploration['exploration_ratio']:.2%}")
-    print(f"   Stati di morte: {final_exploration['death_states_recorded']}")
-    print(f"   Penalità morte date: {final_exploration['death_penalties_given']}")
-    print(f"   Bonus rari dati: {final_exploration['rare_bonuses_given']}")
+    # Statistiche catene
+    final_stats = chain_stats_history[-1]
+    print(f"\n⛓️  Statistiche catene causali:")
+    print(f"   Eventi totali: {final_stats['total_events']}")
+    print(f"   Catene totali: {final_stats['total_chains']}")
+    print(f"   Lunghezza media: {final_stats['avg_chain_length']:.2f}")
+    print(f"   Catena massima: {final_stats['max_chain']}")
     
-    return rewards_history, chain_stats_history, survival_times, exploration_stats
+    return rewards_history, chain_stats_history, survival_times
 
 
 if __name__ == "__main__":
-    total_episodes = 5000
+    total_episodes = 50 #10000
 
-    rewards, stats, survival, exploration = train_generic_dqn(
-        env_factory=create_arkanoid_env,
+    sim_to_train = "catch"  # "arkanoid" o "pong"
+
+    rewards, stats, survival = train_generic_dqn(
+        env_factory=lambda: create_generic_env(sim_type=sim_to_train),
+        sim_name=sim_to_train,
         total_episodes=total_episodes,
         max_steps=3600
     )
@@ -796,4 +782,3 @@ if __name__ == "__main__":
     print(f"   Performance ultimi 100: {np.mean(rewards[-100:]):.2f}")
     print(f"   Sopravvivenza media ultimi 100: {np.mean(survival[-100:]):.1f}s")
     print(f"   Record assoluto: {max(survival):.1f}s")
-    print(f"   Stati unici esplorati: {exploration[-1]['unique_states']}")
