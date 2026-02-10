@@ -12,7 +12,7 @@ from typing import Any, Dict, List, Tuple, Callable
 
 # Import locali 
 from arkanoid_game import Game, grid_width, grid_height
-from catching_game import CatchGame, grid_width, grid_height
+from catching_game import CatchGame, grid_width, grid_height, MAX_MISS
 
 
 # python -m dqn.generic_4
@@ -614,7 +614,7 @@ def create_generic_env(sim_type="arkanoid"):
 
         def termination_check(game):
             # Termina dopo un certo numero di oggetti mancati
-            return game.missed >= 10
+            return game.missed >= MAX_MISS
 
     else:
         raise ValueError(f"Sim type {sim_type} non supportato")
@@ -760,7 +760,7 @@ def train_generic_dqn(env_factory: Callable, total_episodes=10000, max_steps=300
                 print(f"   Mancano ~{60 - avg_surv_5k:.1f}s per 1 minuto")
 
     # Salva modello
-    model_path = os.path.join(SAVE_DIR, "generic_multi.pth")
+    model_path = os.path.join(SAVE_DIR, "generic_multi_catch.pth")
     torch.save(q_net.state_dict(), model_path)
     
     print(f"\n✅ Training completo! Modello: {model_path}")
@@ -780,7 +780,7 @@ def train_generic_dqn(env_factory: Callable, total_episodes=10000, max_steps=300
 
 
 if __name__ == "__main__":
-    total_episodes = 50 #10000
+    total_episodes = 5000 #10000
 
     sim_to_train = "catch"  # "arkanoid" o "catch"
 
