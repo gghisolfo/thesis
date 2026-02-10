@@ -10,8 +10,8 @@ import pickle
 # ---------------- CONFIG ---------------- #
 
 refresh_rate = 0.05
-grid_width, grid_height = 121, 71
-screen_width, screen_height = grid_width * 10, grid_height * 10
+grid_width_C, grid_height_C = 121, 71
+screen_width, screen_height = grid_width_C * 10, grid_height_C * 10
 MAX_MISS = 1
 
 # IDs
@@ -46,10 +46,10 @@ class CatchGame:
     # ---------- GRID ---------- #
 
     def init_grid(self):
-        self.grid = np.zeros((grid_width, grid_height), dtype=int)
-        self.r = np.zeros((grid_width, grid_height), dtype=int)
-        self.g = np.zeros((grid_width, grid_height), dtype=int)
-        self.b = np.zeros((grid_width, grid_height), dtype=int)
+        self.grid = np.zeros((grid_width_C, grid_height_C), dtype=int)
+        self.r = np.zeros((grid_width_C, grid_height_C), dtype=int)
+        self.g = np.zeros((grid_width_C, grid_height_C), dtype=int)
+        self.b = np.zeros((grid_width_C, grid_height_C), dtype=int)
 
     # ---------- ENV ---------- #
 
@@ -70,8 +70,8 @@ class CatchGame:
         self.elements['wall_left'] = {'id': 5, 'existence': True}
 
         # right
-        self.grid[grid_width-3:grid_width, :] = 6
-        self.g[grid_width-3:grid_width, :] = 255
+        self.grid[grid_width_C-3:grid_width_C, :] = 6
+        self.g[grid_width_C-3:grid_width_C, :] = 255
 
         self.elements['wall_right'] = {'id': 6, 'existence': True}
 
@@ -82,8 +82,8 @@ class CatchGame:
         self.elements['wall_top'] = {'id': 7, 'existence': True}
 
         # bottom
-        self.grid[:, grid_height-3:grid_height] = 8
-        self.r[:, grid_height-3:grid_height] = 255
+        self.grid[:, grid_height_C-3:grid_height_C] = 8
+        self.r[:, grid_height_C-3:grid_height_C] = 255
 
         self.elements['wall_bottom'] = {'id': 8, 'existence': True}
 
@@ -118,7 +118,7 @@ class CatchGame:
         self.agent_x = np.clip(
             self.agent_x + self.agent_speed,
             self.agent_halfwidth + 3,
-            grid_width - self.agent_halfwidth - 4
+            grid_width_C - self.agent_halfwidth - 4
         )
 
         # clear old
@@ -191,7 +191,7 @@ class CatchGame:
                 return
 
         # miss
-        if self.obj_y > grid_height - 3:
+        if self.obj_y > grid_height_C - 3:
             self.missed += 1
             self.event_log.append({'event': 'missed'})
             self.respawn_object()

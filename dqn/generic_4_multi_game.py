@@ -12,8 +12,8 @@ from typing import Any, Dict, List, Tuple, Callable
 
 # Import locali 
 from arkanoid_game import Game, grid_width, grid_height
-from catching_game import CatchGame, grid_width, grid_height, MAX_MISS
-
+from catching_game import CatchGame, grid_width_C, grid_height_C, MAX_MISS
+from pong_game import PongGame, WIDTH, HEIGHT, LIVES
 
 # python -m dqn.generic_4
 
@@ -605,16 +605,35 @@ def create_generic_env(sim_type="arkanoid"):
         }
         def obs_extractor(game):
             # Normalizziamo posizione paddle e oggetto
-            paddle_x = game.agent_x / grid_width
-            paddle_y = game.agent_y / grid_height
-            obj_x = game.obj_x / grid_width
-            obj_y = game.obj_y / grid_height
+            paddle_x = game.agent_x / grid_width_C
+            paddle_y = game.agent_y / grid_height_C
+            obj_x = game.obj_x / grid_width_C
+            obj_y = game.obj_y / grid_height_C
             obj_speed = game.obj_speed / 2.0  # scala per valori simili
             return np.array([paddle_x*2-1, paddle_y*2-1, obj_x*2-1, obj_y*2-1, obj_speed], dtype=np.float32)
 
         def termination_check(game):
             # Termina dopo un certo numero di oggetti mancati
             return game.missed >= MAX_MISS
+
+    elif sim_type == "pong":
+        sim_obj = PongGame(lives=LIVES)  # Inizializza Pong con 3 vite
+        action_map = {
+            0: lambda game: game.set_paddle(-1),  # Sinistra
+            1: lambda game: game.set_paddle(0),   # Fermo
+            2: lambda game: game.set_paddle(1),   # Destra
+        }
+        def obs_extractor(game):
+            ball_x = game.ball_x / game.width
+            ball_y = game.ball_y / game.height
+            vx = game.ball_vx / 10.0
+            vy = game.ball_vy / 10.0
+            paddle_x = game.player_x / game.width
+            return np.array([ball_x*2-1, ball_y*2-1, vx, vy, paddle_x*2-1], dtype=np.float32)
+
+        def termination_check(game):
+            # Termina se tutte le vite sono finite
+            return game.lives <= 0
 
     else:
         raise ValueError(f"Sim type {sim_type} non supportato")
@@ -760,7 +779,7 @@ def train_generic_dqn(env_factory: Callable, total_episodes=10000, max_steps=300
                 print(f"   Mancano ~{60 - avg_surv_5k:.1f}s per 1 minuto")
 
     # Salva modello
-    model_path = os.path.join(SAVE_DIR, "generic_multi_catch.pth")
+    model_path = os.path.join(SAVE_DIR, "generic_multi_pong.pth")
     torch.save(q_net.state_dict(), model_path)
     
     print(f"\n✅ Training completo! Modello: {model_path}")
@@ -782,7 +801,7 @@ def train_generic_dqn(env_factory: Callable, total_episodes=10000, max_steps=300
 if __name__ == "__main__":
     total_episodes = 5000 #10000
 
-    sim_to_train = "catch"  # "arkanoid" o "catch"
+    sim_to_train = "pong"  # "arkanoid" o "catch" o "pong"
 
     rewards, stats, survival = train_generic_dqn(
         env_factory=lambda: create_generic_env(sim_type=sim_to_train),
