@@ -765,7 +765,7 @@ def train_generic_dqn(env_factory: Callable,sim_name: str, total_episodes=10000,
 
 
 if __name__ == "__main__":
-    total_episodes = 5000 #10000
+    total_episodes = 50000 #10000
 
     sim_to_train = "pong"  # "arkanoid" o "pong"
 
