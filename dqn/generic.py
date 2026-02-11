@@ -14,7 +14,7 @@ from typing import Any, Dict, List, Tuple, Callable
 from arkanoid_game import Game, grid_width, grid_height
 
 
-# python -m dqn.generic_4
+# python -m dqn.generic
 
 
 SAVE_DIR = "./dqn/dqn_models"

@@ -1,23 +1,22 @@
-from torch.utils.data import Dataset, DataLoader
+
 from PIL import Image
 import numpy as np
 import os
-import numpy as np
-from PIL import Image
+
 import torch
 from torch.utils.data import Dataset, DataLoader
 from torchvision import transforms
-import matplotlib.pyplot as plt
-from UNet import UNet
 import torchvision.utils as vutils
 import torchvision.transforms.functional as TF
-import os
-import matplotlib.pyplot as plt
-import numpy as np
-from matplotlib.colors import ListedColormap
-from sklearn.model_selection import train_test_split
 from torch.utils.tensorboard import SummaryWriter
 
+import matplotlib.pyplot as plt
+from matplotlib.colors import ListedColormap
+
+from sklearn.model_selection import train_test_split
+
+
+from UNet import UNet
 
 # === Colormap per visualizzazione ===
 CLASS_COLORS_ORIGINAL = np.array([

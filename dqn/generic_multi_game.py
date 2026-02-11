@@ -1,4 +1,3 @@
-# import pickle #
 import torch
 import torch.nn as nn
 import torch.optim as optim
@@ -14,7 +13,7 @@ from typing import Any, Dict, List, Tuple, Callable
 from arkanoid_game import Game, grid_width, grid_height
 from pong_game import PongGame, WIDTH, HEIGHT, LIVES
 
-# python -m dqn.generic_4
+# python -m dqn.generic_multi_game
 
 
 SAVE_DIR = "./dqn/dqn_models"
@@ -81,7 +80,7 @@ class GenericEventDetector:
     """
     def __init__(self, 
                  threshold_for_change: float = 0.3,    # Soglia intermedia
-                 min_relative_change: float = 0.03):   # 3% minimo
+                 min_relative_change: float = 0.03):   # minimo
         self.threshold = threshold_for_change
         self.min_relative_change = min_relative_change
 
@@ -220,7 +219,6 @@ class CausalEventChainTracker:
         
         # Calcola reward per questa catena causale
         chain_length = len(events)
-        # print("chain_length:", chain_length)
         
         chain_reward = self._calculate_chain_reward(chain_length)
         
@@ -233,7 +231,6 @@ class CausalEventChainTracker:
             for e in events:
                 print(f"  - {e['attribute']} : {e['prev']} -> {e['curr']}")
 
-        
         self.step_counter += 1
     
     def _calculate_chain_reward(self, chain_length: int) -> float:
@@ -281,7 +278,7 @@ class GenericSymbolicEnv(gym.Env):
                  termination_check: Callable = None,
                  causal_window: int = 3,
                  chain_exponent: float = 1.5,
-                 # nuovi iperparametri per i bonus generici
+
                  w_causal: float = 1.0,
                  w_curiosity: float = 0.5,
                  w_density: float = 0.5,
@@ -312,8 +309,8 @@ class GenericSymbolicEnv(gym.Env):
         # Estrazione stato e rilevamento eventi
         self.state_extractor = GenericStateExtractor(sim_object)
         self.event_detector = GenericEventDetector(
-            threshold_for_change=0.5,      # Soglia intermedia #
-            min_relative_change=0.1       # 3% minimo 
+            threshold_for_change=0.5,      # Soglia intermedia 
+            min_relative_change=0.1       # minimo 
         )
         self.event_tracker = CausalEventChainTracker(
             causal_window=causal_window,
@@ -395,7 +392,7 @@ class GenericSymbolicEnv(gym.Env):
         try:
             # Proviamo a simulare "no-op": copia lo stato, non applicare azione, chiami update() e leggi next state.
             sim_copy = None
-            if hasattr(self.sim, 'clone'):  # se Game implementa clone, usalo
+            if hasattr(self.sim, 'clone'):  
                 sim_copy = self.sim.clone()
             else:
                 # fallback generico: deepcopy (potrebbe essere lento ma è generico)
@@ -462,7 +459,6 @@ class GenericSymbolicEnv(gym.Env):
         # REWARD SHAPING (opzionale): piccolo bonus per comportamento base
         shaping_reward = 0.0
         if SHAPING:
-            
             if hasattr(self.sim, 'ball_y') and hasattr(self.sim, 'paddle_x'):
                 # Piccolo bonus per essere vicino alla palla (solo asse X)
                 ball_x = getattr(self.sim, 'ball_x', 0)
@@ -537,7 +533,7 @@ class QNetwork(nn.Module):
 def create_generic_env(sim_type="arkanoid"):
     """
     Factory generica per Arkanoid o 
-    sim_type: "arkanoid" | 
+    sim_type: "arkanoid" | "pong"
     """
     if sim_type == "arkanoid":
         sim_obj = Game()
@@ -558,7 +554,7 @@ def create_generic_env(sim_type="arkanoid"):
             return game.ball_lost or game.bricks_alive == 0
 
     elif sim_type == "pong":
-        sim_obj = PongGame()  # Inizializza Pong con 3 vite
+        sim_obj = PongGame()  # Inizializza Pong (il numero di vita vedi pong_game.py)
         action_map = {
             0: lambda game: game.set_paddle(-1),  # Sinistra
             1: lambda game: game.set_paddle(0),   # Fermo
@@ -745,7 +741,6 @@ def train_generic_dqn(env_factory: Callable,sim_name: str, total_episodes=10000,
                 print(f"   Mancano ~{60 - avg_surv_5k:.1f}s per 1 minuto")
 
     # Salva modello
-    
     torch.save(q_net.state_dict(), model_path)
     
     print(f"\n✅ Training completo! Modello: {model_path}")
@@ -765,7 +760,8 @@ def train_generic_dqn(env_factory: Callable,sim_name: str, total_episodes=10000,
 
 
 if __name__ == "__main__":
-    total_episodes = 5000 #10000
+
+    total_episodes = 5000 
 
     sim_to_train = "pong"  # "arkanoid" o "pong"
 
@@ -773,7 +769,7 @@ if __name__ == "__main__":
         env_factory=lambda: create_generic_env(sim_type=sim_to_train),
         sim_name=sim_to_train,
         total_episodes=total_episodes,
-        max_steps=3600
+        max_steps=3600 # max 60 sec
     )
     
     print("\n" + "=" * 70)

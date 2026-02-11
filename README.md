@@ -54,7 +54,7 @@ Arkanoid Atom analyzes the behavior of graphical elements in a simple Arkanoid g
 
 The project consists of two main components:
 
-1. **Gameplay**: Run `arkanoid.py` to play the game and generate logs of object interactions.
+1. **Gameplay**: Run `arkanoid_complete.py` or `arkanoid_simple.py` to play the game and generate logs of object interactions.
 2. **Analysis**: Use `main.py` to analyze the generated logs and gain insights into object behaviors.
 
 ### Commands in Gameplay

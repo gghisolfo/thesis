@@ -12,13 +12,10 @@ from .game_env import ArkanoidEnv
 
 MODEL_LIST = [
     "./dqn/dqn_models/WINNING_MODEL.pth",
-    "./dqn/dqn_models/generic_2.pth",
-    "./dqn/dqn_models/generic_3.pth",
-    "./dqn/dqn_models/generic_4_original.pth",
     "./dqn/dqn_models/generic_4_no_shaping_no_density.pth",
     "./dqn/dqn_models/generic_4_no_shaping_yes_density.pth",
-    "./dqn/dqn_models/generic_5.pth",
-    "./dqn/dqn_models/generic_6.pth",
+    "./dqn/dqn_models/best_time_pong.pth",
+    "./dqn/dqn_models/best_reward_pong.pth",
 
 
 ]
