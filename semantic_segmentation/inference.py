@@ -20,7 +20,7 @@ OUTPUT_DIR = "./dataset_test/predictions"
 SHOW_IMAGES = False
 SAVE_VISIBLE_MASK = False
 MODEL_TYPE = "unet"  # "unet" | "smp_unet" 
-MODEL_PATH = "segmentation_model.pth" # per best_fine_tune ->  smp_unet
+MODEL_PATH = "models/segmentation_model.pth" # per best_fine_tune ->  smp_unet
 
 # ----------------------- Utils -----------------------
 def pad_to_multiple_of_32(img: Image.Image):

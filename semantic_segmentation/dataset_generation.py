@@ -12,8 +12,6 @@ from SegmentationTools import CLASS_COLORS_DIFFERENT, CLASS_COLORS_ORIGINAL
 # arkanoid_log_2025_07_15_16_30_15.pkl -> 398 solo pallina e bordo
 # arkanoid_log_2025_07_15_16_29_02.pkl -> 124 test
 
-
-# arkanoid_log_2025_02_07_16_03_00.pkl -> PROVA
 # arkanoid_log_2025_04_15_09_34_43.pkl -> 20
 
 
@@ -23,7 +21,7 @@ PAD_START = 0  # numero di partenza
 COMPLETE = False 
 TEST = False 
 different_bricks = True 
-PROVA = True 
+
 
 # === Output directories ===
 if TEST:
@@ -32,9 +30,6 @@ if TEST:
 elif COMPLETE:
     BASE_DIR = "./dataset_complete"
     PALETTE = CLASS_COLORS_DIFFERENT
-elif PROVA:
-    BASE_DIR = "./dataset_cellpose"
-    PALETTE = CLASS_COLORS_ORIGINAL
 else:
     BASE_DIR = "./dataset"
     PALETTE = CLASS_COLORS_ORIGINAL

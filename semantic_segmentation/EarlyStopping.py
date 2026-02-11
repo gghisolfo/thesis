@@ -1,4 +1,5 @@
 import torch
+
 class EarlyStopping:
     def __init__(self, patience=5, delta=0, verbose=True, path='best_model.pth'):
         self.patience = patience

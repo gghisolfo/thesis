@@ -6,7 +6,7 @@ from torch.utils.data import DataLoader
 from torchvision import transforms
 import matplotlib.pyplot as plt
 from UNet import UNet
-from SegmentationTools import SegmentationDataset, map_mask, CLASS_COLORS_ORIGINAL
+from SegmentationTools import SegmentationDataset, CLASS_COLORS_ORIGINAL #map_mask
 from EarlyStopping import EarlyStopping
 from sklearn.model_selection import train_test_split
 
@@ -26,6 +26,14 @@ SAVE_PREDICTION = False
 
 images_path = "./dataset/images" # "./dataset/images" | "./dataset_complete/images"
 masks_path = "./dataset/masks" # "./dataset/images" | "./dataset_complete/images"
+
+
+MODEL_NAME = "segmentation_model"  
+model_path = f"model/{MODEL_NAME}.pth"
+
+BEST_MODEL_NAME = "best_segmentation_model"  
+best_model_path = f"model/{MODEL_NAME}.pth"
+
 
 # -----------------------
 # Utility
@@ -194,7 +202,7 @@ def main():
     model = build_model()
     criterion = torch.nn.CrossEntropyLoss()
     optimizer = torch.optim.Adam(model.parameters(), lr=1e-3)
-    early_stopping = EarlyStopping(patience=5, delta=0.001, path='best_model.pth')
+    early_stopping = EarlyStopping(patience=5, delta=0.001, path=best_model_path)
 
     for epoch in range(EPOCHS):
         print(f"Epoch {epoch+1}/{EPOCHS}")
@@ -210,8 +218,8 @@ def main():
             break
 
     if SAVE_MODEL:
-        torch.save(model.state_dict(), 'segmentation_model.pth')
-        print('Modello salvato come segmentation_model.pth')
+        torch.save(model.state_dict(), model_path)
+        print('Modello salvato come: ', model_path)
 
     if SHOW_PLOTS:
         visualize_predictions(model, val_loader, max_images=5)
