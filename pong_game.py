@@ -8,7 +8,7 @@ import numpy as np
 WIDTH = 400
 HEIGHT = 300
 FPS = 60
-LIVES = 1  # Numero di vite iniziali
+LIVES = 3  # Numero di vite iniziali
 
 # =====================
 # GAME LOGIC
