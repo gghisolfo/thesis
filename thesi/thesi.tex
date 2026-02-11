@@ -1,0 +1,223 @@
+\documentclass[12pt,a4paper]{report}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{setspace}
+\usepackage{titlesec}
+\usepackage[colorlinks=true, linkcolor=blue, urlcolor=blue, citecolor=blue]{hyperref}
+
+
+
+% Rimuove la scritta "Chapter"
+\titleformat{\chapter}[hang]
+{\normalfont\huge\bfseries}{\thechapter}{1em}{}
+
+\renewcommand{\chaptername}{}
+
+\begin{document}
+
+% =========================
+% ABSTRACT
+% =========================
+
+\chapter*{Abstract}
+\addcontentsline{toc}{chapter}{Abstract}
+
+% Inserire qui l'abstract
+
+\tableofcontents
+\newpage
+
+% =========================
+% 1 INTRODUCTION
+% =========================
+
+\chapter{Introduction}
+
+\section{Context and Motivation}
+
+\section{Research Objectives}
+
+\section{Main Contributions of the Thesis}
+
+\section{Structure of the Document}
+
+% =========================
+% 2 THEORETICAL BACKGROUND
+% =========================
+
+\chapter{Theoretical Background}
+
+\section{The Evolution of Learning in Artificial Intelligence}
+
+\subsection{Artificial Intelligence Paradigms}
+
+\subsection{Symbolic and Hybrid Approaches in Artificial Intelligence}
+
+\subsection{Reinforcement Learning: Learning Through Experience}
+
+\section{Computer Vision Techniques}
+
+\subsection{Classical Techniques for Video Analysis}
+
+\subsection{Visual Perception in Dynamic Environments}
+
+\subsection{Deep Learning for Feature Extraction from Video Streams}
+
+\section{Knowledge Representation and Reasoning}
+
+\subsection{Symbolic Representations, Semantic Networks, and Interpretable Models}
+
+\section{Reinforcement Learning Foundations}
+
+\subsection{Reinforcement Learning Principles and Deep Q-Networks}
+
+\section{Atari-like Environments as Testbeds}
+
+\subsection{Characteristics and Challenges of 2D Game Environments}
+
+% =========================
+% 3 STATE OF THE ART AND CHALLENGES
+% =========================
+
+\chapter{State of the Art and Challenges}
+
+\section{Challenges in Symbolic Interpretation}
+
+\subsection{The Illusion of Understanding}
+
+\subsubsection{The Lack of World Models}
+
+\subsection{The Black Box Problem}
+
+\subsubsection{Making Sense of AI: Toward Explainability}
+
+\subsection{Learning Paradigms and Explainable AI}
+
+\subsubsection{Learning Without Understanding}
+
+\subsubsection{Explainable AI: Goals and Approaches}
+
+\subsubsection{Post-hoc Explainability}
+
+\subsubsection{Intrinsic Interpretability}
+
+\subsubsection{Why XAI is Not Enough}
+
+\section{Cognitive Foundations}
+
+\subsection{Human World Modelling and the Origins of Structured Cognition}
+
+\subsection{Core Knowledge Theory: Cognitive Principles and Psychological Foundations}
+
+\subsection{Definition and Relevance for World Understanding}
+
+\subsection{Cognitive Models and Symbolic Representation}
+
+\section{Positioning of the Proposed Framework}
+
+% =========================
+% 4 FRAMEWORK DESIGN
+% =========================
+
+\chapter{Framework Design - Proposed Framework}
+
+\section{Conceptual Foundations}
+
+\subsection{Evolution of the Idea}
+
+\section{Proposed Implementation}
+
+\subsection{Segmentation}
+
+\subsection{Symbolic System as Knowledge Construction Module}
+
+\subsection{From Symbolic Rules to a Playable Environment}
+
+\subsection{Generic Environment as a Transitional Representation}
+
+\subsection{Deep Q-Network in a Domain-Agnostic Environment}
+
+% =========================
+% 5 IMPLEMENTATION
+% =========================
+
+\chapter{Implementation}
+
+\section{End-to-End Pipeline}
+
+\section{General Architecture of the Framework}
+
+\subsection{Design Choices}
+
+\subsection{Selected Techniques and Algorithms}
+
+\subsection{Modular Structure of the System}
+
+\subsubsection{Video Acquisition and Preprocessing Module}
+
+\subsubsection{Feature Extraction Module}
+
+\subsubsection{Symbolic Mapping Module - Symbolic Reasoning Engine}
+
+\paragraph{Integration of Core Knowledge for Semantic Understanding}
+
+\paragraph{RL Agent}
+
+\subsection{Optimizations and Efficiency Considerations}
+
+% =========================
+% 6 EXPERIMENTAL EVALUATION
+% =========================
+
+\chapter{Experimental Evaluation}
+
+\section{Datasets and Testing Scenarios}
+
+\subsection{Evaluation Metrics: Accuracy, Interpretability, Scalability}
+
+\section{Experimental Results}
+
+\subsection{Comparison with Existing Methods}
+
+\subsection{Critical Discussion of the Results}
+
+% =========================
+% 7 APPLICATIONS AND CONCLUSION
+% =========================
+
+\chapter{Applications and Future Perspectives – Conclusion}
+
+\section{Future Directions}
+
+\subsection{Potential Applications of the Framework}
+
+\subsection{Possible Extensions of the Work}
+
+\subsection{Open Challenges and Future Research Directions}
+
+\section{Summary of Contributions, Impact of the Research, and Final Reflections}
+
+% =========================
+% REFERENCES
+% =========================
+
+\chapter*{References}
+\addcontentsline{toc}{chapter}{References}
+
+% Inserire bibliografia
+
+% =========================
+% APPENDICES
+% =========================
+
+\appendix
+
+\chapter{Additional Technical Details}
+
+\chapter{Code Snippets or Pseudocode of Relevant Modules}
+
+\chapter{Dataset Specifications or Experimental Settings}
+
+\end{document}
