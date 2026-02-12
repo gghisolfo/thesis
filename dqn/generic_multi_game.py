@@ -581,10 +581,10 @@ def create_generic_env(sim_type="arkanoid"):
         observation_extractor=obs_extractor,
         termination_check=termination_check,
         causal_window=3,
-        chain_exponent=1.2,
-        w_causal=0.8,
+        chain_exponent=1.0,
+        w_causal=0.5,
         w_curiosity=0.5,
-        w_density=0.3,
+        w_density=0.5,
         forward_lr=1e-3
     )
 
@@ -599,7 +599,7 @@ def train_generic_dqn(env_factory: Callable,sim_name: str, total_episodes=10000,
     q_net = QNetwork(env.observation_space.shape[0], env.action_space.n).to(device)
     q_target = QNetwork(env.observation_space.shape[0], env.action_space.n).to(device)
     q_target.load_state_dict(q_net.state_dict())
-    optimizer = optim.Adam(q_net.parameters(), lr=1e-4)  # Learning rate più basso lr = 5e-5
+    optimizer = optim.Adam(q_net.parameters(), lr=5e-5)  # Learning rate più basso lr = 5e-5
 
     gamma = 0.99
     epsilon = 1.0
@@ -763,7 +763,7 @@ if __name__ == "__main__":
 
     total_episodes = 5000 
 
-    sim_to_train = "pong"  # "arkanoid" o "pong"
+    sim_to_train = "arkanoid"  # "arkanoid" o "pong"
 
     rewards, stats, survival = train_generic_dqn(
         env_factory=lambda: create_generic_env(sim_type=sim_to_train),
