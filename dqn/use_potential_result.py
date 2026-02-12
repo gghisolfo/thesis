@@ -10,7 +10,7 @@ from arkanoid_game import screen_width, screen_height
 
 from pong_game import LIVES
 
-MODEL_PATH = "./dqn/dqn_models/last_generic_pong.pth" 
+MODEL_PATH = "./dqn/dqn_models/arkanoid/best_reward_arkanoid.pth" 
 
 # WINNING_MODEL | generic_multi | generic_4 | generic_4_no_shaping_no_density | best_time_pong 
 
@@ -25,7 +25,7 @@ FRAME_RATE = 60
 # -----------------------------
 # Scegli il tipo di gioco
 # -----------------------------
-GAME_TYPE = "pong"  # "arkanoid" o "pong"
+GAME_TYPE = "arkanoid"  # "arkanoid" o "pong"
 
 if GAME_TYPE == "arkanoid":
     env = ArkanoidEnv()
