@@ -10,7 +10,7 @@ from arkanoid_game import screen_width, screen_height
 
 from pong_game import LIVES
 
-MODEL_PATH = "./dqn/dqn_models/arkanoid/best_reward_arkanoid.pth" 
+MODEL_PATH = "./dqn/dqn_models/arkanoid_no_shaping_no_density/best_time_arkanoid.pth" 
 
 # WINNING_MODEL | generic_multi | generic_4 | generic_4_no_shaping_no_density | best_time_pong 
 

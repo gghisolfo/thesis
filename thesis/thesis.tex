@@ -5,8 +5,10 @@
 \usepackage{lmodern}
 \usepackage{setspace}
 \usepackage{titlesec}
-\usepackage[colorlinks=true, linkcolor=blue, urlcolor=blue, citecolor=blue]{hyperref}
+\usepackage{cite}  
 
+
+\usepackage[colorlinks=true, linkcolor=blue, urlcolor=blue, citecolor=blue]{hyperref}
 
 
 % Rimuove la scritta "Chapter"
@@ -49,9 +51,62 @@
 
 \chapter{Theoretical Background}
 
-\section{The Evolution of Learning in Artificial Intelligence}
+The field of artificial intelligence has undergone deep transformations since its inception, evolving through distinct 
+paradigms that reflect different philosophical and technical approaches to machine intelligence. This chapter provides 
+the theoretical foundations necessary to understand the framework proposed in this thesis, exploring the evolution of 
+learning paradigms in AI, some techniques of visual perception and the principles underlying symbolic reasoning and 
+reinforcement learning.
 
+\section{The Evolution of Learning in Artificial Intelligence}
 \subsection{Artificial Intelligence Paradigms}
+
+The history of artificial intelligence is characterized by the emergence and evolution of three major paradigms, 
+each representing a distinct approach to providing machines the human-like reasoning abilities. The symbolic paradigm, 
+dominant from the 1950s through the 1980s. This paradigm was grounded in the hypothesis that human intelligence could 
+be replicated through the manipulation of symbols, according to logical rules, to perform reasoning tasks. The systems 
+built on this paradigm operated on explicit knowledge representations, using formal logic and rule-based reasoning to 
+solve problems. These systems are grounded in formal logic and manually designed rule sets. Classic examples include 
+expert systems such as MYCIN and Deep Blue, as well as semantic networks and logic programming frameworks \cite{chiave16}. 
+They are capable of performing reasoning tasks and have achieved notable success in constrained domains where knowledge 
+can be explicitly encoded. 
+However, the symbolic paradigm faced significant limitations due to its high reliance on manually encoded knowledge. 
+Indeed, when faced with tasks requiring pattern recognition, learning from experience, the management of uncertainty or 
+incomplete information, it suffered from brittleness \cite{chiave16, chiave15}.
+These challenges gave rise to the connectionist paradigm, which gained prominence in the late 1980s and experienced a 
+resurgence in the 2010s with the advent of deep learning \cite{chiave40}. Inspired by the structure and function of biological 
+neural networks, connectionist systems learn representations directly from data through training processes that adjust 
+connection weights between artificial neurons \cite{chiave26, chiave40}. This paradigm has achieved remarkable success in tasks such as 
+image recognition, natural language processing and game playing, often surpassing human-level performance in specific domains
+\cite{chiave1}. Their capacity for robust and interpretable reasoning remains limited. Deep learning still struggles with 
+structured reasoning, causal inference and factual consistency. Despite the impressive capabilities of neural networks, their 
+operation and internal representation often lacks transparency, giving rise to what is commonly referred to as the "black box 
+problem” \cite{chiave15}, which limits interpretability, accountability and trust.
+Indeed, many of these approaches compromised interpretability and relied on strong assumptions. Moreover, they lacked the 
+rich semantic expressiveness characteristic of symbolic systems. These limitations provide strong motivation for integrating 
+neural and symbolic paradigms.
+In short, symbolic systems excel at reasoning but lack at perception, while neural networks excel at perception but struggle 
+with reasoning  \cite{chiave16}.
+This limitation has motivated the emergence of a hybrid paradigm, which seeks to combine the learning capabilities of neural 
+networks with the interpretability and reasoning power of symbolic systems. Neuro-symbolic AI represents this third wave, 
+aiming to bridge the gap between data-driven learning and knowledge-based reasoning as well as between logic-based inference 
+and gradient-based learning. By integrating these paradigms, it aims to potentially offer systems that are both powerful and 
+explainable  \cite{chiave43}.
+Neuro-symbolic methods have demonstrated significant promise across a wide range of application areas, especially in scenarios 
+that demand the combination of data-driven learning and structured symbolic reasoning  \cite{chiave43}. This emerging paradigm reflects a 
+synthesis of complementary approaches, bringing together the statistical strengths of deep learning, the formal foundations of 
+symbolic logic and the adaptability of large-scale pretrained models.
+
+
+\noindent Nonetheless, several important challenges remain. These include:
+\begin{itemize}
+    \item Ensuring compatibility between the discrete symbolic structures used in symbolic approaches and the continuous vector representations typical of neural networks.
+    \item Enabling the model to dynamically learn, adapt, modify, and refine logical rules.
+    \item Achieving an optimal balance between system complexity and computational efficiency.
+    \item Addressing the absence of unified architectural frameworks by developing a general architecture that systematically and reusably integrates neural and symbolic components.
+\end{itemize}
+
+Although several challenges persist, neuro-symbolic AI is widely regarded as a promising direction for developing systems capable of transparent, reliable and generalizable reasoning.
+
 
 \subsection{Symbolic and Hybrid Approaches in Artificial Intelligence}
 
@@ -206,7 +261,9 @@
 \chapter*{References}
 \addcontentsline{toc}{chapter}{References}
 
-% Inserire bibliografia
+\bibliographystyle{IEEEtran}
+\bibliography{references}
+
 
 % =========================
 % APPENDICES
