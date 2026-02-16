@@ -1,15 +1,12 @@
 # Fdb version 4
-["pdflatex"] 1770894276.84787 "c:/Users/user/Documents/UNI/TESI/thesis/thesis/summary.tex" "summary.pdf" "summary" 1770894277.74233 0
+["pdflatex"] 1771276859.73181 "c:/Users/user/Documents/UNI/TESI/thesis/thesis/summary.tex" "summary.pdf" "summary" 1771276860.66836 0
   "C:/Users/user/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map" 1770805893 80909 eab91d9745dd2edfd62a31d53cd5fe15 ""
   "C:/Users/user/AppData/Local/MiKTeX/miktex/data/le/pdftex/pdflatex.fmt" 1737536032 24224615 f2530f20cf232f82d6cdc2123847d697 ""
   "C:/Users/user/AppData/Local/Programs/MiKTeX/fonts/tfm/public/cm/cmbx12.tfm" 1136765053 1324 c910af8c371558dc20f2d7822f66fe64 ""
-  "C:/Users/user/AppData/Local/Programs/MiKTeX/fonts/tfm/public/cm/cmmi12.tfm" 1136765053 1524 4414a8315f39513458b80dfc63bff03a ""
   "C:/Users/user/AppData/Local/Programs/MiKTeX/fonts/tfm/public/cm/cmr12.tfm" 1136765053 1288 655e228510b4c2a1abe905c368440826 ""
   "C:/Users/user/AppData/Local/Programs/MiKTeX/fonts/tfm/public/cm/cmr17.tfm" 1136765053 1292 296a67155bdbfc32aa9c636f21e91433 ""
-  "C:/Users/user/AppData/Local/Programs/MiKTeX/fonts/tfm/public/cm/cmsy10.tfm" 1136765053 1124 6c73e740cf17375f03eec0ee63599741 ""
   "C:/Users/user/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmbx12.pfb" 1247596666 32080 340ef9bf63678554ee606688e7b5339d ""
   "C:/Users/user/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr12.pfb" 1247596667 32722 d7379af29a190c3f453aba36302ff5a9 ""
-  "C:/Users/user/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr17.pfb" 1247596666 32362 bc3f3eec7ab7d65fe700963d4017d32c ""
   "C:/Users/user/AppData/Local/Programs/MiKTeX/tex/context/base/mkii/supp-pdf.mkii" 1580390158 71627 94eb9990bed73c364d7f53f960cc8c5b ""
   "C:/Users/user/AppData/Local/Programs/MiKTeX/tex/generic/atbegshi/atbegshi.sty" 1575571100 24708 5584a51a7101caf7e6bbf1fc27d8f7b1 ""
   "C:/Users/user/AppData/Local/Programs/MiKTeX/tex/generic/bigintcalc/bigintcalc.sty" 1576433602 40635 c40361e206be584d448876bba8a64a3b ""
@@ -55,15 +52,13 @@
   "C:/Users/user/AppData/Local/Programs/MiKTeX/tex/latex/refcount/refcount.sty" 1576433952 9878 9e94e8fa600d95f9c7731bb21dfb67a4 ""
   "C:/Users/user/AppData/Local/Programs/MiKTeX/tex/latex/rerunfilecheck/rerunfilecheck.sty" 1657800696 9714 ba3194bd52c8499b3f1e3eb91d409670 ""
   "C:/Users/user/AppData/Local/Programs/MiKTeX/tex/latex/url/url.sty" 1388490452 12796 8edb7d69a20b857904dd0ea757c14ec9 ""
-  "c:/Users/user/Documents/UNI/TESI/thesis/thesis/summary.tex" 1770894276 11113 82be737d54c875dfa8b7bc952ddd375f ""
-  "summary.aux" 1770894277 1198 bc43bf762b3e60f8af34c71c17afe6a2 "pdflatex"
-  "summary.out" 1770894277 1112 60430457898118cf62b87b55ad56d513 "pdflatex"
-  "summary.tex" 1770894276 11113 82be737d54c875dfa8b7bc952ddd375f ""
-  "summary.toc" 1770894277 451 35bfd3c510a47c35f2fdf03a6bd5bbf5 "pdflatex"
+  "c:/Users/user/Documents/UNI/TESI/thesis/thesis/summary.tex" 1771276858 10487 a16dc7139eab3866c7e6ef10db46de9c ""
+  "summary.aux" 1771276860 162 59504cb8f8bee0a3f0488d753cb23a1e "pdflatex"
+  "summary.out" 1771276860 0 d41d8cd98f00b204e9800998ecf8427e "pdflatex"
+  "summary.tex" 1771276858 10487 a16dc7139eab3866c7e6ef10db46de9c ""
   (generated)
   "summary.aux"
   "summary.log"
   "summary.out"
   "summary.pdf"
-  "summary.toc"
   (rewritten before read)
