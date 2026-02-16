@@ -61,4 +61,19 @@ A.~S. d'Avila Garcez, T.~R. Besold, L.~De~Raedt, P.~F{\"o}ldiak, P.~Hitzler,
   \url{https://www.aaai.org/Library/Symposia/Spring/ss15-01.php}
 \BIBentrySTDinterwordspacing
 
+\bibitem{chiave8}
+B.~M. Lake, T.~D. Ullman, J.~B. Tenenbaum, and S.~J. Gershman, ``Building
+  machines that learn and think like people,'' \emph{Behavioral and Brain
+  Sciences}, vol.~40, p. e253, 2017.
+
+\bibitem{chiave49}
+L.~P. Kaelbling, M.~L. Littman, and A.~W. Moore, ``Reinforcement learning: A
+  survey,'' \emph{Journal of Artificial Intelligence Research}, vol.~4, pp.
+  237--285, 1996.
+
+\bibitem{chiave45}
+M.~L. Puterman, \emph{Markov Decision Processes: Discrete Stochastic Dynamic
+  Programming}.\hskip 1em plus 0.5em minus 0.4em\relax Hoboken, NJ, USA: Wiley,
+  2014.
+
 \end{thebibliography}

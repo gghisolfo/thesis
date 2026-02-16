@@ -110,7 +110,64 @@ Although several challenges persist, neuro-symbolic AI is widely regarded as a p
 
 \subsection{Symbolic and Hybrid Approaches in Artificial Intelligence}
 
+Symbolic AI operates on the principle that intelligence can be reduced to the manipulation of symbols representing 
+concepts, objects and relationships. The knowledge in symbolic systems is typically encoded using various 
+representation schemes, including production rules, semantic networks, frames and logical predicates. These 
+representations enable explicit reasoning processes such as deduction, induction and abduction, allowing systems 
+to draw inferences, explain their decisions and incorporate domain knowledge provided by human experts.
+The advantages of symbolic approaches include interpretability, the ability to incorporate prior knowledge and 
+support for logical reasoning and explanation. However, they also present significant challenges: knowledge acquisition 
+bottleneck, brittleness when facing situations not covered by explicit rule and difficulty in learning from raw sensory data. The manual 
+encoding of knowledge is intensive and may not capture the full complexity of real-world domains \cite{chiave16}. 
+Hybrid approaches seek to overcome these limitations by integrating symbolic and connectionist methods. 
+Various integration strategies have been proposed, including systems where neural networks generate symbolic 
+representations that are then processed by reasoning engines, architectures that embed symbolic knowledge into neural 
+network structures and frameworks that use symbolic reasoning to guide neural learning processes \cite{chiave43}. Recent work in neuro-symbolic AI 
+has demonstrated promising results in domains requiring both pattern recognition and logical reasoning, such as visual question answering, 
+knowledge graph completion, and program synthesis.
+Following the advent of neuro-symbolic artificial intelligence, a paradigm shift has been induced in the way 
+machines learn. This approach combines deductive, rule-based learning, typical of symbolic artificial intelligence, with the inductive 
+and pattern-recognition capabilities characteristic of neural networks. The result is a hybrid approach that leverages the strengths of both domains, 
+leading to a more comprehensive learning methodology.
+Neuro-symbolic concepts demonstrate strong compositional generalization: new concepts can be created by 
+structurally combining previously learned or existing ones  \cite{chiave8}. This compositionality naturally allows for a 
+decomposition of the learning problem, in order to learn and recognize basic concepts. During the inference phase, 
+these concepts can be recombined to achieve the objectives of more complex tasks. Neuro-symbolic AI is one of the 
+most exciting directions in AI research today. It aims to create intelligent systems capable of learning and 
+reasoning like humans.
+
+
 \subsection{Reinforcement Learning: Learning Through Experience}
+
+Reinforcement learning (RL) represents a distinct learning paradigm in which an agent learns to make decisions 
+by interacting with an environment. Unlike supervised learning, which requires labeled training data, or 
+unsupervised learning, which seeks to discover patterns in unlabeled data, reinforcement learning is based on the 
+principle of learning from the consequences of actions through trial and error \cite{chiave49}. The agent takes actions, 
+observes their consequences, and receives feedback in the form of rewards.
+At the beginning of learning, an agent may have limited or no prior knowledge of the environment. In model-free 
+approaches, no explicit model is available, and learning relies entirely on interaction. In contrast, model-based 
+methods assume a known model or aim to learn it explicitly. This flexibility makes reinforcement learning suitable
+ for complex environments, where providing a complete dataset or manually specifying optimal behavior is 
+ impractical.
+The core structure of Reinforcement Learning (RL) is modelled through a Markov Decision Process (MDP), which 
+provides a mathematical framework for sequential decision-making \cite{chiave49}. An MDP is defined by a finite or 
+continuous set of states representing the possible situations an agent can encounter, a set of actions available 
+to the agent and a transition function that specifies the probability of moving from one state to another after 
+taking a particular action. Additionally, a reward function assigns numerical feedback to each state-action pair, 
+quantifying the immediate benefit of a given choice. By observing the current state, selecting an action, and 
+receiving a reward and a new state, the agent incrementally improves its decision-making strategy \cite{chiave45}.
+Over time, the agent aims to learn an optimal policy, which is a strategy mapping states to actions. The goal of 
+this policy is to maximize the expected cumulative reward across future interactions, balancing short-term gains 
+with long-term benefits through exploration and exploitation.
+Several agent design approaches exist, including methods based on value estimation and approaches that learn 
+action values directly, such as Q-learning. More advanced techniques combine different strategies to improve 
+learning efficiency. 
+Due to its ability to learn from experience, reinforcement learning has achieved notable success in domains 
+such as game playing, robotics, and resource management \cite{chiave45}.
+
+
+
+
 
 \section{Computer Vision Techniques}
 
