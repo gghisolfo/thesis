@@ -20,7 +20,7 @@ SAVE_DIR = "./dqn/dqn_models"
 os.makedirs(SAVE_DIR, exist_ok=True)
 PRINT_MODE = False
 SHAPING = False
-EVENT_DENSITY = False
+EVENT_DENSITY = True
 
 
 class GenericStateExtractor:
@@ -583,8 +583,8 @@ def create_generic_env(sim_type="arkanoid"):
         causal_window=3,
         chain_exponent=1.0,
         w_causal=0.5,
-        w_curiosity=0.5,
-        w_density=0.5,
+        w_curiosity=0.2,
+        w_density=0.0,
         forward_lr=1e-3
     )
 
@@ -763,7 +763,7 @@ if __name__ == "__main__":
 
     total_episodes = 5000 
 
-    sim_to_train = "arkanoid"  # "arkanoid" o "pong"
+    sim_to_train = "pong"  # "arkanoid" o "pong"
 
     rewards, stats, survival = train_generic_dqn(
         env_factory=lambda: create_generic_env(sim_type=sim_to_train),
