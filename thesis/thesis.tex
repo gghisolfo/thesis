@@ -6,6 +6,9 @@
 \usepackage{setspace}
 \usepackage{titlesec}
 \usepackage{cite}  
+\usepackage{amsmath}   
+\usepackage{amssymb}   
+\usepackage{bm}       
 
 
 \usepackage[colorlinks=true, linkcolor=blue, urlcolor=blue, citecolor=blue]{hyperref}
@@ -51,50 +54,23 @@
 
 \chapter{Theoretical Background}
 
-The field of artificial intelligence has undergone deep transformations since its inception, evolving through distinct 
-paradigms that reflect different philosophical and technical approaches to machine intelligence. This chapter provides 
-the theoretical foundations necessary to understand the framework proposed in this thesis, exploring the evolution of 
-learning paradigms in AI, some techniques of visual perception and the principles underlying symbolic reasoning and 
-reinforcement learning.
+The field of artificial intelligence has undergone deep transformations since its inception,evolving through distinct paradigms that reflect different philosophical and technical approaches to machine intelligence. This chapter provides the theoretical foundations necessary to understand the framework proposed in this thesis, exploring the evolution of learning paradigms in AI, some techniques of visual perception and the principles underlying symbolic reasoning and reinforcement learning.
 
 \section{The Evolution of Learning in Artificial Intelligence}
 \subsection{Artificial Intelligence Paradigms}
 
-The history of artificial intelligence is characterized by the emergence and evolution of three major paradigms, 
-each representing a distinct approach to providing machines the human-like reasoning abilities. The symbolic paradigm, 
-dominant from the 1950s through the 1980s. This paradigm was grounded in the hypothesis that human intelligence could 
-be replicated through the manipulation of symbols, according to logical rules, to perform reasoning tasks. The systems 
-built on this paradigm operated on explicit knowledge representations, using formal logic and rule-based reasoning to 
-solve problems. These systems are grounded in formal logic and manually designed rule sets. Classic examples include 
-expert systems such as MYCIN and Deep Blue, as well as semantic networks and logic programming frameworks \cite{chiave16}. 
-They are capable of performing reasoning tasks and have achieved notable success in constrained domains where knowledge 
-can be explicitly encoded. 
+The history of artificial intelligence is characterized by the emergence and evolution of three major paradigms, each representing a distinct approach to providing machines the human-like reasoning abilities. The symbolic paradigm, dominant from the 1950s through the 1980s. This paradigm was grounded in the hypothesis that human intelligence could be replicated through the manipulation of symbols, according to logical rules, to perform reasoning tasks. The systems  built on this paradigm operated on explicit knowledge representations, using formal logic and rule-based reasoning to solve problems. These systems are grounded in formal logic and manually designed rule sets. Classic examples include expert systems such as MYCIN and Deep Blue, as well as semantic networks and logic programming frameworks \cite{chiave16}. 
+They are capable of performing reasoning tasks and have achieved notable success in constrained domains where knowledge can be explicitly encoded. 
 However, the symbolic paradigm faced significant limitations due to its high reliance on manually encoded knowledge. 
-Indeed, when faced with tasks requiring pattern recognition, learning from experience, the management of uncertainty or 
-incomplete information, it suffered from brittleness \cite{chiave16, chiave15}.
-These challenges gave rise to the connectionist paradigm, which gained prominence in the late 1980s and experienced a 
-resurgence in the 2010s with the advent of deep learning \cite{chiave40}. Inspired by the structure and function of biological 
-neural networks, connectionist systems learn representations directly from data through training processes that adjust 
-connection weights between artificial neurons \cite{chiave26, chiave40}. This paradigm has achieved remarkable success in tasks such as 
-image recognition, natural language processing and game playing, often surpassing human-level performance in specific domains
-\cite{chiave1}. Their capacity for robust and interpretable reasoning remains limited. Deep learning still struggles with 
-structured reasoning, causal inference and factual consistency. Despite the impressive capabilities of neural networks, their 
-operation and internal representation often lacks transparency, giving rise to what is commonly referred to as the "black box 
-problem” \cite{chiave15}, which limits interpretability, accountability and trust.
-Indeed, many of these approaches compromised interpretability and relied on strong assumptions. Moreover, they lacked the 
-rich semantic expressiveness characteristic of symbolic systems. These limitations provide strong motivation for integrating 
-neural and symbolic paradigms.
-In short, symbolic systems excel at reasoning but lack at perception, while neural networks excel at perception but struggle 
-with reasoning  \cite{chiave16}.
-This limitation has motivated the emergence of a hybrid paradigm, which seeks to combine the learning capabilities of neural 
-networks with the interpretability and reasoning power of symbolic systems. Neuro-symbolic AI represents this third wave, 
-aiming to bridge the gap between data-driven learning and knowledge-based reasoning as well as between logic-based inference 
-and gradient-based learning. By integrating these paradigms, it aims to potentially offer systems that are both powerful and 
+Indeed, when faced with tasks requiring pattern recognition, learning from experience, the management of uncertainty or incomplete information, it suffered from brittleness \cite{chiave16, chiave15}.
+These challenges gave rise to the connectionist paradigm, which gained prominence in the late 1980s and experienced a resurgence in the 2010s with the advent of deep learning \cite{chiave40}. Inspired by the structure and function of biological 
+neural networks, connectionist systems learn representations directly from data through training processes that adjust connection weights between artificial neurons \cite{chiave26, chiave40}. This paradigm has achieved remarkable success in tasks such as image recognition, natural language processing and game playing, often surpassing human-level performance in specific domains \cite{chiave1}. Their capacity for robust and interpretable reasoning remains limited. Deep learning still struggles with structured reasoning, causal inference and factual consistency. Despite the impressive capabilities of neural networks, their operation and internal representation often lacks transparency, giving rise to what is commonly referred to as the "black box problem” \cite{chiave15}, which limits interpretability, accountability and trust.
+Indeed, many of these approaches compromised interpretability and relied on strong assumptions. Moreover, they lacked the rich semantic expressiveness characteristic of symbolic systems. These limitations provide strong motivation for integrating neural and symbolic paradigms.
+In short, symbolic systems excel at reasoning but lack at perception, while neural networks excel at perception but struggle with reasoning  \cite{chiave16}.
+This limitation has motivated the emergence of a hybrid paradigm, which seeks to combine the learning capabilities of neural networks with the interpretability and reasoning power of symbolic systems. Neuro-symbolic AI represents this third wave, aiming to bridge the gap between data-driven learning and knowledge-based reasoning as well as between logic-based inference and gradient-based learning. By integrating these paradigms, it aims to potentially offer systems that are both powerful and 
 explainable  \cite{chiave43}.
-Neuro-symbolic methods have demonstrated significant promise across a wide range of application areas, especially in scenarios 
-that demand the combination of data-driven learning and structured symbolic reasoning  \cite{chiave43}. This emerging paradigm reflects a 
-synthesis of complementary approaches, bringing together the statistical strengths of deep learning, the formal foundations of 
-symbolic logic and the adaptability of large-scale pretrained models.
+Neuro-symbolic methods have demonstrated significant promise across a wide range of application areas, especially in scenarios that demand the combination of data-driven learning and structured symbolic reasoning  \cite{chiave43}. This emerging paradigm reflects a 
+synthesis of complementary approaches, bringing together the statistical strengths of deep learning, the formal foundations of symbolic logic and the adaptability of large-scale pretrained models.
 
 
 \noindent Nonetheless, several important challenges remain. These include:
@@ -110,60 +86,27 @@ Although several challenges persist, neuro-symbolic AI is widely regarded as a p
 
 \subsection{Symbolic and Hybrid Approaches in Artificial Intelligence}
 
-Symbolic AI operates on the principle that intelligence can be reduced to the manipulation of symbols representing 
-concepts, objects and relationships. The knowledge in symbolic systems is typically encoded using various 
-representation schemes, including production rules, semantic networks, frames and logical predicates. These 
-representations enable explicit reasoning processes such as deduction, induction and abduction, allowing systems 
+Symbolic AI operates on the principle that intelligence can be reduced to the manipulation of symbols representing concepts, objects and relationships. The knowledge in symbolic systems is typically encoded using various representation schemes, including production rules, semantic networks, frames and logical predicates. These representations enable explicit reasoning processes such as deduction, induction and abduction, allowing systems 
 to draw inferences, explain their decisions and incorporate domain knowledge provided by human experts.
-The advantages of symbolic approaches include interpretability, the ability to incorporate prior knowledge and 
-support for logical reasoning and explanation. However, they also present significant challenges: knowledge acquisition 
-bottleneck, brittleness when facing situations not covered by explicit rule and difficulty in learning from raw sensory data. The manual 
+The advantages of symbolic approaches include interpretability, the ability to incorporate prior knowledge and support for logical reasoning and explanation. However, they also present significant challenges: knowledge acquisition bottleneck, brittleness when facing situations not covered by explicit rule and difficulty in learning from raw sensory data. The manual 
 encoding of knowledge is intensive and may not capture the full complexity of real-world domains \cite{chiave16}. 
 Hybrid approaches seek to overcome these limitations by integrating symbolic and connectionist methods. 
-Various integration strategies have been proposed, including systems where neural networks generate symbolic 
-representations that are then processed by reasoning engines, architectures that embed symbolic knowledge into neural 
-network structures and frameworks that use symbolic reasoning to guide neural learning processes \cite{chiave43}. Recent work in neuro-symbolic AI 
-has demonstrated promising results in domains requiring both pattern recognition and logical reasoning, such as visual question answering, 
-knowledge graph completion, and program synthesis.
-Following the advent of neuro-symbolic artificial intelligence, a paradigm shift has been induced in the way 
-machines learn. This approach combines deductive, rule-based learning, typical of symbolic artificial intelligence, with the inductive 
-and pattern-recognition capabilities characteristic of neural networks. The result is a hybrid approach that leverages the strengths of both domains, 
-leading to a more comprehensive learning methodology.
-Neuro-symbolic concepts demonstrate strong compositional generalization: new concepts can be created by 
-structurally combining previously learned or existing ones  \cite{chiave8}. This compositionality naturally allows for a 
-decomposition of the learning problem, in order to learn and recognize basic concepts. During the inference phase, 
-these concepts can be recombined to achieve the objectives of more complex tasks. Neuro-symbolic AI is one of the 
-most exciting directions in AI research today. It aims to create intelligent systems capable of learning and 
-reasoning like humans.
+Various integration strategies have been proposed, including systems where neural networks generate symbolic representations that are then processed by reasoning engines, architectures that embed symbolic knowledge into neural 
+network structures and frameworks that use symbolic reasoning to guide neural learning processes \cite{chiave43}. Recent work in neuro-symbolic AI has demonstrated promising results in domains requiring both pattern recognition and logical reasoning, such as visual question answering, knowledge graph completion, and program synthesis.
+Following the advent of neuro-symbolic artificial intelligence, a paradigm shift has been induced in the way machines learn. This approach combines deductive, rule-based learning, typical of symbolic artificial intelligence, with the inductive and pattern-recognition capabilities characteristic of neural networks. The result is a hybrid approach that leverages the strengths of both domains, leading to a more comprehensive learning methodology.
+Neuro-symbolic concepts demonstrate strong compositional generalization: new concepts can be created by structurally combining previously learned or existing ones  \cite{chiave8}. This compositionality naturally allows for a decomposition of the learning problem, in order to learn and recognize basic concepts. During the inference phase, these concepts can be recombined to achieve the objectives of more complex tasks. Neuro-symbolic AI is one of the 
+most exciting directions in AI research today. It aims to create intelligent systems capable of learning and reasoning like humans.
 
 
 \subsection{Reinforcement Learning: Learning Through Experience}
 
-Reinforcement learning (RL) represents a distinct learning paradigm in which an agent learns to make decisions 
-by interacting with an environment. Unlike supervised learning, which requires labeled training data, or 
-unsupervised learning, which seeks to discover patterns in unlabeled data, reinforcement learning is based on the 
-principle of learning from the consequences of actions through trial and error \cite{chiave49}. The agent takes actions, 
-observes their consequences, and receives feedback in the form of rewards.
-At the beginning of learning, an agent may have limited or no prior knowledge of the environment. In model-free 
-approaches, no explicit model is available, and learning relies entirely on interaction. In contrast, model-based 
-methods assume a known model or aim to learn it explicitly. This flexibility makes reinforcement learning suitable
- for complex environments, where providing a complete dataset or manually specifying optimal behavior is 
- impractical.
-The core structure of Reinforcement Learning (RL) is modelled through a Markov Decision Process (MDP), which 
-provides a mathematical framework for sequential decision-making \cite{chiave49}. An MDP is defined by a finite or 
-continuous set of states representing the possible situations an agent can encounter, a set of actions available 
-to the agent and a transition function that specifies the probability of moving from one state to another after 
-taking a particular action. Additionally, a reward function assigns numerical feedback to each state-action pair, 
-quantifying the immediate benefit of a given choice. By observing the current state, selecting an action, and 
-receiving a reward and a new state, the agent incrementally improves its decision-making strategy \cite{chiave45}.
-Over time, the agent aims to learn an optimal policy, which is a strategy mapping states to actions. The goal of 
-this policy is to maximize the expected cumulative reward across future interactions, balancing short-term gains 
-with long-term benefits through exploration and exploitation.
-Several agent design approaches exist, including methods based on value estimation and approaches that learn 
-action values directly, such as Q-learning. More advanced techniques combine different strategies to improve 
-learning efficiency. 
-Due to its ability to learn from experience, reinforcement learning has achieved notable success in domains 
-such as game playing, robotics, and resource management \cite{chiave45}.
+Reinforcement learning (RL) represents a distinct learning paradigm in which an agent learns to make decisions by interacting with an environment. Unlike supervised learning, which requires labeled training data, or unsupervised learning, which seeks to discover patterns in unlabeled data, reinforcement learning is based on the principle of learning from the consequences of actions through trial and error \cite{chiave49}. The agent takes actions, observes their consequences, and receives feedback in the form of rewards. At the beginning of learning, an agent may have limited or no prior knowledge of the environment. In model-free 
+approaches, no explicit model is available, and learning relies entirely on interaction. In contrast, model-based methods assume a known model or aim to learn it explicitly. This flexibility makes reinforcement learning suitable for complex environments, where providing a complete dataset or manually specifying optimal behavior is impractical.
+The core structure of Reinforcement Learning (RL) is modelled through a Markov Decision Process (MDP), which provides a mathematical framework for sequential decision-making \cite{chiave49}. An MDP is defined by a finite or continuous set of states representing the possible situations an agent can encounter, a set of actions available to the agent and a transition function that specifies the probability of moving from one state to another after taking a particular action. Additionally, a reward function assigns numerical feedback to each state-action pair, 
+quantifying the immediate benefit of a given choice. By observing the current state, selecting an action, and receiving a reward and a new state, the agent incrementally improves its decision-making strategy \cite{chiave45}.
+Over time, the agent aims to learn an optimal policy, which is a strategy mapping states to actions. The goal of this policy is to maximize the expected cumulative reward across future interactions, balancing short-term gains with long-term benefits through exploration and exploitation.
+Several agent design approaches exist, including methods based on value estimation and approaches that learn action values directly, such as Q-learning. More advanced techniques combine different strategies to improve learning efficiency. 
+Due to its ability to learn from experience, reinforcement learning has achieved notable success in domains such as game playing, robotics, and resource management \cite{chiave45}.
 
 
 
@@ -181,9 +124,189 @@ such as game playing, robotics, and resource management \cite{chiave45}.
 
 \subsection{Symbolic Representations, Semantic Networks, and Interpretable Models}
 
-\section{Reinforcement Learning Foundations}
+\section{Reinforcement Learning Principles}
+This section delves deeper into the principles and methods of reinforcement learning, with particular focus on Deep Q-Networks, which play a central role in the framework proposed in this thesis.
 
-\subsection{Reinforcement Learning Principles and Deep Q-Networks}
+\subsection{Theoretical foundations}
+The mathematical foundation of reinforcement learning rests on the framework of Markov Decision Processes (MDPs). 
+An MDP formalizes sequential decision-making problems in which an agent interacts with an uncertain environment and seeks to maximize a cumulative reward over time. 
+An MDP is defined by the tuple $(S, A, P, R, \gamma)$, where:
+\begin{itemize}
+    \item $S$ is the state space, i.e., the set of all possible configurations of the environment.
+    
+    \item $A$ is the action space, i.e., the set of all actions available for the agent in each state.
+    
+    \item $P(s' \mid s, a)$ is the transition probability function, i.e., the probability that, after performing action 
+    $a$ in state $s$, the system transitions to state $s'$.
+    
+    \item $R(s, a)$ is the reward function, which provides a numerical value quantifying the desirability of transitioning 
+    from state $s$ to state $s'$ after performing action $a$, assigning a scalar value to each state-action pair.
+    
+    \item $\gamma \in [0,1]$ is the discount factor that determines the relative importance of immediate versus future rewards. 
+    Smaller values of $\gamma$ encourage myopic behavior focused on immediate gains, whereas values closer to $1$ promote long-term planning.
+\end{itemize}
+A fundamental assumption in MDPs is the Markov property, which states that the future evolution of the system depends solely on the current state and action, independent of the full history of past states. 
+Mathematically:
+\[
+P(s' \mid s, a, s_{t-1}, a_{t-1}, \dots) = P(s' \mid s, a)
+\]
+This memoryless characteristic significantly simplifies the analysis and allows the use of dynamic programming techniques. 
+The agent tries to maximize the total cumulative reward. This cumulative reward is defined as:
+\[
+G_t = \sum_{k=0}^{\infty} \gamma^k R(s_{t+k}, a_{t+k})
+\]
+It is not simply the sum of instant rewards, but the discounted reward over time. Due to the $\gamma$ it is possible to give more 
+weight to immediate or future rewards.
+
+\subsubsection{Policie}
+In reinforcement learning, a policy $\pi$ defines the agent's behavior by specifying which action should be taken in each possible state \cite{chiave45}. Formally, a policy can be represented either as a function or as a probability distribution over actions. 
+Two main types of policies can be distinguished. A deterministic policy $\pi(s)$ assigns a single, fixed action to each state. In contrast, a stochastic policy $\pi(a \mid s)$ associates a probability with each available action.
+Agents progressively learn an optimal policy through continuous interaction with the environment. This learning process requires collecting experience by visiting new states and testing different actions. Through this interaction, the agent refines its strategy 
+in order to maximize the cumulative reward obtained over time.
+A central challenge in this process is the exploration-exploitation trade-off. Exploration encourages the agent to try new and unfamiliar actions in order to discover potentially better rewards and improve its knowledge of the environment. On the other hand, exploitation focuses 
+on selecting actions that are already known to yield high returns, thus capitalizing on past experience. Achieving an effective balance between these two objectives is crucial for learning a robust and optimal policy.
+\subsubsection{Value Function}
+Value functions are used to evaluate policies and play a fundamental role in many reinforcement learning algorithms. The state-value 
+function $V_\pi(s)$ estimates the expected cumulative reward obtained when starting from state $s$ and following policy $\pi$.
+\[
+V_\pi(s) = \mathbb{E}\Bigg[ \sum_{t=0}^{\infty} \gamma^t R(s_t, a_t, s_{t+1}) \Bigg]
+\]
+The action-value function $Q_\pi(s, a)$ measures the expected return after taking action $a$ in state $s$ and subsequently following policy $\pi$, are also called Q-values \cite{chiave6}. 
+\[
+Q_\pi(s, a) = \mathbb{E}\left[R(s, a, s') + \gamma V_\pi(s')\right]
+\]
+The central objective of reinforcement learning is to identify an optimal policy $\pi^*$ that maximizes these value functions across all states.
+\subsubsection{Potential and areas of application }
+MDPs provide the theoretical foundation for a wide range of reinforcement learning algorithms, including value iteration, policy iteration, temporal-difference learning and Q-learning. These methods exploit the mathematical structure of MDPs to iteratively improve policies, either when the environment model is known or when it must be learned from experience. As a result, MDPs play a crucial role in enabling autonomous agents to learn effective behaviors through interaction with complex and uncertain environments.
+Due to their strong theoretical foundation and flexibility, MDPs are extremely important across numerous application domains. In robotics and automation, for example, robots rely on MDPs to navigate uncertain and dynamic environments. Beyond robotics, MDPs are also widely applied in healthcare for treatment planning and optimization, in finance for trading strategies and risk management, and in game AI for developing intelligent and adaptive agents. This broad applicability highlights the practical significance of MDPs in real-world decision-making problems \cite{chiave45}.
+
+
+\subsubsection{The path to success}
+The primary objective of reinforcement learning is to identify an optimal policy 
+that maximizes long-term rewards. This objective leads to one of the most fundamental 
+results in RL theory: the Bellman Optimality Equation \cite{chiave7}. 
+This equation provides a recursive definition of optimal value functions, both for 
+states and for state-action pairs \cite{chiave44}.
+
+\begin{itemize}
+    \item \textbf{Optimal State Value Function} $V^*(s)$:
+    \begin{equation}
+        V^*(s) = \max_{a} \sum_{s'} P(s' \mid s, a) 
+        \left[ R(s, a, s') + \gamma V^*(s') \right]
+    \end{equation}
+
+    \item \textbf{Optimal Action Value Function} $Q^*(s, a)$:
+    \begin{equation}
+        Q^*(s, a) = \sum_{s'} P(s' \mid s, a) 
+        \left[ R(s, a, s') + \gamma \max_{a'} Q^*(s', a') \right]
+    \end{equation}
+\end{itemize}
+
+The Bellman optimality equation removes any dependence on a particular strategy. 
+Instead, it establishes a self-consistency condition that optimal value functions 
+must satisfy. Specifically, the optimal state-value 
+function is defined as the maximum expected return achievable by selecting the 
+best possible action in a given state. Similarly, the optimal action-value function 
+is expressed as the immediate reward plus the highest expected future return 
+obtainable from the subsequent state \cite{chiave44}.
+
+The Bellman Optimality Equation serves as the theoretical cornerstone for a wide 
+range of optimal control algorithms used in reinforcement learning.
+
+\subsection{Types of Reinforcement Learning}
+Several methods have been developed to solve Markov Decision Processes (MDPs), differing mainly in how they use information about the environment. These approaches can be broadly classified into model-based and model-free methods. Model-based techniques rely on a known or learned model of the environment to predict future states and rewards, allowing agents to plan their actions in advance. In contrast, model-free methods do not assume any prior knowledge of the environment and instead learn optimal behaviors directly through experience and interaction. Understanding this distinction is fundamental for analyzing how different reinforcement learning algorithms operate and adapt to uncertainty.
+\subsubsection{Model-Based Reinforcement Learning}
+\paragraph{Dynamic Programming Methods}
+
+Dynamic programming is a model-based approach and solves MDPs by iteratively 
+improving value functions through:
+
+\begin{itemize}
+    \item \textbf{Policy Iteration:} alternates between policy evaluation and policy 
+    improvement until the policy converges to the optimal policy:
+    \begin{itemize}
+        \item \textit{Policy evaluation} consists of estimating the value function 
+        associated with a given policy $\pi$, typically by computing the expected 
+        return obtained when the agent follows that policy from each state. This step 
+        answers the question of how good the current policy is, by assessing its 
+        long-term performance in the environment.
+        \item \textit{Policy improvement}, on the other hand, aims to enhance the 
+        current policy by exploiting the information obtained during policy evaluation. 
+        In this phase, the policy is updated by selecting actions that yield higher 
+        expected returns according to the evaluated value function, resulting in a new 
+        policy that is guaranteed to be at least as good as the previous one 
+        \cite{chiave44}.
+    \end{itemize}
+    \item \textbf{Value Iteration:} updates the value function until it converges to 
+    the optimal value function.
+        \[
+        V_{k+1}(s) = \max_{a \in A} \sum_{s' \in S} P(s' \mid s, a) 
+    \left[ R(s, a, s') + \gamma V_k(s') \right]
+        \]
+
+
+\end{itemize}
+
+Dynamic programming breaks down complex tasks into smaller subtasks. It then models 
+problems as workflows of sequential decisions made in discrete time steps. Each 
+decision is made based on the possible resulting next state, since dynamic programming 
+considers potential future states and reward signals when selecting actions. Indeed, 
+dynamic programming is a value-based method, meaning it selects actions based on their 
+estimated values according to a policy that aims to maximize its value function.
+
+An agent's reward $r$ for a given action is defined as a function of that action $a$, 
+the current environmental state $s$, and the potential next state $s'$:
+
+\[
+    r_t(s, a) = \sum_{s' \in S} r_t(s, a, s') \, p_t(s' \mid s, a)
+\]
+
+where $P_t(s' \mid s, a)$, called the \textit{transition probability function}, denotes 
+the probability that the system is in state $s'$ at time $t+1$ when the agent chooses 
+action $a$ in state $s$ at time $t$ \cite{chiave44}.
+
+Dynamic programming seeks to maximize cumulative rewards by consistently selecting the 
+best possible actions at each state, using recursive relationships such as the Bellman 
+equations \cite{chiave7}. Dynamic programming theory guarantees the existence 
+of at least one optimal stationary policy. However, classical dynamic programming 
+techniques require full knowledge of the reward function and transition probabilities, 
+which are generally unavailable in real-world scenarios.
+
+\subsubsection{Model-Free Reinforcement Learning}
+
+\paragraph{Monte Carlo methods}
+The Monte Carlo method assumes a black-box environment, making it a model-free approach. Since no prior knowledge of the environment is available, Monte Carlo methods rely entirely on direct interaction to gather information, so these methods are purely experience-driven. These methods sample sequences of states, actions and rewards exclusively through interaction with the environment. As a result, learning occurs through trial and error \cite{chiave44} rather than through predefined probability distributions or transition models. This experiential learning process enables Monte Carlo methods to adapt to unknown environments, but it also requires a large number of episodes to achieve reliable performance.
+Monte Carlo methods estimate value functions by computing the average return for each state-action pair based on observed episodes. Consequently, Monte Carlo methods must wait until an entire episode (or planning horizon) is completed before updating their value estimates and policies.
+Within this framework, two main variants can be distinguished: First-Visit and 
+Every-Visit Monte Carlo.
+
+\begin{itemize}
+    \item \textbf{First-Visit Monte Carlo} estimates the value of a state by averaging 
+    the returns obtained only on the first visit to that state in each episode. This 
+    avoids updating the same state multiple times within the same episode, reducing 
+    the risk of bias in the results.
+
+    \item \textbf{Every-Visit Monte Carlo}, on the other hand, considers all visits 
+    to a state within each episode. The state's value is estimated by averaging the 
+    returns obtained in each visit. This method uses more data than First-Visit but 
+    may introduce greater correlation between observations.
+\end{itemize}
+
+In both variants, the value function is updated according to:
+\[
+V(S_t) \leftarrow V(S_t) + \alpha \left[ G_t - V(S_t) \right]
+\]
+where $V(S_t)$ is the estimated value of state $S_t$, $\alpha$ is the learning rate, 
+and $G_t$ is the actual return obtained from time step $t$.
+
+\paragraph{Temporal Difference learning}
+
+
+\subsection{Deep Q-Networks}
+
+
+
+
 
 \section{Atari-like Environments as Testbeds}
 
