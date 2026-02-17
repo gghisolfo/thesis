@@ -19,7 +19,7 @@ from pong_game import PongGame, WIDTH, HEIGHT, LIVES
 SAVE_DIR = "./dqn/dqn_models"
 os.makedirs(SAVE_DIR, exist_ok=True)
 PRINT_MODE = False
-SHAPING = False
+SHAPING = True
 EVENT_DENSITY = True
 
 
@@ -599,7 +599,7 @@ def train_generic_dqn(env_factory: Callable,sim_name: str, total_episodes=10000,
     q_net = QNetwork(env.observation_space.shape[0], env.action_space.n).to(device)
     q_target = QNetwork(env.observation_space.shape[0], env.action_space.n).to(device)
     q_target.load_state_dict(q_net.state_dict())
-    optimizer = optim.Adam(q_net.parameters(), lr=5e-5)  # Learning rate più basso lr = 5e-5
+    optimizer = optim.Adam(q_net.parameters(), lr=1e-4)  # Learning rate più basso lr = 5e-5
 
     gamma = 0.99
     epsilon = 1.0
