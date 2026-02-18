@@ -142,7 +142,7 @@ An MDP is defined by the tuple $(S, A, P, R, \gamma)$, where:
     \item $R(s, a)$ is the reward function, which provides a numerical value quantifying the desirability of transitioning 
     from state $s$ to state $s'$ after performing action $a$, assigning a scalar value to each state-action pair.
     
-    \item $\gamma \in [0,1]$ is the discount factor that determines the relative importance of immediate versus future rewards. 
+    \item $\gamma \in [0,1)$ is the discount factor that determines the relative importance of immediate versus future rewards. 
     Smaller values of $\gamma$ encourage myopic behavior focused on immediate gains, whereas values closer to $1$ promote long-term planning.
 \end{itemize}
 A fundamental assumption in MDPs is the Markov property, which states that the future evolution of the system depends solely on the current state and action, independent of the full history of past states. 
@@ -161,7 +161,7 @@ weight to immediate or future rewards.
 \subsubsection{Policie}
 In reinforcement learning, a policy $\pi$ defines the agent's behavior by specifying which action should be taken in each possible state \cite{chiave45}. Formally, a policy can be represented either as a function or as a probability distribution over actions. 
 Two main types of policies can be distinguished. A deterministic policy $\pi(s)$ assigns a single, fixed action to each state. In contrast, a stochastic policy $\pi(a \mid s)$ associates a probability with each available action.
-Agents progressively learn an optimal policy through continuous interaction with the environment. This learning process requires collecting experience by visiting new states and testing different actions. Through this interaction, the agent refines its strategy 
+The agents progressively learn an optimal policy through continuous interaction with the environment. This learning process requires collecting experience by visiting new states and testing different actions. Through this interaction, the agent refines its strategy 
 in order to maximize the cumulative reward obtained over time.
 A central challenge in this process is the exploration-exploitation trade-off. Exploration encourages the agent to try new and unfamiliar actions in order to discover potentially better rewards and improve its knowledge of the environment. On the other hand, exploitation focuses 
 on selecting actions that are already known to yield high returns, thus capitalizing on past experience. Achieving an effective balance between these two objectives is crucial for learning a robust and optimal policy.
@@ -202,19 +202,18 @@ states and for state-action pairs \cite{chiave44}.
     \end{equation}
 \end{itemize}
 
-The Bellman optimality equation removes any dependence on a particular strategy. 
+The Bellman optimality equation removes any dependence on a particular policy. 
 Instead, it establishes a self-consistency condition that optimal value functions 
 must satisfy. Specifically, the optimal state-value 
 function is defined as the maximum expected return achievable by selecting the 
 best possible action in a given state. Similarly, the optimal action-value function 
 is expressed as the immediate reward plus the highest expected future return 
 obtainable from the subsequent state \cite{chiave44}.
-
 The Bellman Optimality Equation serves as the theoretical cornerstone for a wide 
 range of optimal control algorithms used in reinforcement learning.
 
 \subsection{Types of Reinforcement Learning}
-Several methods have been developed to solve Markov Decision Processes (MDPs), differing mainly in how they use information about the environment. These approaches can be broadly classified into model-based and model-free methods. Model-based techniques rely on a known or learned model of the environment to predict future states and rewards, allowing agents to plan their actions in advance. In contrast, model-free methods do not assume any prior knowledge of the environment and instead learn optimal behaviors directly through experience and interaction. Understanding this distinction is fundamental for analyzing how different reinforcement learning algorithms operate and adapt to uncertainty.
+Several methods have been developed to solve Markov Decision Processes (MDPs), differing mainly in how they use information about the environment. These approaches can be broadly classified into model-based and model-free methods. Model-based methods rely on a known or learned model of the environment to predict future states and rewards, allowing agents to plan their actions in advance. In contrast, model-free methods do not assume any prior knowledge of the environment and instead learn optimal behaviors directly through experience and interaction. Understanding this distinction is fundamental for analyzing how different reinforcement learning algorithms operate and adapt to uncertainty.
 \subsubsection{Model-Based Reinforcement Learning}
 \paragraph{Dynamic Programming Methods}
 
@@ -222,8 +221,8 @@ Dynamic programming is a model-based approach and solves MDPs by iteratively
 improving value functions through:
 
 \begin{itemize}
-    \item \textbf{Policy Iteration:} alternates between policy evaluation and policy 
-    improvement until the policy converges to the optimal policy:
+    \item \textbf{Policy Iteration} alternates between policy evaluation and policy 
+    improvement until the policy converges to the optimal policy.
     \begin{itemize}
         \item \textit{Policy evaluation} consists of estimating the value function 
         associated with a given policy $\pi$, typically by computing the expected 
@@ -244,27 +243,33 @@ improving value functions through:
     \left[ R(s, a, s') + \gamma V_k(s') \right]
         \]
 
-
+    \noindent where:
+\begin{itemize}
+    \item $k$ is the iteration index of the algorithm;
+    \item $V_k(s)$ is the estimated value of state $s$ at iteration $k$;
+    \item $V_{k+1}(s)$ is the updated value estimate at the next iteration;
+    \item $A$ is the set of available actions;
+    \item $S$ is the set of possible next states;
+    \item $P(s' \mid s, a)$ is the transition probability to state $s'$ given state $s$ and action $a$;
+    \item $R(s, a, s')$ is the reward received after transitioning to $s'$;
+    \item $\gamma \in [0,1)$ is the discount factor.
 \end{itemize}
 
+
+\end{itemize}
 Dynamic programming breaks down complex tasks into smaller subtasks. It then models 
-problems as workflows of sequential decisions made in discrete time steps. Each 
-decision is made based on the possible resulting next state, since dynamic programming 
-considers potential future states and reward signals when selecting actions. Indeed, 
+problems as workflows of sequential decisions made in discrete time steps. Each decision is made based on the possible resulting next state, since dynamic programming considers potential future states and reward signals when selecting actions. Indeed, 
 dynamic programming is a value-based method, meaning it selects actions based on their 
 estimated values according to a policy that aims to maximize its value function.
-
-An agent's reward $r$ for a given action is defined as a function of that action $a$, 
+An agent's reward $R$ for a given action is defined as a function of that action $a$, 
 the current environmental state $s$, and the potential next state $s'$:
 
 \[
-    r_t(s, a) = \sum_{s' \in S} r_t(s, a, s') \, p_t(s' \mid s, a)
+    R(s, a) = \sum_{s' \in S} R(s, a, s') \, P(s' \mid s, a)
 \]
-
 where $P_t(s' \mid s, a)$, called the \textit{transition probability function}, denotes 
 the probability that the system is in state $s'$ at time $t+1$ when the agent chooses 
 action $a$ in state $s$ at time $t$ \cite{chiave44}.
-
 Dynamic programming seeks to maximize cumulative rewards by consistently selecting the 
 best possible actions at each state, using recursive relationships such as the Bellman 
 equations \cite{chiave7}. Dynamic programming theory guarantees the existence 
@@ -291,22 +296,107 @@ Every-Visit Monte Carlo.
     returns obtained in each visit. This method uses more data than First-Visit but 
     may introduce greater correlation between observations.
 \end{itemize}
-
 In both variants, the value function is updated according to:
 \[
-V(S_t) \leftarrow V(S_t) + \alpha \left[ G_t - V(S_t) \right]
+V(s) \leftarrow V(s) + \alpha \left[ G_t - V(s) \right]
 \]
-where $V(S_t)$ is the estimated value of state $S_t$, $\alpha$ is the learning rate, 
+where $V(s)$ is the estimated value of state $s$, $\alpha$ is the learning rate, 
 and $G_t$ is the actual return obtained from time step $t$.
 
 \paragraph{Temporal Difference learning}
 
+Temporal-Difference (TD) learning is a hybrid approach that combines the concepts of dynamic programming and Monte Carlo methods. It relies on experience to learn from interaction with the environment as Monte Carlo method, indeed is model-free approach. It also incorporates the bootstrapping idea from dynamic programming by updating value estimates incrementally, based on existing predictions and after each transition, without waiting for the final outcome of an episode. In this way, TD learning algorithms adjust the estimated value of a state and consequently the agent's policy, incrementally after each step, enabling faster and more continuous learning compared to waiting for complete episodes.
+As its name suggests, a TD learning agent adjusts its policy based on the difference between the predicted reward and the reward received at each state. In other words, while both dynamic programming and Monte Carlo methods focus on the rewards obtained, TD learning additionally evaluates the prediction error between expected and observed rewards. This difference, known as the temporal difference error, is then used to update value estimates for subsequent states immediately, without waiting for the episode to terminate.
+\[
+V(s_t) \leftarrow V(s_T) + \alpha\left[R_{t+1} + \gamma V(s_{t+1}) - V(s_t)\right]
+\]
+
+\noindent where:
+\begin{itemize}
+    \item $V(s_t)$ is the estimated value of state $s$ at time step $t$;
+    \item $\alpha \in (0,1]$ is the learning rate, controlling the update step size;
+    \item $R_{t+1}$ is the reward received after transitioning from $s_t$;
+    \item $\gamma \in [0,1)$ is the discount factor;
+    \item $V(s_{t+1})$ is the estimated value of the next state $s_{t+1}$.
+\end{itemize}
+
+\noindent The temporal difference error $\delta_t$ is defined as:
+\[
+\delta_t = R_{t+1} + \gamma V(s_{t+1}) - V(s_t)
+\]
+
+\noindent so that the update rule can be written compactly as:
+\[
+V(s_t) \leftarrow V(s_t) + \alpha \, \delta_t
+\]
+TD learning exists in multiple variants, among which 
+State-Action-Reward-State-Action (SARSA) and Q-learning are two of the most prominent. \\
+SARSA is an on-policy TD algorithm, meaning it evaluates and improves the same policy that it follows during learning, therefore updates the action-value function based on the action taken by the current policy:
+
+\[
+Q(s_t, a_t) \leftarrow Q(s_t, a_t) + \alpha\left[R_{t+1} + \gamma 
+Q(s_{t+1}, a_{t+1}) - Q(s_t, a_t)\right]
+\]
+
+\noindent where:
+\begin{itemize}
+    \item $Q(s_t, a_t)$ is the estimated value of taking action $a_t$ in 
+    state $s_t$;
+    \item $\alpha \in (0,1]$ is the learning rate;
+    \item $R_{t+1}$ is the reward received after the transition;
+    \item $\gamma \in [0,1)$ is the discount factor;
+    \item $Q(s_{t+1}, a_{t+1})$ is the estimated value of the next 
+    state-action pair, where $a_{t+1}$ is the action chosen by the 
+    \textbf{current policy}.
+\end{itemize}
+Q-Learning is a model-free, off-policy reinforcement learning algorithm that aims to directly approximate the optimal action-value function, independently of the policy used to generate behavior \cite{chiave48}. Q-Learning separates the behavior policy, which directs exploration to gather new experiences, from the target policy, which focuses on exploiting the current value estimates to guide optimal decisions. The behavior policy may include exploratory mechanisms such as $\varepsilon$-greedy action selection, while the target policy is implicitly defined as the greedy policy with respect to the learned action-value function.
+This separation allows Q-Learning to learn the optimal policy regardless of how the agent behaves during data collection, provided that sufficient exploration occurs. For this reason, the algorithm is often described as exploration-insensitive, meaning that its convergence properties do not depend on the specific exploration strategy adopted, as long as all state-action pairs are visited sufficiently often \cite{chiave45}.
+The core update rule of Q-Learning is derived from the Bellman optimality equation and is defined as follows:
+\[
+Q(s_t, a_t) \leftarrow Q(s_t, a_t) + \alpha\left[R_{t+1} + \gamma \max_{a} Q(s_{t+1}, a) - Q(s_t, a_t)\right]
+\]
+where:
+\begin{itemize}
+    \item $\alpha$ is the learning rate,
+    \item $\gamma$ is the discount factor,
+    \item $R_{t+1}$ is the reward received after taking action $a_t$ in state $s_t$,
+    \item $\max_{a} Q(s_{t+1}, a)$ represents the maximum estimated future return obtainable from the next state.
+\end{itemize}
+The algorithm updates the action-value function using the maximum estimated reward of the subsequent state, allowing it to iteratively improve its policy based on expected future returns.
+Since Q-Learning does not require explicit knowledge of the transition probabilities or reward function, it can learn directly from raw experience, making it particularly suitable for environments where a model is unavailable or difficult to construct \cite{chiave4}. Once the optimal action-value function $Q^*(s,a)$ has been learned, the optimal policy is obtained by selecting, in each state, the action that maximizes the estimated Q-value:
+
+\[
+\pi^*(s) = \arg\max_{a} Q^*(s, a)
+\]
+For convergence to the optimal solution, it is necessary that every state-action pair is visited infinitely often and that the learning rate decreases appropriately over time. Under these conditions, also called stochastic approximation conditions, the action-value estimates are guaranteed to converge to their optimal values \cite{chiave48}.
 
 \subsection{Deep Q-Networks}
+Deep Q-Networks (DQN), introduced by Mnih et al. in 2015 \cite{chiave7}, revolutionized reinforcement learning by demonstrating that deep neural networks could successfully approximate Q-functions in high-dimensional state spaces. 
+Prior to DQN, Q-learning was limited to small, discrete state spaces due to its reliance on tabular representations. By integrating convolutional neural networks (CNNs) with Q-learning \cite{chiave7}, DQN enabled end-to-end learning directly from raw sensory inputs, such as pixel-based game screens. This innovation allowed reinforcement learning agents to achieve human-level performance on several Atari 2600 games using only visual input and game scores as feedback, without any handcrafted features.
+The DQN algorithm addresses two key challenges that arise when combining Q-learning with neural networks: instability due to correlations in the sequence of observations and non-stationarity of the target values used for training.
+In standard online reinforcement learning, consecutive observations are highly correlated. Training a neural network on sequential samples violates the independent and identically distributed (i.i.d.) assumption required for stable stochastic gradient descent, leading to oscillations or divergence. In addition, Q-learning relies on bootstrapped targets derived from the same network being trained. As network parameters change during learning, the target values also change, resulting in a moving target problem that destabilizes training.
+DQN employs two critical innovations to stabilize learning \cite{chiave7}. The first innovation was inspired by biological mechanism, the experience replay stores agent transitions, at each time-step, in a replay buffer. In addition, during training, samples minibatches uniformly for training. This technique breaking temporal correlations between past experience, enabling more efficient use of past experience and stabilizes learning through randomized training batches. This allows gradient updates to better approximate the true expectation of the Bellman equation. 
+The second innovation was targeting networks. This technique maintains a separate copy of the Q-network whose parameters are updated less frequently, providing more stable target values for the loss function, this help to reduces harmful feedback loops and prevents divergence.  These techniques enable successful learning in complex domains such as Atari 2600 games, where the state space consists of raw pixel inputs.
 
+\paragraph{Loss Function and Optimization}
+The DQN loss function is designed to minimize the difference between the current Q-value estimates and the target values defined by the Bellman optimality equation. Using a target network with parameters $\theta^-$ , the algorithm stabilizes learning by providing a fixed reference for the updates. In practice, DQN can be seen as a method that approximates the Q-function with a deep neural network and iteratively solves the Bellman optimality equation via stochastic gradient descent.
 
-
-
+\[
+L(\theta) = \mathbb{E}_{(s,a,r,s') \sim \mathrm{U}(D)}\left[\left(r + \gamma 
+\max_{a'} Q(s', a'; \theta^-) - Q(s, a; \theta)\right)^2\right]
+\]
+\noindent where:
+\begin{itemize}
+    \item $L(\theta)$ is the loss function to be minimized with respect to the network parameters $\theta$;
+    \item $(s, a, r, s') \sim \mathrm{U}(D)$ denotes that the transitions are sampled uniformly from the replay buffer $D$;
+    \item $r$ is the immediate reward received after taking action $a$ in state $s$;
+    \item $\gamma \in [0,1)$ is the discount factor;
+    \item $\theta^-$ are the parameters of the target network, kept fixed during updates to stabilize training;
+    \item $\max_{a'} Q(s', a'; \theta^-)$ is the maximum Q-value over all possible next actions $a'$, estimated by the target network;
+    \item $Q(s, a; \theta)$ is the Q-value estimated by the online network for the current state-action pair $(s, a)$;
+    \item $r + \gamma \max_{a'} Q(s', a'; \theta^-) - Q(s, a; \theta)$ is the TD error, measuring the discrepancy between the current estimate and the bootstrapped target based on the best possible next action \cite{chiave1}.
+\end{itemize}
+One of the most significant aspects of DQN is its ability to learn directly from raw sensory inputs, requiring little to no prior domain knowledge or handcrafted feature engineering. Experimental results show that the DQN agent is capable of achieving performance levels comparable to, and in some cases exceeding, those of human players across a wide range of Atari 2600 games \cite{chiave7}. These findings highlight the robustness of deep reinforcement learning methods, showing that complex behaviors can emerge solely from interaction with the environment and scalar reward feedback. The model's success across diverse gaming environments indicates its potential applicability to broader decision-making problems beyond the Atari benchmark.
 
 \section{Atari-like Environments as Testbeds}
 
