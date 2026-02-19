@@ -89,4 +89,36 @@ V.~Mnih \emph{et~al.}, ``Human-level control through deep reinforcement
 R.~S. Sutton and A.~G. Barto, \emph{Reinforcement Learning: An
   Introduction}.\hskip 1em plus 0.5em minus 0.4em\relax MIT Press, 2015.
 
+\bibitem{chiave48}
+\BIBentryALTinterwordspacing
+C.~J. C.~H. Watkins and P.~Dayan, ``Q-learning,'' \emph{Machine Learning},
+  vol.~8, no. 3--4, pp. 279--292, 1992. [Online]. Available:
+  \url{https://doi.org/10.1007/BF00992698}
+\BIBentrySTDinterwordspacing
+
+\bibitem{chiave4}
+\BIBentryALTinterwordspacing
+L.~Huang \emph{et~al.}, ``A survey on hallucination in large language models:
+  Principles, taxonomy, challenges, and open questions,'' \emph{ACM
+  Transactions on Information Systems}, vol.~43, no.~2, pp. 1--55, Jan. 2025.
+  [Online]. Available: \url{http://dx.doi.org/10.1145/3703155}
+\BIBentrySTDinterwordspacing
+
+\bibitem{chiave61}
+\BIBentryALTinterwordspacing
+M.~G. Bellemare, Y.~Naddaf, J.~Veness, and M.~Bowling, ``The arcade learning
+  environment: An evaluation platform for general agents,'' \emph{Journal of
+  Artificial Intelligence Research}, vol.~47, pp. 253--279, 2013. [Online].
+  Available: \url{https://doi.org/10.1613/jair.3912}
+\BIBentrySTDinterwordspacing
+
+\bibitem{chiave62}
+\BIBentryALTinterwordspacing
+M.~C. Machado, M.~G. Bellemare, E.~Talvitie, J.~Veness, M.~Hausknecht, and
+  M.~Bowling, ``Revisiting the arcade learning environment: Evaluation
+  protocols and open problems for general agents,'' \emph{Journal of Artificial
+  Intelligence Research}, vol.~61, pp. 523--562, 2018. [Online]. Available:
+  \url{https://doi.org/10.1613/jair.5699}
+\BIBentrySTDinterwordspacing
+
 \end{thebibliography}

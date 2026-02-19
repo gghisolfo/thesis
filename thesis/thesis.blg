@@ -10,52 +10,53 @@ Reallocating 'singl_function' (item size: 4) to 100 items.
 Reallocating 'wiz_functions' (item size: 4) to 6000 items.
 Reallocating 'singl_function' (item size: 4) to 100 items.
 Database file #1: references.bib
-Warning--I didn't find a database entry for "chiave48"
-Warning--I didn't find a database entry for "chiave4"
+Warning--I didn't find a database entry for "chiave50"
+Warning--I didn't find a database entry for "chiave51"
+Warning--I didn't find a database entry for "chiave52"
 -- IEEEtran.bst version 1.14 (2015/08/26) by Michael Shell.
 -- http://www.michaelshell.org/tex/ieeetran/bibtex/
 -- See the "IEEEtran_bst_HOWTO.pdf" manual for usage information.
 
 Done.
-You've used 12 entries,
+You've used 16 entries,
             4087 wiz_defined-function locations,
-            898 strings with 9078 characters,
-and the built_in function-call counts, 7791 in all, are:
-= -- 632
-> -- 173
-< -- 51
-+ -- 91
-- -- 32
-* -- 373
-:= -- 1240
-add.period$ -- 24
-call.type$ -- 12
-change.case$ -- 8
-chr.to.int$ -- 111
-cite$ -- 12
-duplicate$ -- 569
-empty$ -- 654
-format.name$ -- 41
-if$ -- 1797
+            926 strings with 9903 characters,
+and the built_in function-call counts, 11537 in all, are:
+= -- 962
+> -- 261
+< -- 90
++ -- 140
+- -- 46
+* -- 570
+:= -- 1826
+add.period$ -- 32
+call.type$ -- 16
+change.case$ -- 12
+chr.to.int$ -- 198
+cite$ -- 16
+duplicate$ -- 818
+empty$ -- 905
+format.name$ -- 59
+if$ -- 2657
 int.to.chr$ -- 0
-int.to.str$ -- 12
-missing$ -- 97
-newline$ -- 67
-num.names$ -- 12
-pop$ -- 236
+int.to.str$ -- 16
+missing$ -- 137
+newline$ -- 87
+num.names$ -- 16
+pop$ -- 310
 preamble$ -- 1
 purify$ -- 0
 quote$ -- 2
-skip$ -- 608
+skip$ -- 895
 stack$ -- 0
-substring$ -- 282
-swap$ -- 435
-text.length$ -- 14
+substring$ -- 488
+swap$ -- 666
+text.length$ -- 24
 text.prefix$ -- 0
 top$ -- 5
-type$ -- 12
+type$ -- 16
 warning$ -- 0
-while$ -- 34
-width$ -- 14
-write$ -- 140
-(There were 2 warnings)
+while$ -- 54
+width$ -- 18
+write$ -- 194
+(There were 3 warnings)

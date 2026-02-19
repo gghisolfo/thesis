@@ -108,13 +108,21 @@ Over time, the agent aims to learn an optimal policy, which is a strategy mappin
 Several agent design approaches exist, including methods based on value estimation and approaches that learn action values directly, such as Q-learning. More advanced techniques combine different strategies to improve learning efficiency. 
 Due to its ability to learn from experience, reinforcement learning has achieved notable success in domains such as game playing, robotics, and resource management \cite{chiave45}.
 
-
-
-
-
 \section{Computer Vision Techniques}
+Visual perception is fundamental to many AI applications, enabling systems to extract meaningful information from images and video streams. One of the most relevant goals of computer vision is to mimic human visual perception. Robustness is commonly assessed by comparing algorithmic performance to human-level perception under similar conditions. In this context, robustness refers to the ability to extract task-relevant visual information, even when this information is sparse, corrupted, or significantly different from a previously observed representation, while maintaining tolerance to outliers.
+This section explores both classical and modern approaches to video analysis and feature extraction.
+
 
 \subsection{Classical Techniques for Video Analysis}
+
+Before the advent of deep learning, computer vision systems primarily relied on deterministic techniques and manually engineered features. Traditional algorithms such as edge detection methods (e.g., Sobel and Canny operators), threshold-based segmentation, and morphological processing were widely employed to extract structural information from images.
+Later, handcrafted feature descriptors including SIFT \cite{chiave50} (Scale-Invariant Feature Transform), SURF \cite{chiave51} (Speeded-Up Robust Features), and HOG \cite{chiave52} (Histograms of Oriented Gradient) were introduced to capture local patterns useful for object recognition tasks. Although these methods achieved notable success, they suffered from several inherent limitations, particularly in their sensitivity to noise, changes in illumination, and poor generalization across diverse environments \cite{chiave50}. As a result, significant domain expertise and extensive manual effort were required to design robust feature representations, which constrained their scalability and adaptability to complex real-world scenarios.
+\\
+Originally, computer vision relied heavily on handcrafted features and algorithmic techniques designed based on understanding of visual perception and signal processing. These principles underpin a classical computer vision pipeline, typically composed of preprocessing, feature extraction, and pattern recognition stages.
+Preprocessing techniques include operations such as noise reduction, contrast enhancement, and colour space transformations that prepare raw visual data for subsequent analysis. Edge detection algorithms, such as the Canny edge detector and Sobel operator, identify boundaries between regions with different intensity characteristics, providing fundamental structural information about objects in the scene.
+\\Feature extraction methods in classical computer vision include corner detectors like Harris corners [53] and FAST [54], which identify points of interest that can be reliably detected across different views. Descriptors such as SIFT and SURF provide representations of local image patches that are robust to changes in scale, rotation, and illumination. These features enable tasks such as object recognition, tracking, and image matching.
+While these classical techniques have been largely superseded by deep learning methods in many applications, they remain valuable in contexts where computational resources are limited, interpretability is crucial, or training data is scarce. Moreover, the principles underlying these techniques continue to inform modern approaches and provide insights into visual perception.
+
 
 \subsection{Visual Perception in Dynamic Environments}
 
@@ -269,7 +277,7 @@ the current environmental state $s$, and the potential next state $s'$:
 \]
 where $P_t(s' \mid s, a)$, called the \textit{transition probability function}, denotes 
 the probability that the system is in state $s'$ at time $t+1$ when the agent chooses 
-action $a$ in state $s$ at time $t$ \cite{chiave44}.
+action $a$ in state $s$ at time $t$ \cite{chiave45}.
 Dynamic programming seeks to maximize cumulative rewards by consistently selecting the 
 best possible actions at each state, using recursive relationships such as the Bellman 
 equations \cite{chiave7}. Dynamic programming theory guarantees the existence 
@@ -382,8 +390,8 @@ The second innovation was targeting networks. This technique maintains a separat
 The DQN loss function is designed to minimize the difference between the current Q-value estimates and the target values defined by the Bellman optimality equation. Using a target network with parameters $\theta^-$ , the algorithm stabilizes learning by providing a fixed reference for the updates. In practice, DQN can be seen as a method that approximates the Q-function with a deep neural network and iteratively solves the Bellman optimality equation via stochastic gradient descent.
 
 \[
-L(\theta) = \mathbb{E}_{(s,a,r,s') \sim \mathrm{U}(D)}\left[\left(r + \gamma 
-\max_{a'} Q(s', a'; \theta^-) - Q(s, a; \theta)\right)^2\right]
+L_i(\theta_i) = \mathbb{E}_{(s,a,r,s') \sim \mathrm{U}(D)}\left[\left(r + \gamma 
+\max_{a'} Q(s', a'; \theta^-_i) - Q(s, a; \theta_i)\right)^2\right]
 \]
 \noindent where:
 \begin{itemize}
@@ -391,16 +399,25 @@ L(\theta) = \mathbb{E}_{(s,a,r,s') \sim \mathrm{U}(D)}\left[\left(r + \gamma
     \item $(s, a, r, s') \sim \mathrm{U}(D)$ denotes that the transitions are sampled uniformly from the replay buffer $D$;
     \item $r$ is the immediate reward received after taking action $a$ in state $s$;
     \item $\gamma \in [0,1)$ is the discount factor;
-    \item $\theta^-$ are the parameters of the target network, kept fixed during updates to stabilize training;
-    \item $\max_{a'} Q(s', a'; \theta^-)$ is the maximum Q-value over all possible next actions $a'$, estimated by the target network;
-    \item $Q(s, a; \theta)$ is the Q-value estimated by the online network for the current state-action pair $(s, a)$;
-    \item $r + \gamma \max_{a'} Q(s', a'; \theta^-) - Q(s, a; \theta)$ is the TD error, measuring the discrepancy between the current estimate and the bootstrapped target based on the best possible next action \cite{chiave1}.
+    \item $\theta^-_i$ are the parameters of the target network, kept fixed during updates to stabilize training, at iteration $i$;
+    \item $\max_{a'} Q(s', a'; \theta^-_i)$ is the maximum Q-value over all possible next actions $a'$, estimated by the target network;
+    \item $Q(s, a; \theta_i)$ is the Q-value estimated by the online network for the current state-action pair $(s, a)$;
+    \item $r + \gamma \max_{a'} Q(s', a'; \theta^-_i) - Q(s, a; \theta_i)$ is the TD error, measuring the discrepancy between the current estimate and the bootstrapped target based on the best possible next action \cite{chiave1}.
 \end{itemize}
 One of the most significant aspects of DQN is its ability to learn directly from raw sensory inputs, requiring little to no prior domain knowledge or handcrafted feature engineering. Experimental results show that the DQN agent is capable of achieving performance levels comparable to, and in some cases exceeding, those of human players across a wide range of Atari 2600 games \cite{chiave7}. These findings highlight the robustness of deep reinforcement learning methods, showing that complex behaviors can emerge solely from interaction with the environment and scalar reward feedback. The model's success across diverse gaming environments indicates its potential applicability to broader decision-making problems beyond the Atari benchmark.
 
 \section{Atari-like Environments as Testbeds}
+Over the past decade, two-dimensional video games, especially those from the Atari 2600 game suite, have become standard benchmarks for the evaluation of reinforcement learning and artificial intelligence systems \cite{chiave61}. By offering high-dimensional visual inputs, diverse dynamics, and well-defined evaluation protocols within a controlled setting, these environments bridge the gap between simple toy problems and real-world applications. This section examines the characteristics and inherent challenges that make Atari-like environments particularly suitable as experimental testbeds for AI research.
 
-\subsection{Characteristics and Challenges of 2D Game Environments}
+\subsection{Characteristics and Challenges of two-dimensional Game Environments}
+
+Atari games present diverse challenges that require different capabilities \cite{chiave62}. In this study, we concentrate our analysis on the Atari game Breakout as a representative benchmark environment. This choice allows us to highlight several fundamental properties shared by many Atari games suit. 
+More in details, these environments often require strong temporal reasoning. Temporal reasoning is essential in many games, where success depends on understanding sequences of events, anticipating future states, and planning multi-step strategies. In some cases, precise timing of actions is crucial, while in others, rewards are delayed and the consequences of decisions become apparent only after multiple steps. Breakout requires predicting where the ball will land based on its current trajectory and velocity. Furthermore, the agent must plan the paddle's movements several steps in advance, especially when the ball bounces off bricks or edges. This corresponds to the need for multi-step planning and anticipation of future states.
+Exploration and credit assignment pose additional challenges. Many Atari games sparse reward structures, in which positive feedback is infrequent, making difficult for learning algorithms to discover effective strategies. Furthermore, long action sequences with delayed outcomes complicate the attribution of credit to individual actions that ultimately lead to success or failure. 
+Partial observability is another important characterizes several games, where the full state is not visible in a single frame. This requires agents to integrate information over time or maintain memory of past observations. In Breakout, even though the agent receives numerical information such as the position and speed of the ball, it does not know the complete future trajectory or any changes in speed due to multiple bounces.  This necessitates mechanisms for temporal integration beyond simple reactive policies.
+Generalization across games remains a key challenge \cite{chiave62} for the development of general-purpose learning systems. Although deep reinforcement learning has achieved superhuman performance on individual games, transferring of learned knowledge across different games remains difficult. Each game may require different visual features, temporal abstractions, and strategic reasoning, thereby testing the generality and robustness of learning algorithms.  Even though Breakout doesn't directly test your ability to transfer strategies to other games, while the goal is to develop a generic algorithm, generalization remains a theoretical challenge of the Atari suite.
+The diversity and complexity of Atari games, combined with their standardized interface and computational tractability, make them ideal testbeds \cite{chiave61} for developing and evaluating artificial intelligence systems. They provide a middle ground between simple toy problems and real-world applications, offering sufficient complexity to be challenging while remaining amenable to systematic experimentation. The characteristics are particularly relevant to the framework proposed in this thesis, which aims to extract interpretable symbolic knowledge from visual observations and use this knowledge to guide learning. The structured nature of 2D games, characterized by discrete objects obeying consistent rules, provides a suitable domain for testing the hypothesis that combining perceptual processing, symbolic reasoning, and reinforcement learning can lead to more efficient, interpretable, and generalizable AI systems.
+
 
 % =========================
 % 3 STATE OF THE ART AND CHALLENGES
