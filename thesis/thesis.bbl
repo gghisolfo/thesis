@@ -76,6 +76,39 @@ M.~L. Puterman, \emph{Markov Decision Processes: Discrete Stochastic Dynamic
   Programming}.\hskip 1em plus 0.5em minus 0.4em\relax Hoboken, NJ, USA: Wiley,
   2014.
 
+\bibitem{chiave50}
+D.~G. Lowe, ``Distinctive image features from scale-invariant keypoints,''
+  \emph{International Journal of Computer Vision}, vol.~60, no.~2, pp. 91--110,
+  2004.
+
+\bibitem{chiave51}
+H.~Bay, T.~Tuytelaars, and L.~Van~Gool, ``Surf: Speeded up robust features,''
+  in \emph{European Conference on Computer Vision (ECCV)}.\hskip 1em plus 0.5em
+  minus 0.4em\relax Springer, 2006, pp. 404--417.
+
+\bibitem{chiave52}
+N.~Dalal and B.~Triggs, ``Histograms of oriented gradients for human
+  detection,'' in \emph{Proceedings of the IEEE Computer Society Conference on
+  Computer Vision and Pattern Recognition (CVPR)}, 2005, pp. 886--893.
+
+\bibitem{chiave53}
+C.~Harris and M.~Stephens, ``A combined corner and edge detector,'' in
+  \emph{Proceedings of the Alvey Vision Conference}, 1988, pp. 147--151.
+
+\bibitem{chiave54}
+E.~Rosten and T.~Drummond, ``Machine learning for high-speed corner
+  detection,'' in \emph{European Conference on Computer Vision (ECCV)}.\hskip
+  1em plus 0.5em minus 0.4em\relax Berlin, Heidelberg: Springer Berlin
+  Heidelberg, May 2006, pp. 430--443.
+
+\bibitem{chiave63}
+\BIBentryALTinterwordspacing
+G.~Van~Houdt, C.~Mosquera, and G.~Nápoles, ``A review on the long short-term
+  memory model,'' \emph{Artificial Intelligence Review}, vol.~53, no.~8, pp.
+  5929--5955, 2020. [Online]. Available:
+  \url{https://doi.org/10.1007/s10462-020-09825-6}
+\BIBentrySTDinterwordspacing
+
 \bibitem{chiave6}
 S.~Russell and P.~Norvig, \emph{Artificial Intelligence: A Modern
   Approach}.\hskip 1em plus 0.5em minus 0.4em\relax Englewood Cliffs:

@@ -12,77 +12,80 @@
 \contentsline {section}{\numberline {2.2}Computer Vision Techniques}{10}{section.2.2}%
 \contentsline {subsection}{\numberline {2.2.1}Classical Techniques for Video Analysis}{10}{subsection.2.2.1}%
 \contentsline {subsection}{\numberline {2.2.2}Visual Perception in Dynamic Environments}{11}{subsection.2.2.2}%
-\contentsline {subsection}{\numberline {2.2.3}Deep Learning for Feature Extraction from Video Streams}{11}{subsection.2.2.3}%
-\contentsline {section}{\numberline {2.3}Knowledge Representation and Reasoning}{11}{section.2.3}%
-\contentsline {subsection}{\numberline {2.3.1}Symbolic Representations, Semantic Networks, and Interpretable Models}{11}{subsection.2.3.1}%
-\contentsline {section}{\numberline {2.4}Reinforcement Learning Principles}{11}{section.2.4}%
-\contentsline {subsection}{\numberline {2.4.1}Theoretical foundations}{12}{subsection.2.4.1}%
-\contentsline {subsubsection}{Policie}{13}{subsubsection*.3}%
-\contentsline {subsubsection}{Value Function}{13}{subsubsection*.4}%
-\contentsline {subsubsection}{Potential and areas of application }{13}{subsubsection*.5}%
-\contentsline {subsubsection}{The path to success}{14}{subsubsection*.6}%
-\contentsline {subsection}{\numberline {2.4.2}Types of Reinforcement Learning}{15}{subsection.2.4.2}%
-\contentsline {subsubsection}{Model-Based Reinforcement Learning}{15}{subsubsection*.7}%
-\contentsline {paragraph}{Dynamic Programming Methods}{15}{paragraph*.8}%
-\contentsline {subsubsection}{Model-Free Reinforcement Learning}{16}{subsubsection*.9}%
-\contentsline {paragraph}{Monte Carlo methods}{16}{paragraph*.10}%
-\contentsline {paragraph}{Temporal Difference learning}{17}{paragraph*.11}%
-\contentsline {subsection}{\numberline {2.4.3}Deep Q-Networks}{20}{subsection.2.4.3}%
-\contentsline {paragraph}{Loss Function and Optimization}{20}{paragraph*.12}%
-\contentsline {section}{\numberline {2.5}Atari-like Environments as Testbeds}{22}{section.2.5}%
-\contentsline {subsection}{\numberline {2.5.1}Characteristics and Challenges of two-dimensional Game Environments}{22}{subsection.2.5.1}%
-\contentsline {chapter}{\numberline {3}State of the Art and Challenges}{24}{chapter.3}%
-\contentsline {section}{\numberline {3.1}Challenges in Symbolic Interpretation}{25}{section.3.1}%
-\contentsline {subsection}{\numberline {3.1.1}The Illusion of Understanding}{25}{subsection.3.1.1}%
-\contentsline {subsubsection}{The Lack of World Models}{25}{subsubsection*.13}%
-\contentsline {subsection}{\numberline {3.1.2}The Black Box Problem}{25}{subsection.3.1.2}%
-\contentsline {subsubsection}{Making Sense of AI: Toward Explainability}{25}{subsubsection*.14}%
-\contentsline {subsection}{\numberline {3.1.3}Learning Paradigms and Explainable AI}{25}{subsection.3.1.3}%
-\contentsline {subsubsection}{Learning Without Understanding}{25}{subsubsection*.15}%
-\contentsline {subsubsection}{Explainable AI: Goals and Approaches}{25}{subsubsection*.16}%
-\contentsline {subsubsection}{Post-hoc Explainability}{25}{subsubsection*.17}%
-\contentsline {subsubsection}{Intrinsic Interpretability}{25}{subsubsection*.18}%
-\contentsline {subsubsection}{Why XAI is Not Enough}{25}{subsubsection*.19}%
-\contentsline {section}{\numberline {3.2}Cognitive Foundations}{25}{section.3.2}%
-\contentsline {subsection}{\numberline {3.2.1}Human World Modelling and the Origins of Structured Cognition}{25}{subsection.3.2.1}%
-\contentsline {subsection}{\numberline {3.2.2}Core Knowledge Theory: Cognitive Principles and Psychological Foundations}{25}{subsection.3.2.2}%
-\contentsline {subsection}{\numberline {3.2.3}Definition and Relevance for World Understanding}{25}{subsection.3.2.3}%
-\contentsline {subsection}{\numberline {3.2.4}Cognitive Models and Symbolic Representation}{25}{subsection.3.2.4}%
-\contentsline {section}{\numberline {3.3}Positioning of the Proposed Framework}{25}{section.3.3}%
-\contentsline {chapter}{\numberline {4}Framework Design - Proposed Framework}{26}{chapter.4}%
-\contentsline {section}{\numberline {4.1}Conceptual Foundations}{26}{section.4.1}%
-\contentsline {subsection}{\numberline {4.1.1}Evolution of the Idea}{26}{subsection.4.1.1}%
-\contentsline {section}{\numberline {4.2}Proposed Implementation}{26}{section.4.2}%
-\contentsline {subsection}{\numberline {4.2.1}Segmentation}{26}{subsection.4.2.1}%
-\contentsline {subsection}{\numberline {4.2.2}Symbolic System as Knowledge Construction Module}{26}{subsection.4.2.2}%
-\contentsline {subsection}{\numberline {4.2.3}From Symbolic Rules to a Playable Environment}{26}{subsection.4.2.3}%
-\contentsline {subsection}{\numberline {4.2.4}Generic Environment as a Transitional Representation}{26}{subsection.4.2.4}%
-\contentsline {subsection}{\numberline {4.2.5}Deep Q-Network in a Domain-Agnostic Environment}{26}{subsection.4.2.5}%
-\contentsline {chapter}{\numberline {5}Implementation}{27}{chapter.5}%
-\contentsline {section}{\numberline {5.1}End-to-End Pipeline}{27}{section.5.1}%
-\contentsline {section}{\numberline {5.2}General Architecture of the Framework}{27}{section.5.2}%
-\contentsline {subsection}{\numberline {5.2.1}Design Choices}{27}{subsection.5.2.1}%
-\contentsline {subsection}{\numberline {5.2.2}Selected Techniques and Algorithms}{27}{subsection.5.2.2}%
-\contentsline {subsection}{\numberline {5.2.3}Modular Structure of the System}{27}{subsection.5.2.3}%
-\contentsline {subsubsection}{Video Acquisition and Preprocessing Module}{27}{subsubsection*.20}%
-\contentsline {subsubsection}{Feature Extraction Module}{27}{subsubsection*.21}%
-\contentsline {subsubsection}{Symbolic Mapping Module - Symbolic Reasoning Engine}{27}{subsubsection*.22}%
-\contentsline {paragraph}{Integration of Core Knowledge for Semantic Understanding}{27}{paragraph*.23}%
-\contentsline {paragraph}{RL Agent}{27}{paragraph*.24}%
-\contentsline {subsection}{\numberline {5.2.4}Optimizations and Efficiency Considerations}{27}{subsection.5.2.4}%
-\contentsline {chapter}{\numberline {6}Experimental Evaluation}{28}{chapter.6}%
-\contentsline {section}{\numberline {6.1}Datasets and Testing Scenarios}{28}{section.6.1}%
-\contentsline {subsection}{\numberline {6.1.1}Evaluation Metrics: Accuracy, Interpretability, Scalability}{28}{subsection.6.1.1}%
-\contentsline {section}{\numberline {6.2}Experimental Results}{28}{section.6.2}%
-\contentsline {subsection}{\numberline {6.2.1}Comparison with Existing Methods}{28}{subsection.6.2.1}%
-\contentsline {subsection}{\numberline {6.2.2}Critical Discussion of the Results}{28}{subsection.6.2.2}%
-\contentsline {chapter}{\numberline {7}Applications and Future Perspectives – Conclusion}{29}{chapter.7}%
-\contentsline {section}{\numberline {7.1}Future Directions}{29}{section.7.1}%
-\contentsline {subsection}{\numberline {7.1.1}Potential Applications of the Framework}{29}{subsection.7.1.1}%
-\contentsline {subsection}{\numberline {7.1.2}Possible Extensions of the Work}{29}{subsection.7.1.2}%
-\contentsline {subsection}{\numberline {7.1.3}Open Challenges and Future Research Directions}{29}{subsection.7.1.3}%
-\contentsline {section}{\numberline {7.2}Summary of Contributions, Impact of the Research, and Final Reflections}{29}{section.7.2}%
-\contentsline {chapter}{References}{30}{chapter*.25}%
-\contentsline {chapter}{\numberline {A}Additional Technical Details}{33}{appendix.A}%
-\contentsline {chapter}{\numberline {B}Code Snippets or Pseudocode of Relevant Modules}{34}{appendix.B}%
-\contentsline {chapter}{\numberline {C}Dataset Specifications or Experimental Settings}{35}{appendix.C}%
+\contentsline {subsection}{\numberline {2.2.3}Deep Learning for Feature Extraction from Video Streams}{12}{subsection.2.2.3}%
+\contentsline {subsubsection}{Convolutional Neural Networks for Visual Representation Learning}{12}{subsubsection*.3}%
+\contentsline {subsubsection}{Evolution of Deep Architectures for Visual Representation Learning}{13}{subsubsection*.4}%
+\contentsline {subsubsection}{From Feature Extraction to Dense Prediction: Semantic Segmentation Architectures}{13}{subsubsection*.5}%
+\contentsline {section}{\numberline {2.3}Knowledge Representation and Reasoning}{13}{section.2.3}%
+\contentsline {subsection}{\numberline {2.3.1}Symbolic Representations, Semantic Networks, and Interpretable Models}{13}{subsection.2.3.1}%
+\contentsline {section}{\numberline {2.4}Reinforcement Learning Principles}{13}{section.2.4}%
+\contentsline {subsection}{\numberline {2.4.1}Theoretical foundations}{14}{subsection.2.4.1}%
+\contentsline {subsubsection}{Policie}{15}{subsubsection*.6}%
+\contentsline {subsubsection}{Value Function}{15}{subsubsection*.7}%
+\contentsline {subsubsection}{Potential and areas of application }{15}{subsubsection*.8}%
+\contentsline {subsubsection}{The path to success}{16}{subsubsection*.9}%
+\contentsline {subsection}{\numberline {2.4.2}Types of Reinforcement Learning}{17}{subsection.2.4.2}%
+\contentsline {subsubsection}{Model-Based Reinforcement Learning}{17}{subsubsection*.10}%
+\contentsline {paragraph}{Dynamic Programming Methods}{17}{paragraph*.11}%
+\contentsline {subsubsection}{Model-Free Reinforcement Learning}{18}{subsubsection*.12}%
+\contentsline {paragraph}{Monte Carlo methods}{18}{paragraph*.13}%
+\contentsline {paragraph}{Temporal Difference learning}{19}{paragraph*.14}%
+\contentsline {subsection}{\numberline {2.4.3}Deep Q-Networks}{22}{subsection.2.4.3}%
+\contentsline {paragraph}{Loss Function and Optimization}{22}{paragraph*.15}%
+\contentsline {section}{\numberline {2.5}Atari-like Environments as Testbeds}{24}{section.2.5}%
+\contentsline {subsection}{\numberline {2.5.1}Characteristics and Challenges of two-dimensional Game Environments}{24}{subsection.2.5.1}%
+\contentsline {chapter}{\numberline {3}State of the Art and Challenges}{26}{chapter.3}%
+\contentsline {section}{\numberline {3.1}Challenges in Symbolic Interpretation}{27}{section.3.1}%
+\contentsline {subsection}{\numberline {3.1.1}The Illusion of Understanding}{27}{subsection.3.1.1}%
+\contentsline {subsubsection}{The Lack of World Models}{27}{subsubsection*.16}%
+\contentsline {subsection}{\numberline {3.1.2}The Black Box Problem}{27}{subsection.3.1.2}%
+\contentsline {subsubsection}{Making Sense of AI: Toward Explainability}{27}{subsubsection*.17}%
+\contentsline {subsection}{\numberline {3.1.3}Learning Paradigms and Explainable AI}{27}{subsection.3.1.3}%
+\contentsline {subsubsection}{Learning Without Understanding}{27}{subsubsection*.18}%
+\contentsline {subsubsection}{Explainable AI: Goals and Approaches}{27}{subsubsection*.19}%
+\contentsline {subsubsection}{Post-hoc Explainability}{27}{subsubsection*.20}%
+\contentsline {subsubsection}{Intrinsic Interpretability}{27}{subsubsection*.21}%
+\contentsline {subsubsection}{Why XAI is Not Enough}{27}{subsubsection*.22}%
+\contentsline {section}{\numberline {3.2}Cognitive Foundations}{27}{section.3.2}%
+\contentsline {subsection}{\numberline {3.2.1}Human World Modelling and the Origins of Structured Cognition}{27}{subsection.3.2.1}%
+\contentsline {subsection}{\numberline {3.2.2}Core Knowledge Theory: Cognitive Principles and Psychological Foundations}{27}{subsection.3.2.2}%
+\contentsline {subsection}{\numberline {3.2.3}Definition and Relevance for World Understanding}{27}{subsection.3.2.3}%
+\contentsline {subsection}{\numberline {3.2.4}Cognitive Models and Symbolic Representation}{27}{subsection.3.2.4}%
+\contentsline {section}{\numberline {3.3}Positioning of the Proposed Framework}{27}{section.3.3}%
+\contentsline {chapter}{\numberline {4}Framework Design - Proposed Framework}{28}{chapter.4}%
+\contentsline {section}{\numberline {4.1}Conceptual Foundations}{28}{section.4.1}%
+\contentsline {subsection}{\numberline {4.1.1}Evolution of the Idea}{28}{subsection.4.1.1}%
+\contentsline {section}{\numberline {4.2}Proposed Implementation}{28}{section.4.2}%
+\contentsline {subsection}{\numberline {4.2.1}Segmentation}{28}{subsection.4.2.1}%
+\contentsline {subsection}{\numberline {4.2.2}Symbolic System as Knowledge Construction Module}{28}{subsection.4.2.2}%
+\contentsline {subsection}{\numberline {4.2.3}From Symbolic Rules to a Playable Environment}{28}{subsection.4.2.3}%
+\contentsline {subsection}{\numberline {4.2.4}Generic Environment as a Transitional Representation}{28}{subsection.4.2.4}%
+\contentsline {subsection}{\numberline {4.2.5}Deep Q-Network in a Domain-Agnostic Environment}{28}{subsection.4.2.5}%
+\contentsline {chapter}{\numberline {5}Implementation}{29}{chapter.5}%
+\contentsline {section}{\numberline {5.1}End-to-End Pipeline}{29}{section.5.1}%
+\contentsline {section}{\numberline {5.2}General Architecture of the Framework}{29}{section.5.2}%
+\contentsline {subsection}{\numberline {5.2.1}Design Choices}{29}{subsection.5.2.1}%
+\contentsline {subsection}{\numberline {5.2.2}Selected Techniques and Algorithms}{29}{subsection.5.2.2}%
+\contentsline {subsection}{\numberline {5.2.3}Modular Structure of the System}{29}{subsection.5.2.3}%
+\contentsline {subsubsection}{Video Acquisition and Preprocessing Module}{29}{subsubsection*.23}%
+\contentsline {subsubsection}{Feature Extraction Module}{29}{subsubsection*.24}%
+\contentsline {subsubsection}{Symbolic Mapping Module - Symbolic Reasoning Engine}{29}{subsubsection*.25}%
+\contentsline {paragraph}{Integration of Core Knowledge for Semantic Understanding}{29}{paragraph*.26}%
+\contentsline {paragraph}{RL Agent}{29}{paragraph*.27}%
+\contentsline {subsection}{\numberline {5.2.4}Optimizations and Efficiency Considerations}{29}{subsection.5.2.4}%
+\contentsline {chapter}{\numberline {6}Experimental Evaluation}{30}{chapter.6}%
+\contentsline {section}{\numberline {6.1}Datasets and Testing Scenarios}{30}{section.6.1}%
+\contentsline {subsection}{\numberline {6.1.1}Evaluation Metrics: Accuracy, Interpretability, Scalability}{30}{subsection.6.1.1}%
+\contentsline {section}{\numberline {6.2}Experimental Results}{30}{section.6.2}%
+\contentsline {subsection}{\numberline {6.2.1}Comparison with Existing Methods}{30}{subsection.6.2.1}%
+\contentsline {subsection}{\numberline {6.2.2}Critical Discussion of the Results}{30}{subsection.6.2.2}%
+\contentsline {chapter}{\numberline {7}Applications and Future Perspectives – Conclusion}{31}{chapter.7}%
+\contentsline {section}{\numberline {7.1}Future Directions}{31}{section.7.1}%
+\contentsline {subsection}{\numberline {7.1.1}Potential Applications of the Framework}{31}{subsection.7.1.1}%
+\contentsline {subsection}{\numberline {7.1.2}Possible Extensions of the Work}{31}{subsection.7.1.2}%
+\contentsline {subsection}{\numberline {7.1.3}Open Challenges and Future Research Directions}{31}{subsection.7.1.3}%
+\contentsline {section}{\numberline {7.2}Summary of Contributions, Impact of the Research, and Final Reflections}{31}{section.7.2}%
+\contentsline {chapter}{References}{32}{chapter*.28}%
+\contentsline {chapter}{\numberline {A}Additional Technical Details}{36}{appendix.A}%
+\contentsline {chapter}{\numberline {B}Code Snippets or Pseudocode of Relevant Modules}{37}{appendix.B}%
+\contentsline {chapter}{\numberline {C}Dataset Specifications or Experimental Settings}{38}{appendix.C}%
