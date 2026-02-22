@@ -109,6 +109,57 @@ G.~Van~Houdt, C.~Mosquera, and G.~Nápoles, ``A review on the long short-term
   \url{https://doi.org/10.1007/s10462-020-09825-6}
 \BIBentrySTDinterwordspacing
 
+\bibitem{chiave57}
+\BIBentryALTinterwordspacing
+A.~Krizhevsky, I.~Sutskever, and G.~E. Hinton, ``Imagenet classification with
+  deep convolutional neural networks,'' in \emph{Advances in Neural Information
+  Processing Systems 25 (NeurIPS 2012)}, F.~Pereira, C.~J.~C. Burges,
+  L.~Bottou, and K.~Q. Weinberger, Eds.\hskip 1em plus 0.5em minus 0.4em\relax
+  Curran Associates, Inc., 2012, pp. 1097--1105. [Online]. Available:
+  \url{https://proceedings.neurips.cc/paper_files/paper/2012/file/c399862d3b9d6b76c8436e924a68c45b-Paper.pdf}
+\BIBentrySTDinterwordspacing
+
+\bibitem{chiave58}
+\BIBentryALTinterwordspacing
+K.~Simonyan and A.~Zisserman, ``Very deep convolutional networks for
+  large-scale image recognition,'' \emph{arXiv preprint arXiv:1409.1556}, 2014,
+  submitted on 4 Sep 2014; last revised 10 Apr 2015 (v6). [Online]. Available:
+  \url{https://arxiv.org/abs/1409.1556}
+\BIBentrySTDinterwordspacing
+
+\bibitem{chiave59}
+\BIBentryALTinterwordspacing
+K.~He, X.~Zhang, S.~Ren, and J.~Sun, ``Deep residual learning for image
+  recognition,'' in \emph{Proceedings of the IEEE Conference on Computer Vision
+  and Pattern Recognition (CVPR)}, 2016, pp. 770--778. [Online]. Available:
+  \url{https://doi.org/10.1109/CVPR.2016.90}
+\BIBentrySTDinterwordspacing
+
+\bibitem{chiave60}
+\BIBentryALTinterwordspacing
+M.~Tan and Q.~V. Le, ``Efficientnet: Rethinking model scaling for convolutional
+  neural networks,'' in \emph{Proceedings of the 36th International Conference
+  on Machine Learning (ICML)}, ser. Proceedings of Machine Learning Research,
+  vol.~97.\hskip 1em plus 0.5em minus 0.4em\relax PMLR, 2019, pp. 6105--6114.
+  [Online]. Available: \url{https://proceedings.mlr.press/v97/tan19a.html}
+\BIBentrySTDinterwordspacing
+
+\bibitem{chiave34}
+J.~Long, E.~Shelhamer, and T.~Darrell, ``Fully convolutional networks for
+  semantic segmentation,'' in \emph{Proceedings of the IEEE Conference on
+  Computer Vision and Pattern Recognition (CVPR)}, June 2015.
+
+\bibitem{chiave36}
+\BIBentryALTinterwordspacing
+O.~Ronneberger, P.~Fischer, and T.~Brox, ``U-net: Convolutional networks for
+  biomedical image segmentation,'' in \emph{Medical Image Computing and
+  Computer-Assisted Intervention – MICCAI 2015}, ser. Lecture Notes in
+  Computer Science, N.~Navab, J.~Hornegger, W.~Wells, and A.~Frangi, Eds., vol.
+  9351.\hskip 1em plus 0.5em minus 0.4em\relax Springer, Cham, 2015, pp.
+  234--241. [Online]. Available:
+  \url{https://doi.org/10.1007/978-3-319-24574-4_28}
+\BIBentrySTDinterwordspacing
+
 \bibitem{chiave6}
 S.~Russell and P.~Norvig, \emph{Artificial Intelligence: A Modern
   Approach}.\hskip 1em plus 0.5em minus 0.4em\relax Englewood Cliffs:

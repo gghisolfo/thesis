@@ -146,18 +146,40 @@ The effectiveness of CNNs is rooted in four fundamental architectural principles
 A typical CNN architecture is organized as a sequence of stages, each composed of convolutional layers, nonlinear activation functions, such as the Rectified Linear Unit (ReLU), and pooling layers. In convolutional layers, neurons are grouped into feature maps, where each map applies a specific filter across the entire input, producing a representation that highlights the presence of particular local patterns.
 Pooling layers are responsible for locally aggregating information, reducing the spatial dimensionality of feature maps and introducing a degree of invariance to small translations and distortions in the input. The most common operation is max pooling, which selects the maximum value within a local neighborhood. The alternation of convolution, nonlinearity, and pooling enables the network to progressively construct increasingly abstract and robust representations.
 In the visual domain, low-level features such as edges and orientations are combined into more complex patterns, which in turn form object parts and ultimately complete objects. This hierarchical aggregation allows the learned representations to remain stable under local variations in position, shape, or appearance. In other words, CNNs leverage convolutional operations to capture local spatial patterns, which are gradually combined across deeper layers to form increasingly abstract representations. This hierarchical learning process allows the network to identify complex visual structures without relying on manually designed features. 
-The effectiveness of CNNs was clearly demonstrated in the ImageNet challenge [57], where deep architectures achieved unprecedented performance, significantly outperforming traditional computer vision approaches. This progress has made it possible to tackle complex tasks such as image segmentation, with high accuracy.
+The effectiveness of CNNs was clearly demonstrated in the ImageNet challenge \cite{chiave57}, where deep architectures achieved unprecedented performance, significantly outperforming traditional computer vision approaches. This progress has made it possible to tackle complex tasks such as image segmentation, with high accuracy.
 
 
 
 \subsubsection{Evolution of Deep Architectures for Visual Representation Learning}
+Architectures for image understanding have evolved considerably since the introduction of AlexNet in 2012\cite{chiave57}.  This model demonstrated the effectiveness of deep convolutional neural networks trained on large-scale datasets such as ImageNet, significantly outperforming traditional computer vision methods and marking a turning point for deep learning in visual recognition tasks.
+VGGNet \cite{chiave58} further emphasized the importance of network depth, showing that stacking small convolutional filters could improve representational capacity while maintaining manageable computational complexity. Its simple and uniform architecture also made it a widely adopted backbone for transfer learning and feature extraction.
+ResNet \cite{chiave59} addressed one of the key challenges in training deep networks, namely the vanishing gradient problem. It introduced residual skip connections, which allow gradients to flow more effectively through the network. Furthermore, more recent architectures such as EfficientNet\cite{chiave60} optimize both accuracy and computational efficiency through neural architecture search.
+\\Video understanding requires architectures that can process temporal information. Feature extraction from video streams for downstream tasks often involves using pre-trained networks as feature extractors, transferring knowledge learned on large-scale datasets to specific applications. The features extracted from intermediate or final layers of these networks provide rich representations that can be used for tasks such as action recognition, video classification, and temporal localization of events.
+The integration of deep learning with computer vision has enabled unprecedented performance in visual recognition tasks, but often at the cost of interpretability. The features learned by deep networks, while effective, do not always correspond to human-understandable concepts, motivating research into explainable AI and the integration of symbolic reasoning with learned representations.
+
 
 
 \subsubsection{From Feature Extraction to Dense Prediction: Semantic Segmentation Architectures}
 
+Early convolutional architectures were primarily developed for image-level classification tasks \cite{chiave60}; however, many real-world applications require a more fine-grained understanding of visual scenes. In particular, tasks such as scene understanding and environment modelling demand dense, pixel-level predictions, where each pixel is assigned a semantic label rather than a single global class.
+This shift in objectives led to the development of semantic segmentation architectures, which extend the principles of convolutional feature learning to dense prediction problems. A key milestone in this evolution is represented by Fully Convolutional Networks (FCNs) \cite{chiave34}, which replace fully connected layers with convolutional ones, enabling networks to process images of arbitrary size and produce spatially structured outputs.
+Building upon this idea, the U-Net architecture \cite{chiave36} introduced an encoder-decoder structure specifically designed to preserve spatial precision while leveraging deep hierarchical features. The encoder progressively extracts abstract visual representations through convolution and pooling operations, while the decoder reconstructs a dense segmentation map by restoring spatial resolution.
+A defining characteristic of U-Net is the use of skip connections between corresponding encoder and decoder layers. These connections allow low-level spatial information to be directly combined with high-level semantic representations, mitigating the loss of fine-grained details caused by repeated downsampling. As a result, U-Net achieves accurate boundary localization while maintaining strong semantic consistency \cite{chiave36}.
+Due to its effectiveness, architectural simplicity, and ability to perform well even with limited training data, U-Net and its variants have been widely adopted across domains, including medical imaging, robotics, and video game analysis. In particular, U-Net-based models are well suited for environments characterized by structured layouts and clearly defined visual entities, making them a natural choice for perceptual preprocessing in dynamic 2D environments and an effective perceptual backbone for downstream reasoning and decision-making systems.
+
+
 \section{Knowledge Representation and Reasoning}
 
-\subsection{Symbolic Representations, Semantic Networks, and Interpretable Models}
+The ability to represent knowledge in a structured, manipulable form and to perform reasoning over such representations is central to artificial intelligence. 
+The knowledge representation and reasoning concerned with how knowledge about the world can be formally encoded and manipulated in order to support intelligent behavior. Its primary goal is to design representational formalisms that enable artificial systems to draw logical conclusions, explain their decisions, and reason consistently about complex domains. As emphasized in classical AI literature, effective knowledge representation must balance expressive power, computational efficiency, and interpretability \cite{chiave6}.
+This section examines approaches to symbolic knowledge representation and their role in building interpretable AI systems.
+
+
+\subsection{Symbolic Representations}
+
+\subsection{Semantic Networks}
+
+\subsection{Interpretable Models}
 
 \section{Reinforcement Learning Principles}
 This section delves deeper into the principles and methods of reinforcement learning, with particular focus on Deep Q-Networks, which play a central role in the framework proposed in this thesis.
