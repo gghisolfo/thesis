@@ -165,6 +165,25 @@ S.~Russell and P.~Norvig, \emph{Artificial Intelligence: A Modern
   Approach}.\hskip 1em plus 0.5em minus 0.4em\relax Englewood Cliffs:
   Prentice-Hall, 1995.
 
+\bibitem{chiave66}
+\BIBentryALTinterwordspacing
+M.~Minsky, ``A framework for representing knowledge,'' in \emph{MIT-AI
+  Laboratory Memo 306}, Jun. 1974. [Online]. Available:
+  \url{http://hdl.handle.net/1721.1/6160}
+\BIBentrySTDinterwordspacing
+
+\bibitem{chiave67}
+\BIBentryALTinterwordspacing
+T.~R. Gruber, ``A translation approach to portable ontology specifications,''
+  \emph{Knowledge Acquisition}, vol.~5, no.~2, pp. 199--220, 1993. [Online].
+  Available: \url{https://doi.org/10.1006/knac.1993.1008}
+\BIBentrySTDinterwordspacing
+
+\bibitem{chiave68}
+F.~Baader, Ed., \emph{The Description Logic Handbook: Theory, Implementation
+  and Applications}.\hskip 1em plus 0.5em minus 0.4em\relax Cambridge, UK:
+  Cambridge University Press, 2003.
+
 \bibitem{chiave7}
 V.~Mnih \emph{et~al.}, ``Human-level control through deep reinforcement
   learning,'' \emph{Nature}, vol. 518, pp. 529--533, 2015.
