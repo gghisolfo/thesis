@@ -196,6 +196,8 @@ INPUT C:\Users\user\AppData\Local\Programs\MiKTeX\fonts\enc\dvips\lm\lm-mathit.e
 INPUT C:\Users\user\AppData\Local\Programs\MiKTeX\fonts\enc\dvips\lm\lm-mathsy.enc
 INPUT C:\Users\user\AppData\Local\Programs\MiKTeX\fonts\enc\dvips\lm\lm-mathex.enc
 INPUT C:\Users\user\AppData\Local\Programs\MiKTeX\fonts\tfm\public\lm\ec-lmri12.tfm
+INPUT C:\Users\user\AppData\Local\Programs\MiKTeX\fonts\tfm\public\lm\ec-lmr8.tfm
+INPUT C:\Users\user\AppData\Local\Programs\MiKTeX\fonts\tfm\public\lm\ec-lmr6.tfm
 INPUT .\thesis.bbl
 INPUT .\thesis.bbl
 INPUT thesis.bbl

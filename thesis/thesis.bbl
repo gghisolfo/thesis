@@ -153,8 +153,8 @@ J.~Long, E.~Shelhamer, and T.~Darrell, ``Fully convolutional networks for
 \BIBentryALTinterwordspacing
 O.~Ronneberger, P.~Fischer, and T.~Brox, ``U-net: Convolutional networks for
   biomedical image segmentation,'' in \emph{Medical Image Computing and
-  Computer-Assisted Intervention – MICCAI 2015}, ser. Lecture Notes in
-  Computer Science, N.~Navab, J.~Hornegger, W.~Wells, and A.~Frangi, Eds., vol.
+  Computer-Assisted Intervention - MICCAI 2015}, ser. Lecture Notes in Computer
+  Science, N.~Navab, J.~Hornegger, W.~Wells, and A.~Frangi, Eds., vol.
   9351.\hskip 1em plus 0.5em minus 0.4em\relax Springer, Cham, 2015, pp.
   234--241. [Online]. Available:
   \url{https://doi.org/10.1007/978-3-319-24574-4_28}
@@ -203,6 +203,15 @@ M.~C. Machado, M.~G. Bellemare, E.~Talvitie, J.~Veness, M.~Hausknecht, and
   protocols and open problems for general agents,'' \emph{Journal of Artificial
   Intelligence Research}, vol.~61, pp. 523--562, 2018. [Online]. Available:
   \url{https://doi.org/10.1613/jair.5699}
+\BIBentrySTDinterwordspacing
+
+\bibitem{chiave56}
+\BIBentryALTinterwordspacing
+J.~Deng, W.~Dong, R.~Socher, L.-J. Li, K.~Li, and L.~Fei-Fei, ``Imagenet: A
+  large-scale hierarchical image database,'' in \emph{2009 IEEE Conference on
+  Computer Vision and Pattern Recognition (CVPR)}.\hskip 1em plus 0.5em minus
+  0.4em\relax IEEE, 2009, pp. 248--255. [Online]. Available:
+  \url{https://doi.org/10.1109/CVPR.2009.5206848}
 \BIBentrySTDinterwordspacing
 
 \end{thebibliography}
