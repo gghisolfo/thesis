@@ -535,28 +535,143 @@ The diversity and complexity of Atari games, combined with their standardized in
 % =========================
 
 \chapter{Implementation}
+This chapter describes the concrete implementation of the proposed framework, detailing the end-to-end processing pipeline, the architectural design choices, and the implementation of each system module. The framework integrates visual perception, symbolic reasoning, and reinforcement learning into a unified and modular architecture capable of discovering structure, causality, and control strategies from raw sensory data, validated in a dynamic game environment.
+
 
 \section{End-to-End Pipeline}
+The implemented system follows a fully automated end-to-end pipeline that processes raw visual observations and transforms them into symbolic knowledge and action policies. The pipeline is designed to progressively increase the abstraction level of information, moving from pixels to semantic objects, then to symbolic events, and finally to decision-making strategies.
+\\
+The pipeline operates through the following stages:
+
+\begin{itemize}
+
+    \item \textbf{Visual input acquisition} \\
+    Frames are captured from the environment, each represents the full observable state of the environment at a given time step.
+
+    \item \textbf{Image preprocessing} \\
+    Input images are resized to a fixed spatial resolution and normalized using standard ImageNet statistics. 
+    This ensures numerical stability and compatibility with convolutional neural networks pretrained or inspired by standard vision architectures.
+
+    \item \textbf{Semantic segmentation} \\
+    A deep convolutional model assigns a semantic class to each pixel, producing dense segmentation masks that identify relevant entities such as the ball, paddle, bricks, and background.
+
+    \item \textbf{Patch extraction and object tracking} \\
+    Segmented regions are converted into patches and tracked across consecutive frames, forming persistent object hypotheses with temporal continuity.
+
+    \item \textbf{Symbolic abstraction and reasoning} \\
+    Visual objects are mapped into symbolic entities described by properties, events, and inferred rules. 
+    A population-based heuristic process evaluates alternative symbolic explanations and selects the most coherent ones.
+
+    \item \textbf{Reinforcement learning interaction} \\
+    A reinforcement learning agent interacts with the environment through a generic symbolic interface. 
+    The rewards are derived from intrinsic measures of causality, novelty, and event generation.
+
+    \item \textbf{Logging and persistence} \\
+    Intermediate representations, learned models, and symbolic populations are saved to disk, enabling reproducibility, debugging, and incremental refinement.
+
+\end{itemize}
+This pipeline enables learning and reasoning without relying on handcrafted semantic labels or domain-specific reward functions. While semantic labels are used internally by the segmentation module to generate class maps, they are not provided as supervision for symbolic reasoning or reward assignment; the agent and the symbolic engine operate purely on observed state changes and event structures.
 
 \section{General Architecture of the Framework}
 
 \subsection{Design Choices}
+The architecture of the framework is guided by four fundamental design principles, each contributing to its flexibility, robustness, and transparency. The first principle, modularity, ensures that each component of the system is implemented as an independent, self-contained module with clearly defined interfaces. This design allows vision, symbolic reasoning, and reinforcement learning components to be developed, tested, or replaced in isolation, facilitating experimentation and incremental improvements without disrupting the functionality of the overall system.
+Domain agnosticism represents a second cornerstone: the symbolic reasoning and reinforcement learning modules are intentionally designed to operate over arbitrary simulations, without assuming any prior knowledge of game mechanics, object semantics, or reward structures. This capability allows the framework to generalize across diverse environments and tasks, enhancing its adaptability and reducing the need for manual engineering.
+A third guiding principle is incremental knowledge construction; whereby symbolic knowledge is not static but continuously refined. As the system observes additional trajectories, it dynamically discovers new events, rules, and abstractions, progressively building a richer internal model of the environment. This incremental learning mechanism mirrors human-like cognitive processes, allowing the agent to improve its understanding over time.
+Finally, interpretability sets the framework apart from conventional end-to-end black-box approaches. By exposing intermediate symbolic representations, including object properties, causal relationships between events, and inferred rules, the system allows researchers and practitioners to inspect, analyse, and validate the agent's reasoning process. This transparency not only facilitates debugging and knowledge extraction but also provides a foundation for explainable AI, ensuring that the agent's decisions can be understood and trusted.
+
+
 
 \subsection{Selected Techniques and Algorithms}
+
+The framework combines several established techniques in a novel configuration:
+\begin{itemize}
+
+    \item U-Net convolutional architecture for pixel-wise semantic segmentation.
+    \item Heuristic population-based symbolic induction for rule discovery.
+    \item Automatic state and event extraction based on attribute introspection.
+    \item Deep Q-Learning (DQN) for policy learning.
+    \item Intrinsic motivation mechanisms, including curiosity and causal impact rewards.
+
+\end{itemize}
+The interaction between these techniques allows the agent to learn meaningful behaviors even in the absence of explicit task rewards.
 
 \subsection{Modular Structure of the System}
 
 \subsubsection{Video Acquisition and Preprocessing Module}
+The video acquisition module is responsible for efficiently handling visual input data and preparing it for subsequent processing stages. It supports both online acquisition of frames from live simulations and the loading of previously recorded gameplay logs. Each frame is resized to a fixed resolution of $120 \times 70$ pixels to ensure a consistent input size for the neural network and is converted into a normalized tensor to facilitate stable training. Corresponding segmentation masks are loaded as integer-valued images, where each pixel represents a semantic class identifier, allowing the network to learn to associate spatial regions with meaningful object categories.
+A custom dataset class encapsulates the logic for pairing each image with its corresponding mask, while PyTorch data loaders handle batching, shuffling, and splitting into training and validation sets. A fixed random seed is used to ensure reproducibility of the dataset splits, which is crucial for consistent evaluation of model performance. By abstracting low-level data handling, this module provides a clean interface for the feature extraction stage, allowing the focus to remain on the learning task rather than on preprocessing logistics.
+
 
 \subsubsection{Feature Extraction Module}
+The feature extraction module performs semantic segmentation using a U-Net architecture \cite{chiave36}, which is highly effective for dense pixel-wise prediction tasks. The network follows a symmetric encoder-decoder design: the encoder progressively extracts hierarchical feature representations through convolutional blocks and downsampling, while the decoder reconstructs spatial resolution using transposed convolutions and skip connections. Skip connections between corresponding encoder and decoder layers enable the network to recover fine-grained spatial details lost during downsampling, allowing for precise localization of object boundaries while maintaining contextual awareness.
+Each convolutional block consists of two convolutional layers with 
+$3 \times 3$ kernels, followed by batch normalization and ReLU activation. Batch normalization stabilizes training by normalizing intermediate activations, and ReLU introduces non-linearities that allow the network to model complex patterns. The final output layer uses a 
+$1 \times 1$ convolution to produce one channel per semantic class, enabling per-pixel class predictions.
+Training is conducted with a multi-class cross-entropy loss, optimized using the Adam optimizer. To improve stability and generalization, the training process incorporates data augmentation, input normalization, small batch sizes, and early stopping based on validation loss. Evaluation metrics include pixel accuracy and mean Intersection over Union (mIoU) \cite{chiave34}, which quantify agreement between predicted and ground-truth segmentation maps. Additionally, qualitative visualization tools allow direct inspection of predicted masks alongside ground-truth annotations.
+Overall, this module abstracts the pipeline from raw video frames to class-labeled segmentation maps, producing dense semantic representations that form the foundation for downstream tasks such as symbolic reasoning or reinforcement learning. Its design supports reproducible training and efficient inference, combining robust data handling with a well-established deep learning architecture.
 
-\subsubsection{Symbolic Mapping Module - Symbolic Reasoning Engine}
 
-\paragraph{Integration of Core Knowledge for Semantic Understanding}
 
-\paragraph{RL Agent}
+\subsubsection{Symbolic Reasoning Module}
+The symbolic mapping module converts low-level perceptual outputs into high-level symbolic representations. Each segmented object is transformed into a symbolic entity characterized by:
+\begin{itemize}
+    \item A unique identifier
+    \item A set of observable properties (e.g., position, presence)
+    \item A history of detected events
+    \item Associations with inferred behavioral rules
+\end{itemize}
+Object persistence across frames is handled through patch tracking, allowing the system to reason about temporal continuity and object identity.
+
+????Integration of Core Knowledge for Semantic Understanding
+
+Rather than injecting predefined domain knowledge, the system employs a heuristic initialization process that generates a population of candidate symbolic explanations. Each individual in the population represents a distinct hypothesis about how objects behave and interact over time.
+
+Individuals are evaluated based on their ability to explain observed events while minimizing unexplained changes. Scoring functions reward coherence, temporal consistency, and explanatory completeness.
+
+The best-performing individuals are retained, serialized, and summarized into higher-level prototypes. These prototypes act as emergent core knowledge, capturing regularities such as object dynamics or interaction patterns without explicit supervision.
+
+\subsubsection{Reinforcement Learning Agent}
+The reinforcement learning agent is implemented using a fully generic symbolic environment. The environment automatically extracts all observable numerical and boolean attributes from the simulation object, forming a state representation without manual feature engineering.
+Events are detected by comparing consecutive states and identifying significant changes in attribute values. These events are treated uniformly, without predefined semantic labels.
+A causal event tracker groups events occurring within a temporal window into causal chains. Longer chains yield higher intrinsic rewards, encouraging the agent to discover action sequences that produce rich and structured dynamics.
+The agent is trained using Deep Q-Learning with experience replay, target networks, and $\varepsilon$-greedy exploration.
+
+
+\paragraph{Reward Design and Intrinsic Motivation}
+
+A central aspect of the implementation is the use of intrinsic reward signals. The total reward at each time step is composed of several components:
+
+Event-based reward
+Proportional to the number of detected events and the length of their causal chains.
+
+Causal impact bonus
+Measures how much the outcome of an action differs from a no-op baseline, encouraging interventions that meaningfully affect the environment.
+
+Curiosity bonus
+Derived from the prediction error of a learned forward dynamics model, which estimates the next state given the current state and action.
+
+Event density bonus
+Optionally rewards large overall changes in the state vector, promoting exploration of diverse configurations.
+
+This reward structure allows the agent to learn even in environments with sparse or absent external rewards.
 
 \subsection{Optimizations and Efficiency Considerations}
+
+
+Several implementation choices improve computational efficiency and training stability:
+\begin{itemize}
+    \item Early stopping during segmentation training
+    \item Gradient clipping in neural networks
+    \item Limited observation dimensionality for reinforcement learning
+    \item Adaptive target network update frequency
+
+Serialization of models, logs, and symbolic populations
+\end{itemize}
+
+
+
+These optimizations ensure that the framework remains tractable despite its multi-layered architecture.
 
 % =========================
 % 6 EXPERIMENTAL EVALUATION
