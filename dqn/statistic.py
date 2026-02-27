@@ -27,6 +27,17 @@ MODEL_LIST = [
 
 
 
+BEST_MODEL_LIST = [
+    "./dqn/dqn_models/WINNING_MODEL.pth",
+    "./dqn/dqn_models/arkanoid_no_shaping_no_density/last_generic_arkanoid.pth",  #99%
+    "./dqn/dqn_models/arkanoid_no_shaping_no_density/best_time_arkanoid.pth", # 81%
+    "./dqn/dqn_models/arkanoid_no_shaping_yes_density/best_time_arkanoid.pth", # 100%
+
+]
+
+
+
+
 N_EPISODES = 100
 TIME_LIMIT = 60  # secondi
 
@@ -52,7 +63,7 @@ def load_model(path):
 
 all_results = {}
 
-for model_path in MODEL_LIST:
+for model_path in BEST_MODEL_LIST: # BEST_MODEL_LIST | MODEL_LIST
 
     print(f"\n==============================")
     print(f"TESTING MODEL: {model_path}")

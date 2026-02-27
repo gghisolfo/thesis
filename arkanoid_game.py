@@ -55,7 +55,7 @@ class Game:
         self.init_walls()
 
         self.first_brick = 11, 10
-        self.brick_nrow, self.brick_ncol = 3, 8 # 3, 8
+        self.brick_nrow, self.brick_ncol = 3, 8 # 3, 8 numberbricks (non modificare 8 perchè esce dal muro)
         self.brick_distance = 14, 10
         self.brick_halfwidth, self.brick_halfheight = 5, 2
 
@@ -87,7 +87,7 @@ class Game:
     def init_walls(self):
 
         self.grid[0:3, 3:grid_height - 3] = 5 # left wall
-        self.r[0:3, 3:grid_height - 3] = 0
+        self.r[0:3, 3:grid_height - 3] = 0 #changecolours 
         self.g[0:3, 3:grid_height - 3] = 255
         self.b[0:3, 3:grid_height - 3] = 50
 
@@ -434,7 +434,7 @@ class Game:
 #        self.b[self.ball_old_x - self.ball_radius:self.ball_old_x + self.ball_radius + 1, self.ball_old_y - self.ball_radius:self.ball_old_y + self.ball_radius + 1] = 0
 
         #self.grid[self.ball_x - self.ball_radius:self.ball_x + self.ball_radius + 1, self.ball_y - self.ball_radius:self.ball_y + self.ball_radius] = 1
-        self.r[self.ball_x - self.ball_radius:self.ball_x + self.ball_radius + 1, self.ball_y - self.ball_radius:self.ball_y + self.ball_radius + 1] = 255
+        self.r[self.ball_x - self.ball_radius:self.ball_x + self.ball_radius + 1, self.ball_y - self.ball_radius:self.ball_y + self.ball_radius + 1] = 255 #changecolours
 #        self.g[self.ball_x - self.ball_radius:self.ball_x + self.ball_radius + 1, self.ball_y - self.ball_radius:self.ball_y + self.ball_radius + 1] = 0
 #        self.b[self.ball_x - self.ball_radius:self.ball_x + self.ball_radius + 1, self.ball_y - self.ball_radius:self.ball_y + self.ball_radius + 1] = 0
 
