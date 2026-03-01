@@ -13,11 +13,12 @@
 \usepackage{verbatim}
 \usepackage{caption}
 \usepackage{booktabs}   
+\usepackage{graphicx}   
+\usepackage{geometry}
 
-
+\geometry{top=1cm, bottom=2.5cm, left=3cm, right=3cm}
 
 \usepackage[colorlinks=true, linkcolor=blue, urlcolor=blue, citecolor=blue]{hyperref}
-
 
 % Rimuove la scritta "Chapter"
 \titleformat{\chapter}[hang]
@@ -26,6 +27,50 @@
 \renewcommand{\chaptername}{}
 
 \begin{document}
+\begin{titlepage}
+  \centering
+
+  \includegraphics[width=7.5cm]{politoLogo2021.jpg}
+
+  \vspace{0.4cm}
+
+  {\Large \textbf{Politecnico di Torino}}
+
+  \vspace{0.7cm}
+
+  {\large Master's Degree in Artificial Intelligence and Data Analytics}
+
+  \vspace{0.2cm}
+
+  {\normalsize A.Y. 2025-2026}
+
+  \vspace{0.1cm}
+
+  {\normalsize March 2026}
+
+  \vfill
+
+  {\LARGE \textbf{Design and Development of a Framework for Extracting Interpretable Symbolic Knowledge from Video Streams Exploiting Core Knowledge}}
+
+  \vfill
+
+  \begin{minipage}[t]{0.45\textwidth}
+    \raggedright
+    \textbf{Supervisors:}\\[6pt]
+    Stefano Quer \\
+    Giovanni Squillero
+  \end{minipage}
+  \hfill
+  \begin{minipage}[t]{0.45\textwidth}
+    \raggedleft
+    \textbf{Candidates:}\\[6pt]
+    Giorgia Ghisolfo \\
+    Student ID: 332968
+  \end{minipage}
+
+  \vspace{1.5cm}
+
+\end{titlepage}
 
 % =========================
 % ABSTRACT
@@ -64,13 +109,16 @@ The field of artificial intelligence has undergone deep transformations since it
 \section{The Evolution of Learning in Artificial Intelligence}
 \subsection{Artificial Intelligence Paradigms}
 
-The history of artificial intelligence is characterized by the emergence and evolution of three major paradigms, each representing a distinct approach to providing machines the human-like reasoning abilities. The symbolic paradigm, dominant from the 1950s through the 1980s. This paradigm was grounded in the hypothesis that human intelligence could be replicated through the manipulation of symbols, according to logical rules, to perform reasoning tasks. The systems  built on this paradigm operated on explicit knowledge representations, using formal logic and rule-based reasoning to solve problems. These systems are grounded in formal logic and manually designed rule sets. Classic examples include expert systems such as MYCIN and Deep Blue, as well as semantic networks and logic programming frameworks \cite{chiave16}. 
+The history of artificial intelligence is characterized by the emergence and evolution of three major paradigms, each representing a distinct approach to providing machines the human-like reasoning abilities. 
+\\
+The symbolic paradigm, dominant from the 1950s through the 1980s. This paradigm was grounded in the hypothesis that human intelligence could be replicated through the manipulation of symbols, according to logical rules, to perform reasoning tasks. The systems  built on this paradigm operated on explicit knowledge representations, using formal logic and rule-based reasoning to solve problems. These systems are grounded in formal logic and manually designed rule sets. Classic examples include expert systems such as MYCIN and Deep Blue, as well as semantic networks and logic programming frameworks \cite{chiave16}. 
 They are capable of performing reasoning tasks and have achieved notable success in constrained domains where knowledge can be explicitly encoded. 
 However, the symbolic paradigm faced significant limitations due to its high reliance on manually encoded knowledge. 
 Indeed, when faced with tasks requiring pattern recognition, learning from experience, the management of uncertainty or incomplete information, it suffered from brittleness \cite{chiave16, chiave15}.
 These challenges gave rise to the connectionist paradigm, which gained prominence in the late 1980s and experienced a resurgence in the 2010s with the advent of deep learning \cite{chiave40}. Inspired by the structure and function of biological 
 neural networks, connectionist systems learn representations directly from data through training processes that adjust connection weights between artificial neurons \cite{chiave26, chiave40}. This paradigm has achieved remarkable success in tasks such as image recognition, natural language processing and game playing, often surpassing human-level performance in specific domains \cite{chiave1}. Their capacity for robust and interpretable reasoning remains limited. Deep learning still struggles with structured reasoning, causal inference and factual consistency. Despite the impressive capabilities of neural networks, their operation and internal representation often lacks transparency, giving rise to what is commonly referred to as the "black box problem” \cite{chiave15}, which limits interpretability, accountability and trust.
 Indeed, many of these approaches compromised interpretability and relied on strong assumptions. Moreover, they lacked the rich semantic expressiveness characteristic of symbolic systems. These limitations provide strong motivation for integrating neural and symbolic paradigms.
+
 In short, symbolic systems excel at reasoning but lack at perception, while neural networks excel at perception but struggle with reasoning  \cite{chiave16}.
 This limitation has motivated the emergence of a hybrid paradigm, which seeks to combine the learning capabilities of neural networks with the interpretability and reasoning power of symbolic systems. Neuro-symbolic AI represents this third wave, aiming to bridge the gap between data-driven learning and knowledge-based reasoning as well as between logic-based inference and gradient-based learning. By integrating these paradigms, it aims to potentially offer systems that are both powerful and 
 explainable  \cite{chiave43}.
@@ -93,7 +141,7 @@ Although several challenges persist, neuro-symbolic AI is widely regarded as a p
 
 Symbolic AI operates on the principle that intelligence can be reduced to the manipulation of symbols representing concepts, objects and relationships. The knowledge in symbolic systems is typically encoded using various representation schemes, including production rules, semantic networks, frames and logical predicates. These representations enable explicit reasoning processes such as deduction, induction and abduction, allowing systems 
 to draw inferences, explain their decisions and incorporate domain knowledge provided by human experts.
-The advantages of symbolic approaches include interpretability, the ability to incorporate prior knowledge and support for logical reasoning and explanation. However, they also present significant challenges: knowledge acquisition bottleneck, brittleness when facing situations not covered by explicit rule and difficulty in learning from raw sensory data. The manual 
+The advantages of symbolic approaches include interpretability, ability to incorporate prior knowledge and support for logical reasoning and explanation. However, they also present significant challenges: knowledge acquisition bottleneck, brittleness when facing situations not covered by explicit rule and difficulty in learning from raw sensory data. The manual 
 encoding of knowledge is intensive and may not capture the full complexity of real-world domains \cite{chiave16}. 
 Hybrid approaches seek to overcome these limitations by integrating symbolic and connectionist methods. 
 Various integration strategies have been proposed, including systems where neural networks generate symbolic representations that are then processed by reasoning engines, architectures that embed symbolic knowledge into neural 
@@ -107,7 +155,7 @@ most exciting directions in AI research today. It aims to create intelligent sys
 
 Reinforcement learning (RL) represents a distinct learning paradigm in which an agent learns to make decisions by interacting with an environment. Unlike supervised learning, which requires labeled training data, or unsupervised learning, which seeks to discover patterns in unlabeled data, reinforcement learning is based on the principle of learning from the consequences of actions through trial and error \cite{chiave49}. The agent takes actions, observes their consequences, and receives feedback in the form of rewards. At the beginning of learning, an agent may have limited or no prior knowledge of the environment. In model-free 
 approaches, no explicit model is available, and learning relies entirely on interaction. In contrast, model-based methods assume a known model or aim to learn it explicitly. This flexibility makes reinforcement learning suitable for complex environments, where providing a complete dataset or manually specifying optimal behavior is impractical.
-The core structure of Reinforcement Learning (RL) is modelled through a Markov Decision Process (MDP), which provides a mathematical framework for sequential decision-making \cite{chiave49}. An MDP is defined by a finite or continuous set of states representing the possible situations an agent can encounter, a set of actions available to the agent and a transition function that specifies the probability of moving from one state to another after taking a particular action. Additionally, a reward function assigns numerical feedback to each state-action pair, 
+The core structure of Reinforcement Learning is modelled through a Markov Decision Process (MDP), which provides a mathematical framework for sequential decision-making \cite{chiave49}. An MDP is defined by a finite or continuous set of states representing the possible situations an agent can encounter, a set of actions available to the agent and a transition function that specifies the probability of moving from one state to another after taking a particular action. Additionally, a reward function assigns numerical feedback to each state-action pair, 
 quantifying the immediate benefit of a given choice. By observing the current state, selecting an action, and receiving a reward and a new state, the agent incrementally improves its decision-making strategy \cite{chiave45}.
 Over time, the agent aims to learn an optimal policy, which is a strategy mapping states to actions. The goal of this policy is to maximize the expected cumulative reward across future interactions, balancing short-term gains with long-term benefits through exploration and exploitation.
 Several agent design approaches exist, including methods based on value estimation and approaches that learn action values directly, such as Q-learning. More advanced techniques combine different strategies to improve learning efficiency. 
@@ -189,7 +237,7 @@ Symbolic representation involves encoding knowledge using discrete symbols and t
 Semantic networks are graph-based models designed to organize and represent knowledge through interconnected nodes and labeled edges. In this context, nodes correspond to concepts, objects, or entities, while edges denote semantic relations between them, such as \textit{is-a} (classification), \textit{part-of } (composition), or associative links. This structure allows knowledge to be represented in a way that mirrors conceptual organization, making relationships explicit and visually interpretable.
 One of the central advantages of semantic networks is their ability to represent taxonomic hierarchies. Through hierarchical relations (e.g., canary → bird → animal), properties associated with more general categories can be inherited by more specific ones. For instance, if the concept bird is associated with the property has wings, that property can automatically be inferred for canary without being redundantly specified. This mechanism, known as inheritance reasoning, supports efficient knowledge organization and reduces duplication.
 From a cognitive perspective, semantic networks were strongly influenced by early models of human memory and conceptual organization. A foundational contribution was provided by M. Ross Quillian (1968), who proposed semantic memory models structured as hierarchical networks in which concepts are connected by labeled relations. His work demonstrated how hierarchical organization could explain verification time in human reasoning tasks, suggesting that cognitive processes may operate through structured relational networks.
-Later, John F. Sowa expanded the formal foundations of semantic networks by integrating them with logic in his theory of Conceptual Graphs, providing a more rigorous semantic interpretation and linking graph structures to formal logic systems.
+Later, John F. Sowa expanded the formal foundations of semantic networks by integrating them with logic in his theory of \textit{Conceptual Graphs}, providing a more rigorous semantic interpretation and linking graph structures to formal logic systems.
 Their graphical notation makes them particularly intuitive, facilitating both human understanding and computational reasoning. Although later symbolic formalisms, such as description logics and ontology languages,  provided more formal semantics, semantic networks remain a foundational paradigm in knowledge representation.
 
 
@@ -197,8 +245,11 @@ Their graphical notation makes them particularly intuitive, facilitating both hu
 In knowledge representation, a variety of symbolic models have been developed to describe objects, situations, and events in a structured and interpretable way. Among these, frames and scripts extend semantic networks by introducing richer internal structures capable of capturing stereotypical situations and recurring sequences of actions.
 A frame represents a stereotypical object or situation through a set of attributes, known as slots, which may be filled with specific values, default assumptions, or references to other frames. This structured representation allows frames to encode both declarative knowledge about entities and procedural knowledge about the actions typically associated with a given context. Scripts, by contrast, are specifically designed to model common sequences of events. They describe how actions usually unfold in familiar situations and are particularly effective for narrative understanding and for predicting behavior in routine scenarios. Both models were originally proposed to account for aspects of human comprehension and memory \cite{chiave66}.
 A more formal and explicit approach to knowledge representation is provided by ontologies, which define a shared conceptual framework for a given domain. Ontologies specify classes, relations, constraints, and axioms using logic-based languages, often grounded in Description Logic. By enforcing precise semantics, they enable automated reasoning tasks such as consistency checking, classification, and logical inference. Their standardized nature also supports knowledge sharing and reuse across different systems, making ontologies a central component of areas such as the Semantic Web, intelligent information retrieval, and large-scale knowledge integration  \cite{chiave67, chiave68}.
-Another major category of symbolic approaches is logic-based representations, which encode knowledge as sets of formal logical statements. First-order logic provides a powerful framework for expressing complex relationships among entities through predicates, variables, and quantifiers, enabling rigorous deductive reasoning. Alongside this, production rules, typically expressed as if-then statements, capture procedural knowledge and support both forward chaining, in which conclusions are derived from known facts, and backward chaining, in which goals are traced back to the conditions required to satisfy them. These mechanisms have played a foundational role in expert systems and rule-based AI architectures.
+Another major category of symbolic approaches is logic-based representations, which encode knowledge as sets of formal logical statements. First-order logic provides a powerful framework for expressing complex relationships among entities through predicates, variables, and quantifiers, enabling rigorous deductive reasoning. Alongside this, production rules, typically expressed as if-then statements, capture procedural knowledge and support both forward chaining, in which conclusions are derived from known facts, and backward chaining, in which goals are traced back to the conditions required to satisfy them. 
+
+These mechanisms have played a foundational role in expert systems and rule-based AI architectures.
 The strength of logical representations lies in their ability to guarantee consistency, derive logical consequences, and provide clear explanations for inferred conclusions, if inference rules are correctly applied. More broadly, the interpretability of symbolic representations constitutes a key advantage: the meaning of symbols, rules, and relations can be directly understood by humans, facilitating debugging, validation, and trust in AI systems. However, constructing such representations manually or extracting them from raw, unstructured data remains a significant challenge.
+
 Despite these limitations, symbolic knowledge representation continues to be a crucial component of artificial intelligence, particularly in applications that require explainability, structured reasoning, and formal guarantees. Due to purely symbolic systems are not sufficient on their own, their integration with data-driven approaches offers promising directions for the development of interpretable and robust AI systems. Ongoing research in neuro-symbolic methods aims to automate the extraction of symbolic knowledge from data while preserving the powerful reasoning capabilities that symbolic representations provide.
 
 \section{Reinforcement Learning Principles}
@@ -480,8 +531,9 @@ Over the past decade, two-dimensional video games, especially those from the Ata
 
 \subsection{Characteristics and Challenges of two-dimensional Game Environments}
 
-Atari games present diverse challenges that require different capabilities \cite{chiave62}. In this study, we concentrate our analysis on the Atari game Breakout as a representative benchmark environment. This choice allows us to highlight several fundamental properties shared by many Atari games suit. 
+Atari games present diverse challenges that require different capabilities \cite{chiave62}. In this study, we concentrate our analysis on the Atari game  (also called Arkanoid) as a representative benchmark environment. This choice allows us to highlight several fundamental properties shared by many Atari games suit. 
 More in details, these environments often require strong temporal reasoning. Temporal reasoning is essential in many games, where success depends on understanding sequences of events, anticipating future states, and planning multi-step strategies. In some cases, precise timing of actions is crucial, while in others, rewards are delayed and the consequences of decisions become apparent only after multiple steps. Breakout requires predicting where the ball will land based on its current trajectory and velocity. Furthermore, the agent must plan the paddle's movements several steps in advance, especially when the ball bounces off bricks or edges. This corresponds to the need for multi-step planning and anticipation of future states.
+
 Exploration and credit assignment pose additional challenges. Many Atari games sparse reward structures, in which positive feedback is infrequent, making difficult for learning algorithms to discover effective strategies. Furthermore, long action sequences with delayed outcomes complicate the attribution of credit to individual actions that ultimately lead to success or failure. 
 Partial observability is another important characterizes several games, where the full state is not visible in a single frame. This requires agents to integrate information over time or maintain memory of past observations. In Breakout, even though the agent receives numerical information such as the position and speed of the ball, it does not know the complete future trajectory or any changes in speed due to multiple bounces.  This necessitates mechanisms for temporal integration beyond simple reactive policies.
 Generalization across games remains a key challenge \cite{chiave62} for the development of general-purpose learning systems. Although deep reinforcement learning has achieved superhuman performance on individual games, transferring of learned knowledge across different games remains difficult. Each game may require different visual features, temporal abstractions, and strategic reasoning, thereby testing the generality and robustness of learning algorithms.  Even though Breakout doesn't directly test your ability to transfer strategies to other games, while the goal is to develop a generic algorithm, generalization remains a theoretical challenge of the Atari suite.
@@ -779,7 +831,7 @@ This chapter describes the concrete implementation of the proposed framework, de
 
 
 \section{End-to-End Pipeline}
-The implemented system follows a fully automated end-to-end pipeline that processes raw visual observations and transforms them into symbolic knowledge and action policies. The pipeline is designed to progressively increase the abstraction level of information, moving from pixels to semantic objects, then to symbolic events, and finally to decision-making strategies.
+The implemented system follows a fully automated end-to-end pipeline that processes raw visual observations and transforms them into symbolic knowledge and action policies. The pipeline is designed to progressively increase the abstraction level of information, moving from pixels to semantic objects, then from symbolic events to decision-making strategies.
 \\
 The pipeline operates through the following stages:
 
@@ -818,8 +870,11 @@ This pipeline enables learning and reasoning without relying on handcrafted sema
 The architecture of the framework is guided by four fundamental design principles, each contributing to its flexibility, robustness, and transparency. 
 \\
 The first principle, modularity, ensures that each component of the system is implemented as an independent, self-contained module with clearly defined interfaces. This design allows vision, symbolic reasoning, and reinforcement learning components to be developed, tested, or replaced in isolation, facilitating experimentation and incremental improvements without disrupting the functionality of the overall system.
+
 Domain agnosticism represents a second cornerstone: the symbolic reasoning and reinforcement learning modules are intentionally designed to operate over arbitrary simulations, without assuming any prior knowledge of game mechanics, object semantics, or reward structures. This capability allows the framework to generalize across diverse environments and tasks, enhancing its adaptability and reducing the need for manual engineering.
+
 A third guiding principle is incremental knowledge construction; whereby symbolic knowledge is not static but continuously refined. As the system observes additional trajectories, it dynamically discovers new events, rules, and abstractions, progressively building a richer internal model of the environment. This incremental learning mechanism mirrors human-like cognitive processes, allowing the agent to improve its understanding over time.
+
 Finally, interpretability sets the framework apart from conventional end-to-end black-box approaches. By exposing intermediate symbolic representations, including object properties, causal relationships between events, and inferred rules, the system allows researchers and practitioners to inspect, analyse, and validate the agent's reasoning process. Importantly, these symbolic components do not directly influence the DQN agent's decisions; rather, they provide a means to quantify how much the symbolic model has captured about the environment. This transparency not only facilitates debugging and knowledge extraction but also provides a foundation for explainable AI, ensuring that the agent's decisions can be understood and trusted.
 
 
@@ -841,7 +896,8 @@ The interaction between these techniques allows the agent to learn meaningful be
 \subsection{Modular Structure of the System}
 
 \subsubsection{Video Acquisition and Preprocessing Module}
-The video acquisition module is responsible for efficiently handling visual input data and preparing it for subsequent processing stages. It supports both online acquisition of frames from live simulations and the loading of previously recorded gameplay logs. Each frame is resized to a fixed resolution of $120 \times 70$ pixels to ensure a consistent input size for the neural network and is converted into a normalized tensor to facilitate stable training. Corresponding segmentation masks are loaded as integer-valued images, where each pixel represents a semantic class identifier, allowing the network to learn to associate spatial regions with meaningful object categories.
+The video acquisition module is responsible for efficiently handling visual input data and preparing it for subsequent processing stages. It supports both online acquisition of frames from live simulations and the loading of previously recorded gameplay logs. Each frame is resized to a fixed resolution of $120 \times 70$ pixels to ensure a consistent input size for the neural network and is converted into a normalized tensor to facilitate stable training. 
+The Corresponding segmentation masks are loaded as integer-valued images, where each pixel represents a semantic class identifier, allowing the network to learn to associate spatial regions with meaningful object categories.
 A custom dataset class encapsulates the logic for pairing each image with its corresponding mask, while PyTorch data loaders handle batching, shuffling, and splitting into training and validation sets. A fixed random seed is used to ensure reproducibility of the dataset splits, which is crucial for consistent evaluation of model performance. By abstracting low-level data handling, this module provides a clean interface for the feature extraction stage, allowing the focus to remain on the learning task rather than on preprocessing logistics.
 
 
@@ -850,6 +906,7 @@ The feature extraction module performs semantic segmentation using a U-Net archi
 Each convolutional block consists of two convolutional layers with 
 $3 \times 3$ kernels, followed by batch normalization and ReLU activation. Batch normalization stabilizes training by normalizing intermediate activations, and ReLU introduces non-linearities that allow the network to model complex patterns. The final output layer uses a 
 $1 \times 1$ convolution to produce one channel per semantic class, enabling per-pixel class predictions.
+
 Training is conducted with a multi-class cross-entropy loss, optimized using the Adam optimizer. To improve stability and generalization, the training process incorporates data augmentation, input normalization, small batch sizes, and early stopping based on validation loss. Evaluation metrics include pixel accuracy and mean Intersection over Union (mIoU) \cite{chiave34}, which quantify agreement between predicted and ground-truth segmentation maps. 
 \\
 Overall, this module abstracts the pipeline from raw video frames to class-labeled segmentation maps, producing dense semantic representations that form the foundation for downstream tasks. Its design supports reproducible training and efficient inference, combining robust data handling with a well-established deep learning architecture.
@@ -860,7 +917,7 @@ Overall, this module abstracts the pipeline from raw video frames to class-label
 The symbolic reasoning module converts low-level perceptual outputs into high-level symbolic representations. Each segmented object is transformed into a symbolic entity characterized by:
 \begin{itemize}
     \item A unique identifier.
-    \item A set of observable properties (e.g., position, ???)
+    \item A set of observable properties (e.g., position, shape)
     \item A history of detected events.
     \item Associations with inferred behavioral rules.
 \end{itemize}
@@ -987,26 +1044,28 @@ A key preliminary step in our framework is the extraction of symbolic representa
 
 In principle, one might attempt to translate segmentation maps directly into symbolic logs compatible with the inference module. However, early experiments showed that this naive mapping is insufficient due to two main factors:
 \begin{enumerate}
-    \item Noise in segmentation outputs: Even state-of-the-art segmentation models produce spurious predictions, small artifacts, or intermittent missing detections, which can disrupt the identification of consistent object instances over time.
-    \item First-generation symbolic module limitations: The initial symbolic reasoning pipeline expects structured, temporally coherent inputs. Raw masks alone do not encode relational information or temporal consistency, leading to fragmented event chains and breakdown in rule induction.
+    \item Noise in segmentation outputs: even state-of-the-art segmentation models produce spurious predictions, small artifacts, or intermittent missing detections, which can disrupt the identification of consistent object instances over time.
+    \item First-generation symbolic module limitations: the initial symbolic reasoning pipeline expects structured, temporally coherent inputs. Raw masks alone do not encode relational information or temporal consistency, leading to fragmented event chains and breakdown in rule induction.
 \end{enumerate}
 To overcome these challenges, it was developed a refinement pipeline that converts semantic masks into structured interaction logs while preserving object identity and temporal continuity.
 \subsubsection{Symbolic Log Reconstruction}
 
-Since the environment is a controlled synthetic domain, the geometric properties of all game objects are known a priori. This allows segmentation output to be systematically corrected to match the expected real-world shapes and dimensions. For example, a brick missing a corner pixel is completed, slightly malformed contours are regularized, and spurious artifacts are discarded. The semantic network inference is thus not treated as ground truth, but as a noisy signal that is refined against a structural prior derived from the environment itself.
+Since the environment is a controlled synthetic domain, the geometric properties of all game objects are known a priori. This allows segmentation output to be systematically corrected to match the expected real-world shapes and dimensions. For example, a brick missing a corner pixel is completed, and slightly malformed contours are regularized. The semantic network inference is thus not treated as ground truth, but as a noisy signal that is refined against a structural prior derived from the environment itself.
+
 The reconstruction process proceeds in two main stages.
 In the first stage, mask parsing and object extraction, each frame is analysed to identify individual instances of balls, paddles, walls, and bricks using connected-component analysis. Each instance is assigned a unique identifier, particularly important for bricks, which can be numerous, and position, size, and hitbox information are extracted and normalized into a structured object description. In the second stage, frame-wise log assembly, each frame is transformed into a structured dictionary encoding four fields: elements, containing the objects present with their properties; commands, serving as placeholders for agent actions at this stage; events, initialized as empty lists for later derivation; and \textit{global\_state}, capturing environment-level metadata such as score and object velocity.
 This pipeline ensures that the symbolic module receives high-quality, temporally coherent logs, mitigating the effects of segmentation noise and module sensitivity.
-In addition, procedure provides two main advantages:
+\\
+In addition, this procedure provides two main advantages:
 \begin{itemize}
     \item \textbf{Bridging perception and symbolic reasoning}: structured logs encode both visual properties and inferred dynamics, enabling the symbolic module to operate without direct pixel-level information.
     \item \textbf{Noise resilience}: correcting malformed contours, completing missing pixels, and discarding spurious artifacts, compensate for residual segmentation errors, allowing rule induction to focus on causal regularities rather than transient noise.
 \end{itemize}    
-Although structured logs successfully encode both object identity and causal interactions, forming a solid foundation for the later reinforcement learning experiments based on causal intrinsic reward. However, naive log reconstruction from raw masks failed to produce meaningful causal chains, underscoring the necessity of refinement and heuristics. Therefore per-frame semantic segmentation alone is insufficient for reliable symbolic grounding due to noise and module limitations. A refinement pipeline that reconstructs coherent interaction logs is necessary to enable robust rule induction. 
 
 \subsection{Preliminary Validation: Symbolic Representation Learning}
 This section presents a set of experiments conducted using the preliminary version of the Symbolic reasoning module. The goal is to evaluate the quality of the internal representations learned by the model by comparing them with the ground-truth rules governing the simulated environment.
-As previously described, the system does not receive high-level semantic descriptions but rather sequences of frames composed of anonymous patches characterized only by low-level attributes. An episode corresponds to the complete temporal sequence of frames generated during a single gameplay session, capturing the dynamic evolution of the environment over time. To ensure exposure to diverse interaction patterns, the initial position of the ball is randomized at the beginning of each episode.
+
+An episode corresponds to the complete temporal sequence of frames generated during a single gameplay session, capturing the dynamic evolution of the environment over time. To ensure exposure to diverse interaction patterns, the initial position of the ball is randomized at the beginning of each episode.
 At this stage of development, three different environments have been considered for evaluation. First, a minimal version with only walls and a ball, after a complete Arkanoid environment with paddle and bricks, and in the end, modified variants with altered physical parameters (e.g., larger ball, increased speed, stochastic bounce).
 Across these scenarios, the system demonstrated the ability to:
 
@@ -1049,7 +1108,8 @@ The central contribution of this work is the design of a fully generic reinforce
 \end{itemize}
 
 \subsubsection{Arkanoid Experiments}
-A systematic evaluation was conducted across multiple reward configurations, each trained for up to $5{,}000$ episodes on the Arkanoid environment. In this first set of experiment, the game consists of $24$ destructible bricks that the agent must eliminate within a $60$-second time limit to avoid infinite loop situations. For each configuration, three model checkpoints were preserved during training: the model achieving the highest cumulative reward (\textit{best\_reward}), the model with the best time-efficiency score, meaning the goal of surviving longer in the environment (\textit{best\_time}), and the final model at the end of training (\textit{last\_generic}). Final performance was evaluated using four complementary indicators: win rate, mean number of bricks destroyed per episode, average episode length (in steps), and consistency across evaluation runs.
+A systematic evaluation was conducted across multiple reward configurations, each trained for up to $5{,}000$ episodes on the Arkanoid environment. In this first set of experiment, the game consists of $24$ destructible bricks that the agent must eliminate within a $60$-second time limit to avoid infinite loop situations. 
+\\For each configuration, three model checkpoints were preserved during training: the model achieving the highest cumulative reward (\textit{best\_reward}), the model with the best time-efficiency score, meaning the goal of surviving longer in the environment (\textit{best\_time}), and the final model at the end of training (\textit{last\_generic}). Final performance was evaluated using four complementary indicators: win rate, mean number of bricks destroyed per episode, average episode length (in steps), and consistency across evaluation runs.
 
 The three reward configurations tested were: pure causal and curiosity without shaping or density (\textit{no\_shaping\_no\_density}), causal reward combined with a handcrafted paddle-ball alignment bonus (\textit{yes\_shaping\_no\_density}) and causal reward augmented with an event-density component rewarding the magnitude of state transitions (\textit{no\_shaping\_yes\_density}). These were benchmarked against a reference model (\textit{WINNING\_MODEL}) trained with full supervision, which achieved a $100$\%-win rate and an average episode length of approximately $1{,}791$ steps.
 
@@ -1057,9 +1117,13 @@ The three reward configurations tested were: pure causal and curiosity without s
 \subsubsection{Configuration 1: Pure Causal + Curiosity (no\_shaping\_no\_density)}
 
 This configuration produced the most consistent and robust results across all checkpoints.
- The \textit{last\_generic\_model}, representing the agent's behavior at the end of the full training run, achieved a $99$\% win rate with an average of $23{.}98$ bricks destroyed per episode and a mean episode length of approximately $1{,}687$ steps across winning runs. The textit{best\_reward} checkpoint also performed strongly at $81$\% wins, and the textit{best\_time} checkpoint reached $77$\%. In both cases, failures were exclusively caused by episodes where the agent became stuck in degenerate loops rather than showing any systematic policy breakdown, as evidenced by the extremely high step counts (reaching up to ${\sim}484{,}000 steps)$ in non-winning episodes. This loop behavior indicates the agent retained ball contact but failed to progress toward brick destruction, rather than losing the ball entirely.
-The central outcome of this configuration is that an intrinsic reward signal grounded solely in causal interaction structure is sufficient to achieve near-optimal control. Even in the absence of any task-specific or externally engineered reward, the agent autonomously acquires behaviors such as correctly deflecting the ball, maintaining prolonged exchanges, and progressively eliminating all bricks.
+ The \textit{last\_generic\_model}, representing the agent's behavior at the end of the full training run, achieved a $99$\% win rate with an average of $23{.}98$ bricks destroyed per episode and a mean episode length of approximately $1{,}687$ steps across winning runs. The \textit{best\_reward} checkpoint also performed strongly at $81$\% wins, and the \textit{best\_time} checkpoint reached $77$\%. 
+ 
+In both cases, failures were exclusively caused by episodes where the agent became stuck in degenerate loops rather than showing any systematic policy breakdown, as evidenced by the extremely high step counts (reaching up to ${\sim}484{,}000$ steps) in non-winning episodes. This loop behavior indicates the agent retained ball contact but failed to progress toward brick destruction, rather than losing the ball entirely.
 Importantly, because the reward depends only on event chains, the agent has no prior notion of which events are strategically more valuable. For instance, a sequence involving two wall collisions generates the same intrinsic signal as a sequence consisting of a wall collision followed by a brick hit. The system does not encode predefined relevance; it simply maximizes structured interaction.
+
+The central outcome of this configuration is that an intrinsic reward signal grounded solely in causal interaction structure is sufficient to achieve near-optimal control. Even in the absence of any task-specific or externally engineered reward, the agent autonomously acquires behaviors such as correctly deflecting the ball, maintaining prolonged exchanges, and progressively eliminating all bricks.
+
 This finding supports the core hypothesis of the thesis: the causal structure embedded in state-transition sequences provides sufficient informational richness to drive effective policy learning in this domain, even without explicit goal-oriented reward shaping.
 \subsubsection{Configuration 2: Shaping Enabled - No Density}
 The introduction of a handcrafted shaping term rewarding paddle-ball alignment produced markedly degraded and unstable performance. The \textit{best\_reward} checkpoint failed completely, achieving a $0$\%-win rate across all $100$ test episodes, with each episode terminating in fewer than $30$ steps. Inspection of the step counts confirms the agent was losing the ball almost immediately after launch, suggesting the policy learned to maximize the alignment reward at the expense of ball retention. The \textit{best\_time} and \textit{last\_generic} checkpoints recovered partially, reaching win rates of $54$\% and $53$\% respectively, but both remained well below the unshaped configuration.
@@ -1069,6 +1133,7 @@ This finding has an important methodological implication: handcrafted shaping si
 \subsubsection{Configuration 2: No Shaping - Density Enabled}
 
 Adding an event-density component, a reward term proportional to the magnitude of state change across consecutive frames, produced the highest peak performance of any configuration. The \textit{best\_time} checkpoint achieved a $100$\%-win rate with an average of 24.00 bricks destroyed per episode and a mean episode length of approximately 1,804 steps, essentially matching the supervised reference model. This represents a complete and reliable solution to the environment under purely intrinsic motivation.
+
 However, the across-checkpoint variance was substantially higher than in the no-density configuration. The \textit{best\_reward} model achieved only $52$\% wins and exhibited a characteristic bimodal failure pattern: some episodes terminated in under 100 steps, suggesting immediate ball loss, while others ran for hundreds of thousands of steps, suggesting loop behavior. The \textit{last\_generic} model reached $57$\% wins, with similar instability. This variance suggests that the density reward accelerates early exploration, helping the agent discover productive interaction patterns more quickly, but introduces optimization instability that makes the final learned policy less reliable.
 The density term rewards novelty in state transitions independently of their causal structure. While this promotes rapid coverage of the state space, it may also encourage the agent to seek dynamically rich states that are not strategically useful for brick destruction, thereby disrupting the convergence properties that the pure causal signal provides.
 
@@ -1093,7 +1158,7 @@ yes\_shaping\_no\_density -- best\_reward & 0\%  & 0.00  & 23.54  \\
 \end{tabular}
 \end{table}
 
-
+\subsubsection{Final consideration}
 Two configurations produced models that match or approach the supervised reference: pure causal reward (\textit{no\_shaping\_no\_density}) and causal reward with density (\textit{no\_shaping\_yes\_density}). The critical distinction between them lies not in peak performance but in training stability. The pure causal configuration converges reliably and maintains high performance across all checkpoints, while the density-augmented configuration reaches its optimum only transiently during training before destabilizing \cite{chiave69}.
 The shaping experiments confirm that intrinsic structural signals and handcrafted bonuses are not straightforwardly additive. When the causal reward already provides a rich learning signal, introducing an additional shaped term risks disrupting the gradient landscape rather than supplementing it. This aligns with findings in the broader reward shaping literature, where imprecisely specified bonuses can lead to degenerate policies that exploit the shaping signal rather than solving the underlying task.
 Taken together, these experiments demonstrate that causal interaction structure, as captured by the proposed intrinsic reward formulation, is both necessary and sufficient for learning to play Arkanoid without any external reward signal. The result is particularly notable given the task's requirement for sustained sequential behavior: the agent must not only contact the ball but maintain a long chain of interactions across dozens of bricks, coordinating its behavior over time horizons far beyond what a simple local reward signal would support.
@@ -1103,6 +1168,7 @@ Taken together, these experiments demonstrate that causal interaction structure,
 \subsection{Generalization Under Structural Modifications}
 
 To further evaluate the structural robustness of the learned policy, the best-performing Arkanoid model was tested under controlled modifications of the environment, without performing any retraining. The goal was to determine whether the learned behavior depends on superficial perceptual features or whether it captures deeper causal regularities of the domain.
+
 Three types of modifications were introduced: an increase in ball size, an increase in the number of bricks, and variations in the visual appearance of objects such as colors.
 In the first experiment, the ball size was increased by a factor of five, significantly altering collision geometry and raising the probability of multiple brick contacts within a single frame. Despite this substantial physical change, the agent maintained stable behavior and continued to solve the task reliably. This result is particularly meaningful given that the observation space encodes normalized physical variables, positions and velocities, and that the intrinsic reward is derived exclusively from state transitions and causal impact. The policy is therefore not tied to specific geometric assumptions about object scale; instead, it reacts to relational dynamics such as ball-paddle alignment, collision-induced velocity changes, and brick disappearance events, demonstrating clear invariance to object size as long as the underlying causal interaction structure remains consistent.
 In the second experiment, the number of bricks was increased beyond the original $24$, affecting episode length, event frequency, and interaction density. Performance remained high even without retraining, with the agent successfully clearing the environment in most test runs. This outcome suggests that the learned policy does not memorize fixed spatial layouts but generalizes across variations in object count. Since the intrinsic reward depends on event chains and causal impact rather than explicit score signals, the agent remains motivated to generate meaningful interactions regardless of how many bricks are present the objective internalized by the network is not destroy exactly $24$ bricks, but rather something closer to maximizing structured causal engagement with the environment.
@@ -1115,7 +1181,9 @@ Training logs show gradual increases in survival time and event chain complexity
 
 \subsection{Critical discussion of the results}
 The experimental results highlight several important findings concerning both the representational layer and the reinforcement learning dynamics enabled by the proposed framework.
+
 First, the symbolic modeling component confirms that the system captures consistent object-centric causal dynamics in deterministic environments and adapts parameters under structural modifications. The induced rules remain stable when physical quantities such as velocity magnitude or object size change, provided that the underlying causal mechanisms are preserved. This establishes that the representation layer encodes structural regularities rather than superficial statistical correlations.
+
 Second, the reinforcement learning experiments demonstrate that purely intrinsic, causally grounded reward signals can drive complex goal-directed behavior. The agent successfully learns to solve Arkanoid without any handcrafted task reward. In fact, the experiments show that adding shaping signals can be detrimental when intrinsic structural rewards are already informative, suggesting that externally imposed heuristics may interfere with the emergence of structurally coherent policies. Event-based causal interaction appears to function as a powerful exploration driver, encouraging sustained engagement with meaningful environment dynamics.
 The strongest empirical result is the near-perfect performance (up to $100$\%-win rate) in Arkanoid using only domain-agnostic intrinsic rewards. This suggests that maximizing structured causal interaction with the environment can implicitly approximate goal-directed behavior in tasks where success depends on maintaining coherent interaction chains over time.
 Crucially, the generalization experiments further reinforce this interpretation. The best-performing Arkanoid model was evaluated under structural modifications, including increased ball size, increased number of bricks, and variations in visual appearance, without any retraining. Performance remained stable across these changes.
