@@ -165,6 +165,19 @@ S.~Russell and P.~Norvig, \emph{Artificial Intelligence: A Modern
   Approach}.\hskip 1em plus 0.5em minus 0.4em\relax Englewood Cliffs:
   Prentice-Hall, 1995.
 
+\bibitem{chiave64}
+\BIBentryALTinterwordspacing
+A.~Newell and H.~A. Simon, ``Computer science as empirical inquiry: Symbols and
+  search,'' in \emph{ACM Turing Award Lectures}.\hskip 1em plus 0.5em minus
+  0.4em\relax Association for Computing Machinery, 2007, p. 1975. [Online].
+  Available: \url{https://dl.acm.org/doi/book/10.5555/1283922}
+\BIBentrySTDinterwordspacing
+
+\bibitem{chiave65}
+R.~J. Brachman and H.~J. Levesque, \emph{Knowledge Representation and
+  Reasoning}.\hskip 1em plus 0.5em minus 0.4em\relax San Francisco, CA, USA:
+  Elsevier, 2004.
+
 \bibitem{chiave66}
 \BIBentryALTinterwordspacing
 M.~Minsky, ``A framework for representing knowledge,'' in \emph{MIT-AI
@@ -492,6 +505,21 @@ J.~Deng, W.~Dong, R.~Socher, L.-J. Li, K.~Li, and L.~Fei-Fei, ``Imagenet: A
   Computer Vision and Pattern Recognition (CVPR)}.\hskip 1em plus 0.5em minus
   0.4em\relax IEEE, 2009, pp. 248--255. [Online]. Available:
   \url{https://doi.org/10.1109/CVPR.2009.5206848}
+\BIBentrySTDinterwordspacing
+
+\bibitem{chiave70}
+\BIBentryALTinterwordspacing
+D.~Amodei, C.~Olah, J.~Steinhardt, P.~Christiano, J.~Schulman, and D.~Man{\'e},
+  ``Concrete problems in ai safety,'' \emph{arXiv preprint arXiv:1606.06565},
+  2016. [Online]. Available: \url{https://arxiv.org/abs/1606.06565}
+\BIBentrySTDinterwordspacing
+
+\bibitem{chiave69}
+\BIBentryALTinterwordspacing
+Y.~Burda, H.~Edwards, D.~Pathak, A.~Storkey, T.~Darrell, and A.~A. Efros,
+  ``Large-scale study of curiosity-driven learning,'' \emph{arXiv preprint
+  arXiv:1808.04355}, 2018. [Online]. Available:
+  \url{https://arxiv.org/abs/1808.04355}
 \BIBentrySTDinterwordspacing
 
 \end{thebibliography}
