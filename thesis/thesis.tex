@@ -719,7 +719,7 @@ The framework relies on a segmentation algorithm that segments the images of gam
 The segmentation network is a U-Net-based convolutional neural network, specifically designed for multi-class semantic segmentation. The architecture follows the classic encoder-decoder paradigm with skip connections, enabling the model to combine high-level semantic information with fine-grained spatial details.
 The encoder consists of three convolutional blocks, each composed of two consecutive 3x3 convolutional layers followed by batch normalization and ReLU activation functions. These blocks progressively increase the number of feature channels (64, 128, and 256) while reducing spatial resolution via max pooling. This design allows the network to capture increasingly abstract representations of the input image due to progressively reduces spatial resolution by increasing the number of channels.
 At the bottleneck, a deeper convolutional block expands the feature dimensionality to 512 channels, the network learns the most abstract and global features of the image.
-The decoder mirrors the encoder structure and employs transposed convolutions for upsampling. At each decoding stage, the upsampled feature maps are concatenated with the corresponding encoder outputs through skip connections. This mechanism preserves spatial context and improves boundary localization in the segmentation masks. To address potential spatial mismatches, bilinear interpolation is applied to ensure consistent feature map dimensions before concatenation.
+The decoder mirrors the encoder structure and employs transposed convolutions for upsampling. At each decoding stage, the upsampled feature maps are concatenated with the corresponding encoder outputs through skip connections. This mechanism preserves spatial context and improves boundary localization in the segmentation masks. In order to address potential spatial mismatches, bilinear interpolation is applied to ensure consistent feature map dimensions before concatenation.
 The final output layer is a 1x1 convolution that maps the decoded feature maps to the desired number of semantic classes. The network produces dense per-pixel class scores, which are later converted into discrete labels using an argmax operation.
 
 \subsection{Symbolic System as Knowledge Construction Module}
@@ -739,7 +739,7 @@ The framework's next development phase will add a visual segmentation module, al
 \subsubsection{Object Formation}
 The object formation module is responsible for reconstructing persistent entities over time by associating sequences of patches across frames. Since the system receives no explicit information about object identity or permanence, this module plays a crucial role in establishing continuity and coherence in the environment representation.
 Object tracking is performed using a set of interpretable heuristics based on spatial and temporal coherence, as well as predictions derived from previously inferred knowledge encoded in object classes. Each object is associated with a class that defines behavioral constraints and predictive rules. Incoming patches are matched to existing objects according to proximity, shape similarity, and consistency with expected behavior.
-Patch-to-object assignments are categorized as perfect, possible or no-direct, allowing the system to represent both expected and unexpected changes. Due to the sequential nature of frame processing, ambiguities frequently arise. To manage this uncertainty, the system maintains multiple competing interpretations in parallel, each corresponding to a distinct configuration of objects and inferred behaviors.
+Patch-to-object assignments are categorized as perfect, possible or no-direct, allowing the system to represent both expected and unexpected changes. Due to the sequential nature of frame processing, ambiguities frequently arise. In order to manage this uncertainty, the system maintains multiple competing interpretations in parallel, each corresponding to a distinct configuration of objects and inferred behaviors.
 Objects are modeled as episodic reconstructions tied to the current observation sequence, while object classes and behavioral rules provide the basis for generalizable knowledge. This module, as integrated, establishes the foundational link between perceptual input and symbolic representation.
 
 
@@ -750,7 +750,7 @@ When consistent patterns are detected, the system generates generalized symbolic
 In its current form, rule inference relies on correlational analysis and does not yet implement causal or counterfactual reasoning. Despite this limitation, the module represents an important step toward structured, interpretable symbolic knowledge.
 
 \subsubsection{Pruning}
-Throughout the processing pipeline, the system may generate multiple individuals, each representing a distinct interpretation of the environment. To prevent uncontrolled growth in the number of maintained interpretations, a pruning mechanism evaluates individuals based on the coherence and simplicity of their explanations.
+Throughout the processing pipeline, the system may generate multiple individuals, each representing a distinct interpretation of the environment. In order to prevent uncontrolled growth in the number of maintained interpretations, a pruning mechanism evaluates individuals based on the coherence and simplicity of their explanations.
 Scoring criteria include the number of unexplained changes, adherence to object class rules, and overall explanatory complexity. Interpretations that achieve the highest scores are retained, while others are scheduled for removal after a short grace period, allowing confirmation from subsequent frames.
 This pruning strategy balances flexibility and computational efficiency, ensuring that the system can explore alternative hypotheses without incurring prohibitive computational costs.
 
@@ -790,7 +790,7 @@ The training follows a standard off-policy DQN framework \cite{chiave7}, incorpo
 
 
 \subsubsection{Reward}
-The underlying goal is to develop an agent capable of adapting to a diverse set of environments without being explicitly provided with environment-specific reward functions. To achieve this, rather than relying on sparse or task-specific rewards, the agent is trained with a composite intrinsic reward that reflects the causal structure of the environment.
+The underlying goal is to develop an agent capable of adapting to a diverse set of environments without being explicitly provided with environment-specific reward functions. In order to achieve this, rather than relying on sparse or task-specific rewards, the agent is trained with a composite intrinsic reward that reflects the causal structure of the environment.
 This design choice is inspired by the extensive literature on intrinsic motivation in reinforcement learning, which proposes internal reward signals to drive exploration and autonomous skill acquisition \cite{chiave38}.
 The composite reward structure combines multiple components that encourage meaningful interaction with the environment. Instead of relying on task-specific signals, the agent is rewarded based on the effects of its actions, including event-driven changes and measures of causal impact.
 
@@ -907,7 +907,7 @@ Each convolutional block consists of two convolutional layers with
 $3 \times 3$ kernels, followed by batch normalization and ReLU activation. Batch normalization stabilizes training by normalizing intermediate activations, and ReLU introduces non-linearities that allow the network to model complex patterns. The final output layer uses a 
 $1 \times 1$ convolution to produce one channel per semantic class, enabling per-pixel class predictions.
 
-Training is conducted with a multi-class cross-entropy loss, optimized using the Adam optimizer. To improve stability and generalization, the training process incorporates data augmentation, input normalization, small batch sizes, and early stopping based on validation loss. Evaluation metrics include pixel accuracy and mean Intersection over Union (mIoU) \cite{chiave34}, which quantify agreement between predicted and ground-truth segmentation maps. 
+Training is conducted with a multi-class cross-entropy loss, optimized using the Adam optimizer. In order to improve stability and generalization, the training process incorporates data augmentation, input normalization, small batch sizes, and early stopping based on validation loss. Evaluation metrics include pixel accuracy and mean Intersection over Union (mIoU) \cite{chiave34}, which quantify agreement between predicted and ground-truth segmentation maps. 
 \\
 Overall, this module abstracts the pipeline from raw video frames to class-labeled segmentation maps, producing dense semantic representations that form the foundation for downstream tasks. Its design supports reproducible training and efficient inference, combining robust data handling with a well-established deep learning architecture.
 
@@ -1065,7 +1065,7 @@ In addition, this procedure provides two main advantages:
 \subsection{Preliminary Validation: Symbolic Representation Learning}
 This section presents a set of experiments conducted using the preliminary version of the Symbolic reasoning module. The goal is to evaluate the quality of the internal representations learned by the model by comparing them with the ground-truth rules governing the simulated environment.
 
-An episode corresponds to the complete temporal sequence of frames generated during a single gameplay session, capturing the dynamic evolution of the environment over time. To ensure exposure to diverse interaction patterns, the initial position of the ball is randomized at the beginning of each episode.
+An episode corresponds to the complete temporal sequence of frames generated during a single gameplay session, capturing the dynamic evolution of the environment over time. In order to ensure exposure to diverse interaction patterns, the initial position of the ball is randomized at the beginning of each episode.
 At this stage of development, three different environments have been considered for evaluation. First, a minimal version with only walls and a ball, after a complete Arkanoid environment with paddle and bricks, and in the end, modified variants with altered physical parameters (e.g., larger ball, increased speed, stochastic bounce).
 Across these scenarios, the system demonstrated the ability to:
 
@@ -1194,15 +1194,39 @@ This invariance is particularly significant. The agent does not rely on fixed ge
 % 7 APPLICATIONS AND CONCLUSION
 % =========================
 
-\chapter{Applications and Future Perspectives - Conclusion}
+\chapter{Conclusion and Future Works}
+
+This thesis has examined fundamental limitations in contemporary artificial intelligence systems, particularly their brittleness, limited reasoning capabilities, and lack of transparency. Modern large language models often operate through large-scale statistical pattern extraction rather than grounded semantic understanding, while deep reinforcement learning agents typically fail to construct transferable, structured knowledge about the environments in which they operate. In both cases, the dominant paradigm remains heavily sub-symbolic and correlation-driven, with limited capacity for explicit causal modelling or conceptual abstraction.
+
+
+Drawing on insights from philosophy, cognitive science, and artificial intelligence research, this work aligns with a growing body of scholarship arguing for hybrid architectures that integrate symbolic structure with neural computation. Researchers such as Melanie Mitchell and Gary Marcus have emphasized the importance of combining statistical learning with structured reasoning in order to achieve robustness, interpretability, and systematic generalization.
+
+
+Inspired by Core Knowledge Theory, this thesis leverages the foundations of a framework that constructs structured representations of dynamic environments by identifying entities through fundamental properties and modelling their interactions symbolically. Rather than relying solely on end-to-end optimization, the system abstracts object classes, infers interaction rules, and builds a reusable structural representation of the environment.
+
+
+Preliminary empirical results indicate that this structured approach improves interpretability, robustness under environmental modifications, and explainability of learned behavior in dynamic domains. At the same time, several challenges remain: the current implementation lacks deep context-based reasoning, operates with a still limited and immature knowledge base, faces potential combinatorial growth in rule induction, and does not yet fully integrate formal causal reasoning mechanisms. These limitations define a rich space for future research
 
 \section{Future Directions}
+The framework, in its present form, demonstrates that symbolic, interpretable models of dynamic environments can be constructed by grounding object tracking and rule inference in structural priors. Although the initial validation in controlled game environments shows promising generalization and robustness, further development is necessary to extend the framework's scalability and applicability.
 
-\subsection{Potential Applications of the Framework}
+\subsection{Perception Module}
+A first essential extension concerns the integration of an explicit perception module tightly coupled with the symbolic representation layer. Although a perceptual element has been introduced in the current implementation, segmentation outputs are refined post hoc into structured logs rather than being directly extracted as object patches. A more advanced architecture would introduce a bidirectional loop:
+\begin{itemize}
+     \item Bottom-up perception extracts candidate object patches from raw frames.
+     \item Top-down predictions from the symbolic model guide attention toward expected spatial regions.
+\end{itemize}
+Once an object has been modelled symbolically, its predicted future position could inform attention mechanisms in the segmentation stage, focusing computation on areas where the object is expected to appear. This integration of perceptual input with conceptual priors would significantly improve robustness to noise and partial observability, while enabling scaling to real-world visual domains.
 
-\subsection{Possible Extensions of the Work}
 
-\subsection{Open Challenges and Future Research Directions}
+\subsection{RL Integration}
+A further extension of this work involves embedding the existing framework within a fully model-based reinforcement learning architecture, inspired by a Dyna-style approach. In the current implementation, the agent relies primarily on off-policy Q-learning and incorporates a forward model only indirectly through curiosity-based reward shaping. While this provides some predictive information, the agent does not yet use the symbolic internal representation to plan or simulate future trajectories explicitly.
+
+
+In order to achieve a fully model-based setup, the symbolic internal representation could be leveraged as a predictive engine for internal rollouts. In this configuration, the agent would maintain an internal model of the environment derived from the structured rules and object representations. Incoming observations would be encoded into symbolic states capturing the relevant entities and their properties, and potential actions could be evaluated by simulating their effects within this internal model. This refinement would allow the agent to anticipate the consequences of actions before executing them in the real environment, using the symbolic framework not only for decision-making but also as a testable hypothesis of environmental dynamics. Discrepancies between predicted and actual outcomes would then inform continuous refinement of the internal model. This approach could preserve the existing modules, event detection, causal chains, curiosity, and density-based shaping, while augmenting the system with planning capabilities and enhanced interpretability, progressively transforming it into a fully model-based agent.
+
+\subsection{Generalization Across Environments}
+Another important avenue for future research is the evaluation and enhancement of the framework's ability to generalize across different environments. Although current experiments demonstrate promising transfer within similar game instances, extending the symbolic representation and rule abstraction mechanisms to support entirely new domains remains largely unexplored. Future work could investigate how the structured knowledge captured by the framework, such as object classes, interaction rules, and causal chains, can be adapted or reused in novel environments, providing robust generalization while minimizing retraining. This could involve mechanisms for abstracting high-level patterns, aligning entities across domains, or leveraging meta-learning strategies to accelerate adaptation to previously unseen scenarios.
 
 \section{Summary of Contributions, Impact of the Research, and Final Reflections}
 
