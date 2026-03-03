@@ -1,5 +1,4 @@
 \documentclass[12pt,a4paper]{report}
-
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage{lmodern}
@@ -20,7 +19,6 @@
 
 \usepackage[colorlinks=true, linkcolor=blue, urlcolor=blue, citecolor=blue]{hyperref}
 
-% Rimuove la scritta "Chapter"
 \titleformat{\chapter}[hang]
 {\normalfont\huge\bfseries}{\thechapter}{1em}{}
 
@@ -28,10 +26,12 @@
 
 \begin{document}
 \begin{titlepage}
+\begin{figure}[ht]
   \centering
 
   \includegraphics[width=7.5cm]{politoLogo2021.jpg}
-
+\end{figure}
+\centering
   \vspace{0.4cm}
 
   {\Large \textbf{Politecnico di Torino}}
@@ -79,7 +79,6 @@
 \chapter*{Abstract}
 \addcontentsline{toc}{chapter}{Abstract}
 
-% Inserire qui l'abstract
 
 \tableofcontents
 \newpage
@@ -131,7 +130,7 @@ synthesis of complementary approaches, bringing together the statistical strengt
     \item Ensuring compatibility between the discrete symbolic structures used in symbolic approaches and the continuous vector representations typical of neural networks.
     \item Enabling the model to dynamically learn, adapt, modify, and refine logical rules.
     \item Achieving an optimal balance between system complexity and computational efficiency.
-    \item Addressing the absence of unified architectural frameworks by developing a general architecture that systematically and reusably integrates neural and symbolic components.
+    \item Addressing the absence of unified architectural frameworks by developing a general architecture that systematically and reproducibly integrates neural and symbolic components.
 \end{itemize}
 
 Although several challenges persist, neuro-symbolic AI is widely regarded as a promising direction for developing systems capable of transparent, reliable and generalizable reasoning.
@@ -172,7 +171,7 @@ Before the advent of deep learning, computer vision systems primarily relied on 
 Later, handcrafted feature descriptors including SIFT \cite{chiave50} (Scale-Invariant Feature Transform), SURF \cite{chiave51} (Speeded-Up Robust Features), and HOG \cite{chiave52} (Histograms of Oriented Gradient) were introduced to capture local patterns useful for object recognition and matching tasks. Although these methods achieved notable success, they suffered from several inherent limitations, particularly in their sensitivity to noise, changes in illumination, and poor generalization across diverse environments \cite{chiave50}. As a result, significant domain expertise and extensive manual effort were required to design robust feature representations, which constrained their scalability and adaptability to complex real-world scenarios.
 \\
 Originally, computer vision relied heavily on handcrafted features and algorithmic techniques designed based on understanding of visual perception and signal processing. These principles underpin a classical computer vision pipeline, typically composed of preprocessing, feature extraction, and pattern recognition stages.
-\\Preprocessing techniques include operations such as noise reduction, contrast enhancement, and colour space transformations that prepare raw visual data for subsequent analysis. Edge detection algorithms, such as the Canny edge detector and Sobel operator, identify boundaries between regions with different intensity characteristics, providing fundamental structural information about objects in the scene.
+\\Preprocessing techniques include operations such as noise reduction, contrast enhancement, and colours space transformations that prepare raw visual data for subsequent analysis. Edge detection algorithms, such as the Canny edge detector and Sobel operator, identify boundaries between regions with different intensity characteristics, providing fundamental structural information about objects in the scene.
 \\Feature extraction methods in classical computer vision include corner detectors like Harris corners \cite{chiave53} and FAST \cite{chiave54} (Features from Accelerated Segment Test), which identify points of interest that can be reliably detected across different views. Descriptors such as SIFT and SURF provide representations of local image patches that are robust to changes in scale, rotation, and illumination. These features enable tasks such as object recognition, tracking, and image matching.
 Although these classical techniques have been largely superseded by deep learning methods in many applications, they remain valuable in contexts where computational resources are limited, interpretability is crucial, or training data is scarce. Moreover, the principles underlying these techniques continue to inform modern approaches and provide insights into visual perception.
 
@@ -234,7 +233,8 @@ Furthermore, since human communication relies predominantly on the use of symbol
 Symbolic representation involves encoding knowledge using discrete symbols and the relationships between them. Unlike distributed representations in neural networks, where meaning emerges from patterns of activation across many units or is distributed across numerical parameters, symbolic representations explicitly denote concepts and their properties, encoded in well-defined structures. Each symbol has a clear semantic interpretation, which makes symbolic representations particularly suitable for reasoning, explanation, and the integration of expert knowledge \cite{chiave65}. 
 
 \subsection{Semantic Networks}
-Semantic networks are graph-based models designed to organize and represent knowledge through interconnected nodes and labeled edges. In this context, nodes correspond to concepts, objects, or entities, while edges denote semantic relations between them, such as \textit{is-a} (classification), \textit{part-of } (composition), or associative links. This structure allows knowledge to be represented in a way that mirrors conceptual organization, making relationships explicit and visually interpretable.
+Semantic networks are graph-based models designed to organize, and represent knowledge, through interconnected nodes and labeled edges. 
+In this context, nodes correspond to concepts, objects, or entities, while edges denote semantic relations between them, such as \textit{is-a} (classification), \textit{part-of } (composition), or associative links. This structure allows knowledge to be represented in a way that mirrors conceptual organization, making relationships explicit and visually interpretable.
 One of the central advantages of semantic networks is their ability to represent taxonomic hierarchies. Through hierarchical relations (e.g., canary → bird → animal), properties associated with more general categories can be inherited by more specific ones. For instance, if the concept bird is associated with the property has wings, that property can automatically be inferred for canary without being redundantly specified. This mechanism, known as inheritance reasoning, supports efficient knowledge organization and reduces duplication.
 From a cognitive perspective, semantic networks were strongly influenced by early models of human memory and conceptual organization. A foundational contribution was provided by M. Ross Quillian (1968), who proposed semantic memory models structured as hierarchical networks in which concepts are connected by labeled relations. His work demonstrated how hierarchical organization could explain verification time in human reasoning tasks, suggesting that cognitive processes may operate through structured relational networks.
 Later, John F. Sowa expanded the formal foundations of semantic networks by integrating them with logic in his theory of \textit{Conceptual Graphs}, providing a more rigorous semantic interpretation and linking graph structures to formal logic systems.
@@ -278,7 +278,7 @@ Mathematically:
 \[
 P(s' \mid s, a, s_{t-1}, a_{t-1}, \dots) = P(s' \mid s, a)
 \]
-This memoryless characteristic significantly simplifies the analysis and allows the use of dynamic programming techniques. 
+This memory-less characteristic significantly simplifies the analysis and allows the use of dynamic programming techniques. 
 The agent tries to maximize the total cumulative reward. This cumulative reward is defined as:
 \[
 G_t = \sum_{k=0}^{\infty} \gamma^k R(s_{t+k}, a_{t+k})
@@ -503,7 +503,7 @@ Deep Q-Networks (DQN), introduced by Mnih et al. in 2015 \cite{chiave7}, revolut
 Prior to DQN, Q-learning was limited to small, discrete state spaces due to its reliance on tabular representations. By integrating convolutional neural networks (CNNs) with Q-learning \cite{chiave7}, DQN enabled end-to-end learning directly from raw sensory inputs, such as pixel-based game screens. This innovation allowed reinforcement learning agents to achieve human-level performance on several Atari 2600 games using only visual input and game scores as feedback, without any handcrafted features.
 The DQN algorithm addresses two key challenges that arise when combining Q-learning with neural networks: instability due to correlations in the sequence of observations and non-stationarity of the target values used for training.
 In standard online reinforcement learning, consecutive observations are highly correlated. Training a neural network on sequential samples violates the independent and identically distributed (i.i.d.) assumption required for stable stochastic gradient descent, leading to oscillations or divergence. In addition, Q-learning relies on bootstrapped targets derived from the same network being trained. As network parameters change during learning, the target values also change, resulting in a moving target problem that destabilizes training.
-DQN employs two critical innovations to stabilize learning \cite{chiave7}. The first innovation was inspired by biological mechanism, the experience replay stores agent transitions, at each time-step, in a replay buffer. In addition, during training, samples minibatches uniformly for training. This technique breaking temporal correlations between past experience, enabling more efficient use of past experience and stabilizes learning through randomized training batches. This allows gradient updates to better approximate the true expectation of the Bellman equation. 
+DQN employs two critical innovations to stabilize learning \cite{chiave7}. The first innovation was inspired by biological mechanism, the experience replay stores agent transitions, at each time-step, in a replay buffer. In addition, during training, samples mini batches uniformly for training. This technique breaking temporal correlations between past experience, enabling more efficient use of past experience and stabilizes learning through randomized training batches. This allows gradient updates to better approximate the true expectation of the Bellman equation. 
 The second innovation was targeting networks. This technique maintains a separate copy of the Q-network whose parameters are updated less frequently, providing more stable target values for the loss function, this help to reduces harmful feedback loops and prevents divergence.  These techniques enable successful learning in complex domains such as Atari 2600 games, where the state space consists of raw pixel inputs.
 
 \paragraph{Loss Function and Optimization}
@@ -529,7 +529,7 @@ One of the most significant aspects of DQN is its ability to learn directly from
 \section{Atari-like Environments as Testbeds}
 Over the past decade, two-dimensional video games, especially those from the Atari 2600 game suite, have become standard benchmarks for the evaluation of reinforcement learning and artificial intelligence systems \cite{chiave61}. By offering high-dimensional visual inputs, diverse dynamics, and well-defined evaluation protocols within a controlled setting, these environments bridge the gap between simple toy problems and real-world applications. This section examines the characteristics and inherent challenges that make Atari-like environments particularly suitable as experimental testbeds for AI research.
 
-\subsection{Characteristics and Challenges of two-dimensional Game Environments}
+\subsection{Challenges of two-dimensional Game Environments}
 
 Atari games present diverse challenges that require different capabilities \cite{chiave62}. In this study, we concentrate our analysis on the Atari game  (also called Arkanoid) as a representative benchmark environment. This choice allows us to highlight several fundamental properties shared by many Atari games suit. 
 More in details, these environments often require strong temporal reasoning. Temporal reasoning is essential in many games, where success depends on understanding sequences of events, anticipating future states, and planning multi-step strategies. In some cases, precise timing of actions is crucial, while in others, rewards are delayed and the consequences of decisions become apparent only after multiple steps. Breakout requires predicting where the ball will land based on its current trajectory and velocity. Furthermore, the agent must plan the paddle's movements several steps in advance, especially when the ball bounces off bricks or edges. This corresponds to the need for multi-step planning and anticipation of future states.
@@ -764,7 +764,7 @@ When new observations systematically violate existing class rules, the system ca
 
 The module presented in the previous section is capable of extracting meaningful symbolic representations from raw perceptual input. The system successfully identifies object classes, tracks their properties over time, and infers a set of interaction rules that closely match the dynamics encoded in the original environments. These rules capture not only static object attributes, but also conditional behaviors triggered by events such as contacts, disappearances, and user inputs, providing an explicit and interpretable description of the environment's underlying structure. In addition, the results obtained in previously executed experimental evaluation suggest that the inferred rules are stable, transferable across episodes, and robust to moderate environmental variations, reinforcing the hypothesis that they could eventually support the automatic generation of executable environments.
 From a conceptual standpoint, this inferred symbolic representation constitutes a natural candidate for the construction of a fully autonomous game environment. In principle, the object classes and behavioral rules discovered by the system could be compiled into an executable world model, allowing an agent to interact with an environment generated directly from learned knowledge. This capability would represent a crucial step toward closing the loop between perception, knowledge acquisition, and action.
-However, in the current stage of this work, the automatic synthesis of a playable environment from symbolic rules has not yet been implemented. Despite the inferred rules are sufficiently expressive to describe the observed dynamics, translating them into a complete and robust simulation raises additional challenges, including conflict resolution between rules, temporal coordination, and the handling of underspecified or ambiguous behaviors. For this reason, the experiments presented in this thesis adopt a simulated game environment as a proxy for the rule-generated world.
+However, in the current stage of this work, the automatic synthesis of a playable environment from symbolic rules has not yet been implemented. Despite the inferred rules are sufficiently expressive to describe the observed dynamics, translating them into a complete and robust simulation raises additional challenges, including conflict resolution between rules, temporal coordination, and the handling of incompletely specified or ambiguous behaviors. For this reason, the experiments presented in this thesis adopt a simulated game environment as a proxy for the rule-generated world.
 A Deep Q-Network (DQN) agent is then trained to interact with this simulated environment, using state descriptions and event-based rewards derived from the system's representations. This approach allows the investigation of how an agent can learn effective control policies over an interpretable and structured state space, without relying on dense, task-specific reward functions.
 Crucially, the use of a simulated environment does not undermine the long-term objectives of the framework. Rather, it serves as a controlled experimental platform that enables the validation of the proposed learning mechanisms. In this sense, the simulated game world employed in this thesis should be regarded as a placeholder for future developments, in which symbolic rules will directly give rise to the environments in which agents learn and act.
 
