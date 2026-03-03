@@ -21,6 +21,13 @@
 \providecommand{\BIBdecl}{\relax}
 \BIBdecl
 
+\bibitem{chiave1}
+\BIBentryALTinterwordspacing
+Y.~LeCun, Y.~Bengio, and G.~Hinton, ``Deep learning,'' \emph{Nature}, vol. 521,
+  pp. 436--444, 2015. [Online]. Available:
+  \url{https://doi.org/10.1038/nature14539}
+\BIBentrySTDinterwordspacing
+
 \bibitem{chiave16}
 B.~Liang, Y.~Wang, and C.~Tong, ``Ai reasoning in deep learning era: From
   symbolic ai to neural--symbolic ai,'' \emph{Mathematics}, vol.~13, no.~11, p.
@@ -43,13 +50,6 @@ A.~S. d'Avila Garcez, L.~C. Lamb, and D.~M. Gabbay, \emph{Neural-Symbolic
   Cognitive Reasoning}.\hskip 1em plus 0.5em minus 0.4em\relax Berlin,
   Heidelberg: Springer Berlin Heidelberg, 2009. [Online]. Available:
   \url{https://link.springer.com/book/10.1007/978-3-540-73246-4}
-\BIBentrySTDinterwordspacing
-
-\bibitem{chiave1}
-\BIBentryALTinterwordspacing
-Y.~LeCun, Y.~Bengio, and G.~Hinton, ``Deep learning,'' \emph{Nature}, vol. 521,
-  pp. 436--444, 2015. [Online]. Available:
-  \url{https://doi.org/10.1038/nature14539}
 \BIBentrySTDinterwordspacing
 
 \bibitem{chiave43}
