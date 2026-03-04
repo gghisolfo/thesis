@@ -10,20 +10,30 @@ from .game_env import ArkanoidEnv
 # CONFIG
 # =====================
 
+# MODEL_LIST = [
+#     "./dqn/dqn_models/WINNING_MODEL.pth",
+#     "./dqn/dqn_models/arkanoid_no_shaping_no_density/best_reward_arkanoid.pth",
+#     "./dqn/dqn_models/arkanoid_no_shaping_no_density/best_time_arkanoid.pth",
+#     "./dqn/dqn_models/arkanoid_no_shaping_no_density/last_generic_arkanoid.pth",
+
+#     "./dqn/dqn_models/arkanoid_yes_shaping_no_density/best_reward_arkanoid.pth",
+#     "./dqn/dqn_models/arkanoid_yes_shaping_no_density/best_time_arkanoid.pth",
+#     "./dqn/dqn_models/arkanoid_yes_shaping_no_density/last_generic_arkanoid.pth",
+
+#     "./dqn/dqn_models/arkanoid_no_shaping_yes_density/best_reward_arkanoid.pth",
+#     "./dqn/dqn_models/arkanoid_no_shaping_yes_density/best_time_arkanoid.pth",
+#     "./dqn/dqn_models/arkanoid_no_shaping_yes_density/last_generic_arkanoid.pth",
+# ]
+
+
 MODEL_LIST = [
-    "./dqn/dqn_models/WINNING_MODEL.pth",
-    "./dqn/dqn_models/arkanoid_no_shaping_no_density/best_reward_arkanoid.pth",
-    "./dqn/dqn_models/arkanoid_no_shaping_no_density/best_time_arkanoid.pth",
-    "./dqn/dqn_models/arkanoid_no_shaping_no_density/last_generic_arkanoid.pth",
 
-    "./dqn/dqn_models/arkanoid_yes_shaping_no_density/best_reward_arkanoid.pth",
-    "./dqn/dqn_models/arkanoid_yes_shaping_no_density/best_time_arkanoid.pth",
-    "./dqn/dqn_models/arkanoid_yes_shaping_no_density/last_generic_arkanoid.pth",
 
-    "./dqn/dqn_models/arkanoid_no_shaping_yes_density/best_reward_arkanoid.pth",
-    "./dqn/dqn_models/arkanoid_no_shaping_yes_density/best_time_arkanoid.pth",
-    "./dqn/dqn_models/arkanoid_no_shaping_yes_density/last_generic_arkanoid.pth",
+    "./dqn/dqn_models/arkanoid_yes_shaping_yes_density/best_reward_arkanoid.pth",
+    "./dqn/dqn_models/arkanoid_yes_shaping_yes_density/best_time_arkanoid.pth",
+    "./dqn/dqn_models/arkanoid_yes_shaping_yes_density/last_generic_arkanoid.pth",
 ]
+
 
 
 
