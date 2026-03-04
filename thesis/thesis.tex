@@ -15,6 +15,7 @@
 \usepackage{graphicx}   
 \usepackage{geometry}
 
+
 \geometry{top=1cm, bottom=2.5cm, left=3cm, right=3cm}
 
 \usepackage[colorlinks=true, linkcolor=blue, urlcolor=blue, citecolor=blue]{hyperref}
@@ -1138,40 +1139,79 @@ The introduction of a handcrafted shaping term rewarding paddle-ball alignment p
 This degradation is interpretable as a form of reward hacking \cite{chiave70}. The alignment bonus creates a shortcut in the reward landscape: the agent can accumulate shaping reward by positioning the paddle near the ball's projected contact point without necessarily developing the long-horizon behavior required to destroy all bricks. When the shaping signal dominates early training, it crowds out the structural curiosity signal that would otherwise drive exploration of causal interaction chains. The result is a policy that is locally well-calibrated for paddle positioning but globally brittle.
 This finding has an important methodological implication: handcrafted shaping signals can be harmful when a strong intrinsic structural reward is already present, because they introduce competing learning pressures that distort the trajectory of policy improvement.
 
-\subsubsection{Configuration 2: No Shaping - Density Enabled}
+\subsubsection{Configuration 3: No Shaping - Density Enabled}
 
 Adding an event-density component, a reward term proportional to the magnitude of state change across consecutive frames, produced the highest peak performance of any configuration. The \textit{best\_time} checkpoint achieved a $100$\%-win rate with an average of 24.00 bricks destroyed per episode and a mean episode length of approximately 1,804 steps, essentially matching the supervised reference model. This represents a complete and reliable solution to the environment under purely intrinsic motivation.
 
 However, the across-checkpoint variance was substantially higher than in the no-density configuration. The \textit{best\_reward} model achieved only $52$\% wins and exhibited a characteristic bimodal failure pattern: some episodes terminated in under 100 steps, suggesting immediate ball loss, while others ran for hundreds of thousands of steps, suggesting loop behavior. The \textit{last\_generic} model reached $57$\% wins, with similar instability. This variance suggests that the density reward accelerates early exploration, helping the agent discover productive interaction patterns more quickly, but introduces optimization instability that makes the final learned policy less reliable.
 The density term rewards novelty in state transitions independently of their causal structure. While this promotes rapid coverage of the state space, it may also encourage the agent to seek dynamically rich states that are not strategically useful for brick destruction, thereby disrupting the convergence properties that the pure causal signal provides.
 
+\subsubsection{Configuration 4: Shaping Enabled - Density Enabled (yes\_shaping\_yes\_density)}
+
+
+The simultaneous activation of the handcrafted paddle-ball alignment bonus and the event-density term produced a markedly different dynamic compared to the previous configurations. Unlike the shaping-only setup, which collapsed due to reward hacking, and the density-only configuration, which showed high variance across checkpoints, this combined formulation achieved both high peak performance and strong final reliability.
+
+The \textit{best\_time} checkpoint reached a $100$\% win rate, destroying all $24$ bricks in every episode with an average episode length of approximately $1,761$ steps. This performance fully matches the supervised reference model. Crucially, unlike the density-only configuration, the success here is not transient: the \textit{last\_generic} checkpoint maintains a $96$\% win rate, indicating that performance remains stable at the end of training rather than appearing only as a temporary optimum.
+
+The \textit{best\_reward} checkpoint achieved a lower but still substantial $78$\% win rate. As in other density-based settings, non-winning episodes display extremely high step counts 
+(${\sim}430{,}000$ steps), indicating degenerate loop behavior rather than immediate ball loss. This confirms that the dominant failure mode remains structural stagnation rather than control breakdown.
+From a learning-dynamics perspective, the density component appears to mitigate the pathological effect observed when shaping is used in isolation. In the shaping-only configuration, the alignment bonus dominated early training, encouraging locally optimal paddle positioning without long-horizon brick-clearing behavior. When density is added, however, the agent continues to receive reward for dynamically rich state transitions, preventing premature convergence to alignment-focused strategies. 
+The resulting behavior is both globally competent and locally precise. The agent consistently maintains long interaction chains, progressively eliminates bricks, and rarely collapses into early termination patterns. The presence of occasional loop episodes suggests that optimization instability is not entirely removed, but its frequency is substantially reduced relative to density-only training.
+The central implication of this configuration is that intrinsic reward components are not inherently antagonistic; rather, their interaction depends on balance. While shaping alone distorts the learning landscape, and density alone introduces variance, their combination can produce near-perfect performance with high reliability.
+
 
 \begin{table}[h]
 \centering
-\caption{Performance comparison across model configurations. The table summarizes the results across configurations.}
+\caption{Performance comparison across all model configurations.}
 \label{tab:results}
 \resizebox{\textwidth}{!}{
 \begin{tabular}{lccc}
 \toprule
 \textbf{Model} & \textbf{Win Rate} & \textbf{Avg Bricks} & \textbf{Avg Steps (wins)} \\
-\midrule
-WINNING\_MODEL (reference)         & 100\% & 24.00 & 1,791 \\
-no\_shaping\_no\_density -- last    & 99\%  & 23.98 & 1,687 \\
-no\_shaping\_yes\_density -- best\_time & 100\% & 24.00 & 1,804 \\
+\midrule[1.2pt]
+
+WINNING\_MODEL (reference) & 100\% & 24.00 & 1,791 \\
+\midrule[1.2pt]
+
 no\_shaping\_no\_density -- best\_reward & 81\% & 23.75 & 1,638 \\
-yes\_shaping\_no\_density -- best\_time  & 54\% & 22.18 & 1,766 \\
-yes\_shaping\_no\_density -- last        & 53\% & 20.21 & 1,611 \\
-no\_shaping\_yes\_density -- last        & 57\% & 21.06 & 1,662 \\
-yes\_shaping\_no\_density -- best\_reward & 0\%  & 0.00  & 23.54  \\
+no\_shaping\_no\_density -- best\_time & 77\% & 23.03 & 1,998 \\
+no\_shaping\_no\_density -- last & 99\% & 23.98 & 1,6878 \\
+
+\midrule[1.2pt]
+
+yes\_shaping\_no\_density -- best\_reward & 0\% & 0.00 & 24 \\
+yes\_shaping\_no\_density -- best\_time & 54\% & 22.18 & 1,766 \\
+yes\_shaping\_no\_density -- last & 53\% & 20.21 & 1,611 \\
+
+\midrule[1.2pt]
+
+no\_shaping\_yes\_density -- best\_reward & 52\% & 16.48 & 1,794 \\
+\textbf{no\_shaping\_yes\_density} -- best\_time & \textbf{100\%} & 24.00 & 1,804\\
+no\_shaping\_yes\_density -- last & 57\% & 21.06 & 1,662 \\
+
+\midrule[1.2pt]
+
+yes\_shaping\_yes\_density -- best\_reward & 80\% & 23.44 & 1,835 \\
+\textbf{yes\_shaping\_yes\_density} -- best\_time & \textbf{100\%} & 24.00 & 1,765 \\
+yes\_shaping\_yes\_density -- last & 97\% & 23.88 & 1,780 \\
+
 \bottomrule
 \end{tabular}
 }
 \end{table}
 
 \subsubsection{Final consideration}
-Two configurations produced models that match or approach the supervised reference: pure causal reward (\textit{no\_shaping\_no\_density}) and causal reward with density (\textit{no\_shaping\_yes\_density}). The critical distinction between them lies not in peak performance but in training stability. The pure causal configuration converges reliably and maintains high performance across all checkpoints, while the density-augmented configuration reaches its optimum only transiently during training before destabilizing \cite{chiave69}.
-The shaping experiments confirm that intrinsic structural signals and handcrafted bonuses are not straightforwardly additive. When the causal reward already provides a rich learning signal, introducing an additional shaped term risks disrupting the gradient landscape rather than supplementing it. This aligns with findings in the broader reward shaping literature, where imprecisely specified bonuses can lead to degenerate policies that exploit the shaping signal rather than solving the underlying task.
-Taken together, these experiments demonstrate that causal interaction structure, as captured by the proposed intrinsic reward formulation, is both necessary and sufficient for learning to play Arkanoid without any external reward signal. The result is particularly notable given the task's requirement for sustained sequential behavior: the agent must not only contact the ball but maintain a long chain of interactions across dozens of bricks, coordinating its behavior over time horizons far beyond what a simple local reward signal would support.
+Two configurations produced models that approach the supervised reference: shaped causal reward with density (\textit{yes\_shaping\_yes\_density})  and causal reward with density (\textit{no\_shaping\_yes\_density}). Both incorporate the same intrinsic density modulation, yet they differ in the presence of an additional shaping term.
+
+Empirically, the configuration without shaping achieves perfect performance and stable convergence, whereas the shaped counterpart, although capable of reaching high win rates, exhibits greater variance and reduced robustness across checkpoints.
+This contrast suggests that the density component alone, while capable of driving strong performance, provides a purely magnitude-based signal: it rewards large overall state transitions without distinguishing whether they contribute to long-term task structure. When shaping is introduced alongside density, it does not conflict with the intrinsic reward. Instead, it adds a mild directional bias that can regularize exploration by encouraging locally coherent behaviors, without overriding the causal signal.
+In other words, the density term amplifies state variation in a domain-agnostic manner, whereas shaping introduces weak task-aligned structure. Their combination does not distort the optimization landscape; rather, it slightly constrains it in a way that can improve stability. Empirically, this is reflected in the high and consistent performance of the \textit{yes\_shaping\_yes\_density} configuration, which remains competitive with the purely density-driven variant.
+
+However, the shaping component presupposes deeper prior knowledge of the environment. Designing an effective shaping reward requires assumptions about task structure, desirable intermediate behaviors, or implicit notions of progress. In this work, shaping was introduced only as an experimental probe, to test whether explicit guidance could complement with the intrinsic causal formulation. However, the primary objective of the proposed framework is to remain environment-agnostic. The agent should rely solely on the structural properties of interaction dynamics, without handcrafted bonuses tailored to a specific game.
+
+Extending the comparison, two configurations ultimately match or approach the supervised reference: pure causal reward (\textit{no\_shaping\_no\_density}) and causal reward with density (\textit{no\_shaping\_yes\_density}). The crucial distinction between them lies not in peak performance but in training stability. The pure causal configuration converges reliably and maintains strong performance across checkpoints, while the density-augmented configuration reaches its optimum only transiently during training before destabilizing \cite{chiave69}.
+
+In summary, these experiments demonstrate that the causal interaction structure captured by the proposed intrinsic reward is both necessary and sufficient for learning to play Arkanoid without any external reward signal. The agent must not only establish contact with the ball but maintain extended chains of coordinated interactions across dozens of bricks, operating over long temporal horizons. The fact that this competence emerges without shaping and, without task-specific priors, reinforces the central claim: structured intrinsic motivation grounded in causal interaction dynamics is both robust and general, and does not require environment-dependent reward engineering.
 
 
 
@@ -1179,7 +1219,21 @@ Taken together, these experiments demonstrate that causal interaction structure,
 
 To further evaluate the structural robustness of the learned policy, the best-performing Arkanoid model was tested under controlled modifications of the environment, without performing any retraining. The goal was to determine whether the learned behavior depends on superficial perceptual features or whether it captures deeper causal regularities of the domain.
 
-Three types of modifications were introduced: an increase in ball size, an increase in the number of bricks, and variations in the visual appearance of objects such as colors.
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.32\textwidth]{big_ball.png}
+  \hfill
+  \includegraphics[width=0.32\textwidth]{more_bricks.png}
+  \hfill
+  \includegraphics[width=0.32\textwidth]{different_colour.png}
+  
+  \caption{From left to right: the three stylistic modifications introduced in the environment — increased paddle size, increased number of bricks, and altered object colours.}
+  \label{fig:modification}
+\end{figure}
+
+
+
+Three types of modifications were introduced: an increase in ball size, an increase in the number of bricks, and variations in the visual appearance of objects such as colors \ref{fig:modification}.
 In the first experiment, the ball size was increased by a factor of five, significantly altering collision geometry and raising the probability of multiple brick contacts within a single frame. Despite this substantial physical change, the agent maintained stable behavior and continued to solve the task reliably. This result is particularly meaningful given that the observation space encodes normalized physical variables, positions and velocities, and that the intrinsic reward is derived exclusively from state transitions and causal impact. The policy is therefore not tied to specific geometric assumptions about object scale; instead, it reacts to relational dynamics such as ball-paddle alignment, collision-induced velocity changes, and brick disappearance events, demonstrating clear invariance to object size as long as the underlying causal interaction structure remains consistent.
 In the second experiment, the number of bricks was increased beyond the original $24$, affecting episode length, event frequency, and interaction density. Performance remained high even without retraining, with the agent successfully clearing the environment in most test runs. This outcome suggests that the learned policy does not memorize fixed spatial layouts but generalizes across variations in object count. Since the intrinsic reward depends on event chains and causal impact rather than explicit score signals, the agent remains motivated to generate meaningful interactions regardless of how many bricks are present the objective internalized by the network is not destroy exactly $24$ bricks, but rather something closer to maximizing structured causal engagement with the environment.
 Finally, additional tests confirmed that modifying the colours of the ball, paddle, and bricks has no effect on performance. This invariance follows directly from two core design choices: the observation extractor operates on numerical state attributes rather than raw pixels, and the reward mechanism depends exclusively on state transitions and causal differences. As a result, the policy is entirely insensitive to changes in color, texture, or visual theme. Taken together, these experiments highlight a fundamental property of the proposed framework: the learned behavior is grounded in causal structure, not perceptual appearance.
