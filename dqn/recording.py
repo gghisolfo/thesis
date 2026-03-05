@@ -11,8 +11,13 @@ from arkanoid_game import screen_width, screen_height
 
 from pong_game import LIVES
 
-MODEL_PATH = "./dqn/dqn_models/arkanoid_no_shaping_yes_density/best_reward_arkanoid.pth" # arkanoid_no_shaping_yes_density/best_time_arkanoid.pth
 
+
+MODEL_PATH = ".dqn/dqn_models/pong_yes_shaping_yes_density/best_time_pong.pth" # arkanoid_no_shaping_yes_density/best_time_arkanoid.pth
+
+MODEL_PATH="C:/Users/user/Documents/UNI/TESI/thesis/dqn/dqn_models/pong_no_shaping_yes_density/last_generic_pong.pth"
+
+print
 # "./dqn/dqn_models/WINNING_MODEL.pth"
 # "./dqn/dqn_models/arkanoid_no_shaping_no_density/last_generic_arkanoid.pth",  #99%
 #    "./dqn/dqn_models/arkanoid_no_shaping_no_density/best_time_arkanoid.pth", # 81%
@@ -40,7 +45,7 @@ VIDEO_PATH = "./gameplay_recording.mp4"
 # -----------------------------
 # Scegli il tipo di gioco
 # -----------------------------
-GAME_TYPE = "arkanoid"  # "arkanoid" o "pong"
+GAME_TYPE = "pong"  # "arkanoid" o "pong"
 
 if GAME_TYPE == "arkanoid":
     env = ArkanoidEnv()
@@ -65,7 +70,7 @@ q_net.eval()
 # -----------------------------
 # Loop principale
 # -----------------------------
-N = 2  # quante partite registrare
+N = 1  # quante partite registrare
 
 for episode in range(N):
     obs = env.reset()

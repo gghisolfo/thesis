@@ -14,6 +14,7 @@
 \usepackage{booktabs}   
 \usepackage{graphicx}   
 \usepackage{geometry}
+\usepackage{subcaption}
 
 
 \geometry{top=1cm, bottom=2.5cm, left=3cm, right=3cm}
@@ -709,6 +710,29 @@ The core idea is to recreate the analysed game environment, based on the extract
 Although the framework is still at an early stage and limited in scope, it successfully generates a coherent symbolic representation of the game environment from low-level visual inputs, thereby offering a concrete proof of concept for the proposed research direction.
 The final goal is to develop a system that is highly adaptable to a wide range of 2D game environments, capable of generalizing across the diverse dynamics and structural properties that characterize such domains.
 
+\begin{figure}[htbp]
+  \centering
+  % Prima subfigure
+  \begin{subfigure}[b]{0.33\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{semantic.png}
+    \caption{Description A}
+  \end{subfigure}\hfill 
+  \begin{subfigure}[b]{0.33\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{semantic.png}
+    \caption{Description B}
+  \end{subfigure}\hfill 
+  \begin{subfigure}[b]{0.33\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{semantic.png}
+    \caption{Description C}
+  \end{subfigure}
+  
+  \caption{Overall caption.}
+  \label{fig:all}
+\end{figure}
+
 
 \section{Proposed Implementation}
 
@@ -840,7 +864,12 @@ This chapter describes the concrete implementation of the proposed framework, de
 
 
 \section{End-to-End Pipeline}
-The implemented system follows a fully automated end-to-end pipeline that processes raw visual observations and transforms them into symbolic knowledge and action policies. The pipeline is designed to progressively increase the abstraction level of information, moving from pixels to semantic objects, then from symbolic events to decision-making strategies.
+
+
+
+
+
+The implemented system follows a fully automated end-to-end pipeline that processes raw visual observations and transforms them into symbolic knowledge and action policies. The pipeline is designed to progressively increase the abstraction level of information, moving from pixels to semantic objects, then from symbolic events to decision-making strategies (see Figure ???).
 \\
 The pipeline operates through the following stages:
 
@@ -871,6 +900,17 @@ The pipeline operates through the following stages:
     Intermediate representations, learned models, and symbolic populations are saved, enabling reproducibility, debugging, and incremental refinement.
 
 \end{itemize}
+
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=1\textwidth]{flow1.png}
+  \caption{ \small The figure illustrates the overall architecture of the system, which consists of three main modules. The Perception Module uses a U-Net for semantic segmentation of raw game frames, extracting structured patches via an encoder-decoder architecture with skip connections. These patches are passed to the Knowledge Module, which builds a symbolic knowledge base and recreates the game environment through a rule-based simulation, producing symbolic states. Finally, the Agent Module will receive these reconstructed states and uses a DQN to select actions, guided by an intrinsic reward signal.}
+
+  \label{fig:flow1}
+\end{figure}
+
+
 This pipeline enables learning and reasoning without relying on handcrafted semantic labels or domain-specific reward functions. While semantic labels are used internally by the segmentation module to generate class maps, they are not, actually, provided as supervision for symbolic reasoning or reward assignment; the agent and the symbolic engine operate purely on observed state changes and event structures.
 
 \section{General Architecture of the Framework}
@@ -1041,7 +1081,7 @@ Importantly, in generalization experiments, the trained model was evaluated with
 \subsection{Evaluation Metrics: Accuracy, Interpretability, Scalability}
 
 Evaluation was conducted along three orthogonal axes: task performance, structural coherence, and interpretability.
-The performance was measured using win rate measured as the percentage of episodes successfully completed, average number of bricks destroyed, average episode length (steps), survival time (only for pong), and stability across evaluation runs. These metrics quantify whether intrinsic reward is sufficient to produce goal-directed behavior without task-specific supervision.
+The performance was measured using win rate measured as the percentage of episodes successfully completed, average number of bricks destroyed, average episode length (steps, in this context, one step is equal to one frame), survival time (only for pong), and stability across evaluation runs. These metrics quantify whether intrinsic reward is sufficient to produce goal-directed behavior without task-specific supervision.
 The symbolic layer was evaluated in terms of coherence of induced object classes, consistency of transition rules across episodes, stability under parameter changes, and correct abstention in stochastic conditions. These criteria assess whether the symbolic module produces well-formed and reliable representations of the environment.
 At the RL layer, interpretability was assessed through behavioral robustness under structural modifications, invariance to visual features, and generalization across object count variations. Rather than focusing solely on reward maximization, this axis investigates whether learned policies reflect structural regularities of the environment.
 
@@ -1117,8 +1157,11 @@ The central contribution of this work is the design of a fully generic reinforce
 \end{itemize}
 
 \subsubsection{Arkanoid Experiments}
-A systematic evaluation was conducted across multiple reward configurations, each trained for up to $5{,}000$ episodes on the Arkanoid environment. In this first set of experiment, the game consists of $24$ destructible bricks that the agent must eliminate within a $60$-second time limit to avoid infinite loop situations. 
-\\For each configuration, three model checkpoints were preserved during training: the model achieving the highest cumulative reward (\textit{best\_reward}), the model with the best time-efficiency score, meaning the goal of surviving longer in the environment (\textit{best\_time}), and the final model at the end of training (\textit{last\_generic}). Final performance was evaluated using four complementary indicators: win rate, mean number of bricks destroyed per episode, average episode length (in steps), and consistency across evaluation runs.
+A systematic evaluation was conducted across multiple reward configurations, each trained for up to $5{,}000$ episodes on the Arkanoid environment. 
+For this framework, one episode corresponds to one complete game, composed of individual steps where each step advances the simulation by exactly one frame.
+
+In this first set of experiment, the game consists of $24$ destructible bricks that the agent must eliminate within a $60$-second time limit to avoid infinite loop situations. 
+For each configuration, three model checkpoints were preserved during training: the model achieving the highest cumulative reward (\textit{best\_reward}), the model with the best time-efficiency score, meaning the goal of surviving longer in the environment (\textit{best\_time}), and the final model at the end of training (\textit{last\_generic}). Final performance was evaluated using four complementary indicators: win rate, mean number of bricks destroyed per episode, average episode length (in steps), and consistency across evaluation runs.
 
 The three reward configurations tested were: pure causal and curiosity without shaping or density (\textit{no\_shaping\_no\_density}), causal reward combined with a handcrafted paddle-ball alignment bonus (\textit{yes\_shaping\_no\_density}) and causal reward augmented with an event-density component rewarding the magnitude of state transitions (\textit{no\_shaping\_yes\_density}). These were benchmarked against a reference model (\textit{WINNING\_MODEL}) trained with full supervision, which achieved a $100$\%-win rate and an average episode length of approximately $1{,}791$ steps.
 
@@ -1201,9 +1244,20 @@ yes\_shaping\_yes\_density -- last & 97\% & 23.88 & 1,780 \\
 \end{table}
 
 \subsubsection{Final consideration}
+
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=1\textwidth]{training_performance.png}
+
+
+  \caption{ \small The figure shows the average reward over $5{,}000$ training episodes for four different configurations of the DQN agent on the Arkanoid environment. All configurations start with similar low rewards and begin to diverge around episode $2{,}000$. The configurations with density reward (\textit{yes\_density}) tend to achieve higher average rewards, with \textit{no\_shaping\_yes\_density} reaching the peak around episode 4500. The \textit{yes\_shaping\_no\_density} configuration shows the weakest performance in the later episodes.}
+  \label{fig:training}
+\end{figure}
+
 Two configurations produced models that approach the supervised reference: shaped causal reward with density (\textit{yes\_shaping\_yes\_density})  and causal reward with density (\textit{no\_shaping\_yes\_density}). Both incorporate the same intrinsic density modulation, yet they differ in the presence of an additional shaping term.
 
-Empirically, the configuration without shaping achieves perfect performance and stable convergence, whereas the shaped counterpart, although capable of reaching high win rates, exhibits greater variance and reduced robustness across checkpoints.
+Empirically, the configuration without shaping achieves perfect performance and stable convergence, whereas the shaped counterpart, although capable of reaching high win rates, exhibits greater variance and reduced robustness across checkpoints (see Figure \ref{fig:training}).
 This contrast suggests that the density component alone, while capable of driving strong performance, provides a purely magnitude-based signal: it rewards large overall state transitions without distinguishing whether they contribute to long-term task structure. When shaping is introduced alongside density, it does not conflict with the intrinsic reward. Instead, it adds a mild directional bias that can regularize exploration by encouraging locally coherent behaviors, without overriding the causal signal.
 In other words, the density term amplifies state variation in a domain-agnostic manner, whereas shaping introduces weak task-aligned structure. Their combination does not distort the optimization landscape; rather, it slightly constrains it in a way that can improve stability. Empirically, this is reflected in the high and consistent performance of the \textit{yes\_shaping\_yes\_density} configuration, which remains competitive with the purely density-driven variant.
 
@@ -1227,23 +1281,35 @@ To further evaluate the structural robustness of the learned policy, the best-pe
   \hfill
   \includegraphics[width=0.32\textwidth]{different_colour.png}
   
-  \caption{From left to right: the three stylistic modifications introduced in the environment — increased paddle size, increased number of bricks, and altered object colours.}
+  \caption{\small From left to right: the three stylistic modifications introduced in the environment — increased paddle size, increased number of bricks, and altered object colours.}
   \label{fig:modification}
 \end{figure}
 
 
 
-Three types of modifications were introduced: an increase in ball size, an increase in the number of bricks, and variations in the visual appearance of objects such as colors \ref{fig:modification}.
+Three types of modifications were introduced: an increase in ball size, an increase in the number of bricks, and variations in the visual appearance of objects such as colors (see Figure \ref{fig:modification}).
 In the first experiment, the ball size was increased by a factor of five, significantly altering collision geometry and raising the probability of multiple brick contacts within a single frame. Despite this substantial physical change, the agent maintained stable behavior and continued to solve the task reliably. This result is particularly meaningful given that the observation space encodes normalized physical variables, positions and velocities, and that the intrinsic reward is derived exclusively from state transitions and causal impact. The policy is therefore not tied to specific geometric assumptions about object scale; instead, it reacts to relational dynamics such as ball-paddle alignment, collision-induced velocity changes, and brick disappearance events, demonstrating clear invariance to object size as long as the underlying causal interaction structure remains consistent.
 In the second experiment, the number of bricks was increased beyond the original $24$, affecting episode length, event frequency, and interaction density. Performance remained high even without retraining, with the agent successfully clearing the environment in most test runs. This outcome suggests that the learned policy does not memorize fixed spatial layouts but generalizes across variations in object count. Since the intrinsic reward depends on event chains and causal impact rather than explicit score signals, the agent remains motivated to generate meaningful interactions regardless of how many bricks are present the objective internalized by the network is not destroy exactly $24$ bricks, but rather something closer to maximizing structured causal engagement with the environment.
 Finally, additional tests confirmed that modifying the colours of the ball, paddle, and bricks has no effect on performance. This invariance follows directly from two core design choices: the observation extractor operates on numerical state attributes rather than raw pixels, and the reward mechanism depends exclusively on state transitions and causal differences. As a result, the policy is entirely insensitive to changes in color, texture, or visual theme. Taken together, these experiments highlight a fundamental property of the proposed framework: the learned behavior is grounded in causal structure, not perceptual appearance.
 
 \subsection{Pong Experiments}
-To test domain generality, the same framework was applied to Pong without structural modification of the intrinsic reward mechanism. The techniques developed for Arkanoid transfer effectively to Pong, confirming that the approach is not tied to a specific game architecture. However, model performance in Pong is noticeably lower, which can be attributed to the fact that Pong generates fewer simultaneous events compared to Arkanoid, providing a sparser set of interaction opportunities for the agent to exploit.
+To test domain generality, the same framework was applied to Pong without structural modification of the intrinsic reward mechanism. The techniques developed for Arkanoid transfer effectively to Pong ( see Figure \ref{fig:pong}), confirming that the approach is not tied to a specific game architecture. However, model performance in Pong is noticeably lower, which can be attributed to the fact that Pong generates fewer simultaneous events compared to Arkanoid, providing a sparser set of interaction opportunities for the agent to exploit.
 Training logs show gradual increases in survival time and event chain complexity. After $1000$ episodes, the average survival time reached approximately $1{.}3$ seconds, indicating that the agent had begun exploiting interaction regularities but had not yet converged to expert-level behavior. Although Pong learning is slower than Arkanoid, the same intrinsic reward structure drives improvement without any task-specific reward definition. This supports the claim that the proposed reward mechanism captures generic properties of interactive dynamics rather than game-specific objectives.
 
 
-\subsection{Critical discussion of the results}
+\begin{figure}[htbp]
+
+  \centering
+  \includegraphics[width=0.47\textwidth]{pong1.png}
+  \includegraphics[width=0.47\textwidth]{pong3.png}
+  \caption{ \small The figures represent the Pong environment.}
+
+  \label{fig:pong}
+\end{figure}
+
+
+
+\subsection{Critical discussion of the results }
 The experimental results highlight several important findings concerning both the representational layer and the reinforcement learning dynamics enabled by the proposed framework.
 
 First, the symbolic modeling component confirms that the system captures consistent object-centric causal dynamics in deterministic environments and adapts parameters under structural modifications. The induced rules remain stable when physical quantities such as velocity magnitude or object size change, provided that the underlying causal mechanisms are preserved. This establishes that the representation layer encodes structural regularities rather than superficial statistical correlations.
