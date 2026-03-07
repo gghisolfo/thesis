@@ -20,7 +20,7 @@ from sklearn.model_selection import train_test_split
 # IMAGE_SIZE = (120, 70)
 NUM_CLASSES = 10
 BATCH_SIZE = 4
-EPOCHS = 1 #10
+EPOCHS = 10 #1
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 SHUFFLE = False
 SHOW_PLOTS = True
@@ -148,7 +148,7 @@ def validate(model, loader, criterion, device, num_classes=NUM_CLASSES):
             outputs = model(images)
             loss = criterion(outputs, masks)
             val_loss += loss.item()
-            preds = torch.argmax(outputs, dim=1)
+            preds = torch.argmax(outputs, dim=1) # converted into discrete labels using an argmax operation
             correct_pixels += (preds == masks).sum().item()
             total_pixels += torch.numel(masks)
             batch_ious = compute_iou(preds, masks, num_classes)

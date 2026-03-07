@@ -58,47 +58,47 @@
 \contentsline {subsection}{\numberline {4.2.1}Segmentation}{37}{subsection.4.2.1}%
 \contentsline {subsubsection}{Network Architecture}{37}{subsubsection*.25}%
 \contentsline {subsection}{\numberline {4.2.2}Symbolic System as Knowledge Construction Module}{38}{subsection.4.2.2}%
-\contentsline {subsubsection}{Patch Extraction}{38}{subsubsection*.26}%
-\contentsline {subsubsection}{Object Formation}{38}{subsubsection*.27}%
-\contentsline {subsubsection}{Rule Inference}{39}{subsubsection*.28}%
-\contentsline {subsubsection}{Pruning}{39}{subsubsection*.29}%
-\contentsline {subsubsection}{Generalization}{39}{subsubsection*.30}%
+\contentsline {subsubsection}{Patch Extraction}{38}{subsubsection*.27}%
+\contentsline {subsubsection}{Object Formation}{39}{subsubsection*.28}%
+\contentsline {subsubsection}{Rule Inference}{39}{subsubsection*.29}%
+\contentsline {subsubsection}{Pruning}{40}{subsubsection*.30}%
+\contentsline {subsubsection}{Generalization}{40}{subsubsection*.31}%
 \contentsline {subsection}{\numberline {4.2.3}From Symbolic Rules to a Playable Environment}{40}{subsection.4.2.3}%
-\contentsline {subsection}{\numberline {4.2.4}Generic Environment as a Transitional Representation}{40}{subsection.4.2.4}%
-\contentsline {subsubsection}{Generic Environment Design}{40}{subsubsection*.31}%
-\contentsline {subsubsection}{Generic event detection and causal abstraction}{41}{subsubsection*.32}%
-\contentsline {subsection}{\numberline {4.2.5}Deep Q-Network in a Domain-Agnostic Environment}{41}{subsection.4.2.5}%
-\contentsline {subsubsection}{Reward}{41}{subsubsection*.33}%
-\contentsline {subsubsection}{Event-centered reward}{42}{subsubsection*.34}%
-\contentsline {subsubsection}{Causal impact bonus}{42}{subsubsection*.35}%
-\contentsline {subsubsection}{Curiosity-driven bonus}{42}{subsubsection*.36}%
-\contentsline {subsubsection}{Evaluation Perspective}{42}{subsubsection*.37}%
-\contentsline {chapter}{\numberline {5}Implementation}{43}{chapter.5}%
-\contentsline {section}{\numberline {5.1}End-to-End Pipeline}{43}{section.5.1}%
-\contentsline {section}{\numberline {5.2}General Architecture of the Framework}{45}{section.5.2}%
-\contentsline {subsection}{\numberline {5.2.1}Design Choices}{45}{subsection.5.2.1}%
-\contentsline {subsection}{\numberline {5.2.2}Selected Techniques and Algorithms}{45}{subsection.5.2.2}%
-\contentsline {subsection}{\numberline {5.2.3}Modular Structure of the System}{46}{subsection.5.2.3}%
-\contentsline {subsubsection}{Visual Input Acquisition and Preprocessing Module}{46}{subsubsection*.39}%
-\contentsline {subsubsection}{Perception Module}{46}{subsubsection*.40}%
-\contentsline {subsubsection}{Symbolic Reasoning Module}{47}{subsubsection*.41}%
-\contentsline {subsubsection}{Reinforcement Learning Agent}{47}{subsubsection*.42}%
-\contentsline {subsection}{\numberline {5.2.4}Optimizations and Efficiency Considerations}{48}{subsection.5.2.4}%
+\contentsline {subsection}{\numberline {4.2.4}Generic Environment as a Transitional Representation}{41}{subsection.4.2.4}%
+\contentsline {subsubsection}{Generic Environment Design}{41}{subsubsection*.32}%
+\contentsline {subsubsection}{Generic event detection and causal abstraction}{41}{subsubsection*.33}%
+\contentsline {subsection}{\numberline {4.2.5}Deep Q-Network in a Domain-Agnostic Environment}{42}{subsection.4.2.5}%
+\contentsline {subsubsection}{Reward}{42}{subsubsection*.34}%
+\contentsline {subsubsection}{Event-centered reward}{42}{subsubsection*.35}%
+\contentsline {subsubsection}{Causal impact bonus}{42}{subsubsection*.36}%
+\contentsline {subsubsection}{Curiosity-driven bonus}{43}{subsubsection*.37}%
+\contentsline {subsubsection}{Evaluation Perspective}{43}{subsubsection*.38}%
+\contentsline {chapter}{\numberline {5}Implementation}{44}{chapter.5}%
+\contentsline {section}{\numberline {5.1}End-to-End Pipeline}{44}{section.5.1}%
+\contentsline {section}{\numberline {5.2}General Architecture of the Framework}{46}{section.5.2}%
+\contentsline {subsection}{\numberline {5.2.1}Design Choices}{46}{subsection.5.2.1}%
+\contentsline {subsection}{\numberline {5.2.2}Selected Techniques and Algorithms}{46}{subsection.5.2.2}%
+\contentsline {subsection}{\numberline {5.2.3}Modular Structure of the System}{47}{subsection.5.2.3}%
+\contentsline {subsubsection}{Visual Input Acquisition and Preprocessing Module}{47}{subsubsection*.40}%
+\contentsline {subsubsection}{Perception Module}{47}{subsubsection*.41}%
+\contentsline {subsubsection}{Symbolic Reasoning Module}{47}{subsubsection*.42}%
+\contentsline {subsubsection}{Reinforcement Learning Agent}{48}{subsubsection*.43}%
+\contentsline {subsection}{\numberline {5.2.4}Optimizations and Efficiency Considerations}{49}{subsection.5.2.4}%
 \contentsline {chapter}{\numberline {6}Experimental Evaluation}{50}{chapter.6}%
 \contentsline {section}{\numberline {6.1}Datasets and Testing Scenarios}{50}{section.6.1}%
 \contentsline {subsection}{\numberline {6.1.1}Evaluation Metrics: Accuracy, Interpretability, Scalability}{51}{subsection.6.1.1}%
 \contentsline {section}{\numberline {6.2}Experimental Results}{51}{section.6.2}%
 \contentsline {subsection}{\numberline {6.2.1}Semantic Grounding and Symbolic Log Reconstruction}{51}{subsection.6.2.1}%
-\contentsline {subsubsection}{From Semantic Masks to Symbolic Logs}{51}{subsubsection*.43}%
-\contentsline {subsubsection}{Symbolic Log Reconstruction}{52}{subsubsection*.44}%
+\contentsline {subsubsection}{From Semantic Masks to Symbolic Logs}{51}{subsubsection*.44}%
+\contentsline {subsubsection}{Symbolic Log Reconstruction}{52}{subsubsection*.45}%
 \contentsline {subsection}{\numberline {6.2.2}Preliminary Validation: Symbolic Representation Learning}{52}{subsection.6.2.2}%
 \contentsline {subsection}{\numberline {6.2.3}Reinforcement Learning module}{53}{subsection.6.2.3}%
-\contentsline {subsubsection}{Arkanoid Experiments}{54}{subsubsection*.45}%
-\contentsline {subsubsection}{Configuration 1: Pure Causal + Curiosity (no\_shaping\_no\_density)}{54}{subsubsection*.46}%
-\contentsline {subsubsection}{Configuration 2: Shaping Enabled - No Density}{55}{subsubsection*.47}%
-\contentsline {subsubsection}{Configuration 3: No Shaping - Density Enabled}{55}{subsubsection*.48}%
-\contentsline {subsubsection}{Configuration 4: Shaping Enabled - Density Enabled (yes\_shaping\_yes\_density)}{55}{subsubsection*.49}%
-\contentsline {subsubsection}{Final consideration}{56}{subsubsection*.51}%
+\contentsline {subsubsection}{Arkanoid Experiments}{54}{subsubsection*.46}%
+\contentsline {subsubsection}{Configuration 1: Pure Causal + Curiosity (no\_shaping\_no\_density)}{54}{subsubsection*.47}%
+\contentsline {subsubsection}{Configuration 2: Shaping Enabled - No Density}{55}{subsubsection*.48}%
+\contentsline {subsubsection}{Configuration 3: No Shaping - Density Enabled}{55}{subsubsection*.49}%
+\contentsline {subsubsection}{Configuration 4: Shaping Enabled - Density Enabled (yes\_shaping\_yes\_density)}{55}{subsubsection*.50}%
+\contentsline {subsubsection}{Final consideration}{56}{subsubsection*.52}%
 \contentsline {subsection}{\numberline {6.2.4}Generalization Under Structural Modifications}{58}{subsection.6.2.4}%
 \contentsline {subsection}{\numberline {6.2.5}Pong Experiments}{59}{subsection.6.2.5}%
 \contentsline {subsection}{\numberline {6.2.6}Critical discussion of the results }{59}{subsection.6.2.6}%
@@ -108,7 +108,7 @@
 \contentsline {subsection}{\numberline {7.1.2}RL Integration}{62}{subsection.7.1.2}%
 \contentsline {subsection}{\numberline {7.1.3}Generalization Across Environments}{62}{subsection.7.1.3}%
 \contentsline {section}{\numberline {7.2}Summary of Contributions, Impact of the Research, and Final Reflections}{63}{section.7.2}%
-\contentsline {chapter}{References}{64}{chapter*.55}%
+\contentsline {chapter}{References}{64}{chapter*.56}%
 \contentsline {chapter}{\numberline {A}Additional Technical Details}{71}{appendix.A}%
 \contentsline {chapter}{\numberline {B}Code Snippets or Pseudocode of Relevant Modules}{72}{appendix.B}%
 \contentsline {chapter}{\numberline {C}Dataset Specifications or Experimental Settings}{73}{appendix.C}%
