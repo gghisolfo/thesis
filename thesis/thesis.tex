@@ -696,6 +696,14 @@ During the search for a framework that allows good game performance, overcoming 
 The following sections describe more in detail, the various components, workflow, and principles that make this integration an alternative and complementary solution to the modern dominant approaches in artificial intelligence.
 
 
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=1\textwidth]{flow1.png}
+  \caption{ \small The figure illustrates the overall architecture of the system, which consists of three main modules. The Perception Module uses a U-Net for semantic segmentation of raw game frames, extracting structured patches via an encoder-decoder architecture with skip connections. These patches are passed to the Knowledge Module, which builds a symbolic knowledge base and recreates the game environment through a rule-based simulation, producing symbolic states. Finally, the Agent Module will receive these reconstructed states and uses a DQN to select actions, guided by an intrinsic reward signal.}
+
+  \label{fig:flow1}
+\end{figure}
+
 \section{Conceptual Foundations}
 
 This section presents the development of the thesis' themes and objectives, starting with the definition of the fundamental design principles that guided the development of the work.
@@ -710,28 +718,7 @@ The core idea is to recreate the analysed game environment, based on the extract
 Although the framework is still at an early stage and limited in scope, it successfully generates a coherent symbolic representation of the game environment from low-level visual inputs, thereby offering a concrete proof of concept for the proposed research direction.
 The final goal is to develop a system that is highly adaptable to a wide range of 2D game environments, capable of generalizing across the diverse dynamics and structural properties that characterize such domains.
 
-\begin{figure}[htbp]
-  \centering
-  % Prima subfigure
-  \begin{subfigure}[b]{0.33\textwidth}
-    \centering
-    \includegraphics[width=\linewidth]{semantic.png}
-    \caption{Description A}
-  \end{subfigure}\hfill 
-  \begin{subfigure}[b]{0.33\textwidth}
-    \centering
-    \includegraphics[width=\linewidth]{semantic.png}
-    \caption{Description B}
-  \end{subfigure}\hfill 
-  \begin{subfigure}[b]{0.33\textwidth}
-    \centering
-    \includegraphics[width=\linewidth]{semantic.png}
-    \caption{Description C}
-  \end{subfigure}
-  
-  \caption{Overall caption.}
-  \label{fig:all}
-\end{figure}
+
 
 
 \section{Proposed Implementation}
@@ -750,22 +737,45 @@ The framework relies on a segmentation algorithm that segments the images of gam
 
 \subsubsection{Network Architecture}
 The segmentation network is a U-Net-based convolutional neural network, specifically designed for multi-class semantic segmentation. The architecture follows the classic encoder-decoder paradigm with skip connections, enabling the model to combine high-level semantic information with fine-grained spatial details.
-The encoder consists of three convolutional blocks, each composed of two consecutive 3x3 convolutional layers followed by batch normalization and ReLU activation functions. These blocks progressively increase the number of feature channels (64, 128, and 256) while reducing spatial resolution via max pooling. This design allows the network to capture increasingly abstract representations of the input image due to progressively reduces spatial resolution by increasing the number of channels.
-At the bottleneck, a deeper convolutional block expands the feature dimensionality to 512 channels, the network learns the most abstract and global features of the image.
-The decoder mirrors the encoder structure and employs transposed convolutions for upsampling. At each decoding stage, the upsampled feature maps are concatenated with the corresponding encoder outputs through skip connections. This mechanism preserves spatial context and improves boundary localization in the segmentation masks. In order to address potential spatial mismatches, bilinear interpolation is applied to ensure consistent feature map dimensions before concatenation.
+
+---
+The encoder consists of three convolutional blocks, each composed of two consecutive 3x3 convolutional layers followed by batch normalization and ReLU activation functions. These blocks progressively increase the number of feature channels (64, 128, and 256) while reducing spatial resolution via max pooling. 
+
+
+
+
+
+This design allows the network to capture increasingly abstract representations of the input image due to progressively reduces spatial resolution by increasing the number of channels.
+At the bottleneck, a deeper convolutional block expands the feature dimensionality to 512 channels, the network learns the most abstract and global features of the image.The segmentation network
+
+
+
+---
+The decoder mirrors the encoder structure and employs transposed convolutions for upsampling. At each decoding stage, the upsampled feature maps are concatenated with the corresponding encoder outputs through skip connections. This mechanism preserves spatial context and improves boundary localization in the segmentation masks. 
+
+---
+In order to address potential spatial mismatches, bilinear interpolation is applied to ensure consistent feature map dimensions before concatenation.
+---
+
+
 The final output layer is a 1x1 convolution that maps the decoded feature maps to the desired number of semantic classes. The network produces dense per-pixel class scores, which are later converted into discrete labels using an argmax operation.
 
 \subsection{Symbolic System as Knowledge Construction Module}
 This chapter describes a system module that was adopted and integrated within the overall framework, rather than being designed and implemented entirely from scratch. The module was incorporated as a pre-existing conceptual and functional component, with only minimal modifications introduced to improve coherence and interoperability with the preceding and subsequent modules of the architecture.
-Its primary role is to explore a cognitive-inspired alternative for building internal world models specifically, it is a symbolic system that derives interpretable representations of a dynamic environment from low-level perceptual inputs. The following sections describe synthetically the key modules of that framework, focusing on their purpose, design, and current limitations.
+Its primary role is to explore a cognitive-inspired alternative for building internal world models specifically, it is a symbolic system that derives interpretable representations of a dynamic environment from low-level perceptual inputs. 
+
+The following sections describe synthetically the key modules of that framework, focusing on their purpose, design, and current limitations.
 
 
 
 \subsubsection{Patch Extraction}
 The environment is represented as a sequence of discrete frames extracted from a game-like simulation. Each frame is decomposed into a set of non-overlapping visual units, called patches, which serve as the system's primary perceptual input. These patches are anonymous and minimal representations of visual elements that may correspond to objects or object parts.
 In the current framework, patch extraction is not performed through direct visual reasoning within the agent. Nevertheless, this component has undergone a slight improvement over the originally proposed model, as patches are no longer obtained directly from the simulated environment.
+
 Instead, raw game frames are processed by the semantic segmentation module, whose outputs are subsequently post-processed by a reconstruction script. This script converts segmented objects into structured attributes, such as position and shape, which are then used to construct simplified patch representations.
 This component effectively serves as a placeholder perceptual pipeline. Its use reflects the framework's primary focus on symbolic modeling and knowledge representation rather than perceptual learning.
+
+
 The framework's next development phase will add a visual segmentation module, allowing patches to be derived from raw pixel inputs under the guidance previously acquired knowledge. However, this process is vital for examining how the system handles real-world perceptual challenges.
 
 
@@ -835,7 +845,7 @@ Detected events are grouped into causal chains, and rewards are assigned as a fu
 To further encourage intentional behavior, the framework introduces a causal impact bonus. For each action, the observed state transition is compared with a counterfactual transition produced by a no-op baseline. The difference between these transitions provides an estimate of how strongly the agent's action influenced the environment.
 This mechanism rewards actions with a clear causal footprint, discouraging passive or redundant behaviors and promoting actions that actively shape the environment's dynamics. The notion of causality here is purely operational and does not rely on symbolic causal models.
 
-\subsubsection{Curiosity-driven exploration}
+\subsubsection{Curiosity-driven bonus}
 Intrinsic motivation is further reinforced through a curiosity mechanism based on predictive modelling. 
 A learned forward model attempts to predict the next state \cite{chiave41} given the current state and action. The prediction error of this model serves as an intrinsic reward signal, encouraging the agent to explore regions of the state space that are novel, complex, or difficult to predict.
 This formulation aligns with the view that learning progress and model error are proxies for informational gain. The forward model is trained online, ensuring that curiosity adapts dynamically as the agent's understanding of the environment improves.
@@ -869,7 +879,7 @@ This chapter describes the concrete implementation of the proposed framework, de
 
 
 
-The implemented system follows a fully automated end-to-end pipeline that processes raw visual observations and transforms them into symbolic knowledge and action policies. The pipeline is designed to progressively increase the abstraction level of information, moving from pixels to semantic objects, then from symbolic events to decision-making strategies (see Figure ???).
+The implemented system follows a fully automated end-to-end pipeline that processes raw visual observations and transforms them into symbolic knowledge and action policies. The pipeline is designed to progressively increase the abstraction level of information, moving from pixels to semantic objects, then from symbolic events to decision-making strategies (see Figure \ref{fig:flow1}).
 \\
 The pipeline operates through the following stages:
 
@@ -883,18 +893,18 @@ The pipeline operates through the following stages:
     This ensures numerical stability and compatibility with convolutional neural networks pretrained or inspired by standard vision architectures.
 
     \item \textbf{Semantic segmentation} \\
-    A deep convolutional model assigns a semantic class to each pixel, producing dense segmentation masks that identify relevant entities such as the ball, paddle, bricks, and background.
+    A deep convolutional model assigns a semantic class to each pixel, producing dense segmentation masks that identify relevant entities such as the ball, paddle, bricks, and background (see Figure \ref{fig:perception}).
 
     \item \textbf{Patch extraction and object tracking} \\
     Segmented regions are converted into patches and tracked across consecutive frames, forming persistent object hypotheses with temporal continuity.
 
     \item \textbf{Symbolic abstraction and reasoning} \\
     Visual objects are mapped into symbolic entities described by properties, events, and inferred rules. 
-    A population-based heuristic process evaluates alternative symbolic explanations and selects the most coherent ones.
+    A population-based heuristic process evaluates alternative symbolic explanations and selects the most coherent ones (see Figure \ref{fig:symbolic}).
 
-    \item \textbf{Reinforcement learning interaction} \\
+    \item \textbf{Reinforcement learning} \\
     A reinforcement learning agent interacts with the environment through a generic symbolic interface. 
-    The rewards are derived from intrinsic measures of causality, novelty, and event generation.
+    The rewards are derived from intrinsic measures of causality, novelty, and event generation (see Figure \ref{fig:DQN}).
 
     \item \textbf{Logging and persistence} \\
     Intermediate representations, learned models, and symbolic populations are saved, enabling reproducibility, debugging, and incremental refinement.
@@ -902,12 +912,37 @@ The pipeline operates through the following stages:
 \end{itemize}
 
 
+
+
+
 \begin{figure}[htbp]
   \centering
-  \includegraphics[width=1\textwidth]{flow1.png}
-  \caption{ \small The figure illustrates the overall architecture of the system, which consists of three main modules. The Perception Module uses a U-Net for semantic segmentation of raw game frames, extracting structured patches via an encoder-decoder architecture with skip connections. These patches are passed to the Knowledge Module, which builds a symbolic knowledge base and recreates the game environment through a rule-based simulation, producing symbolic states. Finally, the Agent Module will receive these reconstructed states and uses a DQN to select actions, guided by an intrinsic reward signal.}
+    % \includegraphics[width=1\linewidth]{ELEMENT.png}
 
-  \label{fig:flow1}
+  \begin{subfigure}[b]{0.42\textwidth}
+    \centering
+    \includegraphics[width=1\linewidth]{SEM.png}
+    \caption{}
+    \label{fig:perception}
+  \end{subfigure}\hfill 
+  \begin{subfigure}[b]{0.575
+    \textwidth}
+    \centering
+    \includegraphics[width=1\linewidth]{SYM.png}
+    \caption{}
+    \label{fig:symbolic}
+
+  \end{subfigure}\hfill 
+  \begin{subfigure}[b]{0.45\textwidth}
+    \centering
+    \includegraphics[width=1\linewidth]{DQN.png}
+    \caption{}
+    \label{fig:DQN}
+
+  \end{subfigure}
+
+  \caption{\small The framework consists of (a) a neural perception layer for raw data processing, (b) a symbolic module for knowledge base construction, and (c) a DQN agent utilizing intrinsic motivation for environment-agnostic policy learning.}
+  \label{fig:element}
 \end{figure}
 
 
@@ -944,17 +979,28 @@ The interaction between these techniques allows the agent to learn meaningful be
 
 \subsection{Modular Structure of the System}
 
-\subsubsection{Video Acquisition and Preprocessing Module}
-The video acquisition module is responsible for efficiently handling visual input data and preparing it for subsequent processing stages. It supports both online acquisition of frames from live simulations and the loading of previously recorded gameplay logs. Each frame is resized to a fixed resolution of $120 \times 70$ pixels to ensure a consistent input size for the neural network and is converted into a normalized tensor to facilitate stable training. 
+\subsubsection{Visual Input Acquisition and Preprocessing Module}
+The frame acquisition module is responsible for efficiently handling visual input data and preparing it for subsequent processing stages. It supports both online acquisition of frames from live simulations and the loading of previously recorded gameplay logs. 
+
+---
+Each frame is resized to a fixed resolution of $120 \times 70$ pixels to ensure a consistent input size for the neural network and is converted into a normalized tensor to facilitate stable training. 
+
+---
 The Corresponding segmentation masks are loaded as integer-valued images, where each pixel represents a semantic class identifier, allowing the network to learn to associate spatial regions with meaningful object categories.
 A custom dataset class encapsulates the logic for pairing each image with its corresponding mask, while PyTorch data loaders handle batching, shuffling, and splitting into training and validation sets. A fixed random seed is used to ensure reproducibility of the dataset splits, which is crucial for consistent evaluation of model performance. By abstracting low-level data handling, this module provides a clean interface for the feature extraction stage, allowing the focus to remain on the learning task rather than on preprocessing logistics.
 
 
-\subsubsection{Feature Extraction Module}
-The feature extraction module performs semantic segmentation using a U-Net architecture \cite{chiave36}, which is highly effective for dense pixel-wise prediction tasks. The network follows a symmetric encoder-decoder design: the encoder progressively extracts hierarchical feature representations through convolutional blocks and downsampling, while the decoder reconstructs spatial resolution using transposed convolutions and skip connections. Skip connections between corresponding encoder and decoder layers enable the network to recover fine-grained spatial details lost during downsampling, allowing for precise localization of object boundaries while maintaining contextual awareness.
+
+\subsubsection{Perception Module}
+The perception module performs semantic segmentation using a U-Net architecture \cite{chiave36}, which is highly effective for dense pixel-wise prediction tasks. The network follows a symmetric encoder-decoder design: the encoder progressively extracts hierarchical feature representations through convolutional blocks and downsampling, while the decoder reconstructs spatial resolution using transposed convolutions and skip connections. Skip connections between corresponding encoder and decoder layers enable the network to recover fine-grained spatial details lost during downsampling, allowing for precise localization of object boundaries while maintaining contextual awareness.
+
+---
 Each convolutional block consists of two convolutional layers with 
 $3 \times 3$ kernels, followed by batch normalization and ReLU activation. Batch normalization stabilizes training by normalizing intermediate activations, and ReLU introduces non-linearities that allow the network to model complex patterns. The final output layer uses a 
 $1 \times 1$ convolution to produce one channel per semantic class, enabling per-pixel class predictions.
+
+
+--
 
 Training is conducted with a multi-class cross-entropy loss, optimized using the Adam optimizer. In order to improve stability and generalization, the training process incorporates data augmentation, input normalization, small batch sizes, and early stopping based on validation loss. Evaluation metrics include pixel accuracy and mean Intersection over Union (mIoU) \cite{chiave34}, which quantify agreement between predicted and ground-truth segmentation maps. 
 \\
@@ -993,9 +1039,9 @@ The agent is trained using Deep Q-Learning with experience replay, target networ
 \end{itemize}
 A central aspect of the implementation is the use of intrinsic reward signals. The total reward at each time step is composed of several components:
 \begin{itemize}
-    \item \textbf{Event-based reward:} Proportional to the number of detected events and the length of their causal chains.
+    \item \textbf{Event-centered reward:} Proportional to the number of detected events and the length of their causal chains.
     \item \textbf{Causal impact bonus:} Measures how much the outcome of an action differs from a no-op baseline, encouraging interventions that meaningfully affect the environment.
-    \item \textbf{Curiosity bonus:}Derived from the prediction error of a learned forward dynamics model, which estimates the next state given the current state and action.
+    \item \textbf{Curiosity-driven bonus:}Derived from the prediction error of a learned forward dynamics model, which estimates the next state given the current state and action.
     \item \textbf{Event density bonus:}Optionally rewards large overall changes in the state vector, promoting exploration of diverse configurations.
 \end{itemize}
 Formally, the total reward $R_{\text{total}}$ can be expressed as:
