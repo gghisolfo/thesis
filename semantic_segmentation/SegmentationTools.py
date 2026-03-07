@@ -2,7 +2,7 @@
 from PIL import Image
 import numpy as np
 import os
-
+import random
 import torch
 from torch.utils.data import Dataset 
 from torchvision import transforms
@@ -37,23 +37,44 @@ CLASS_COLORS_DIFFERENT = np.array([
 ], dtype=np.uint8)
 
 
-def map_mask(mask):
-    mapped_mask = np.zeros_like(mask)
-    mapping = {
-    0: 0,
-    1: 1,
-    2: 2,
-    3: 3,
-    4: 4,
-    5: 5,
-    6: 6,
-    7: 7,
-    8: 8,
-    9: 9
-    }
-    for original_value, class_index in mapping.items():
-        mapped_mask[mask == original_value] = class_index
+# def map_mask(mask):
+#     mapped_mask = np.zeros_like(mask)
+#     mapping = {
+#     0: 0,
+#     1: 1,
+#     2: 2,
+#     3: 3,
+#     4: 4,
+#     5: 5,
+#     6: 6,
+#     7: 7,
+#     8: 8,
+#     9: 9
+#     }
+#     for original_value, class_index in mapping.items():
+#         mapped_mask[mask == original_value] = class_index
 
+#     return mapped_mask
+
+
+def map_mask(mask):
+    # Se ricevi un tensore, portalo su CPU e convertilo in numpy
+    if torch.is_tensor(mask):
+        mask_np = mask.cpu().numpy()
+    else:
+        mask_np = np.array(mask)
+
+    # Crea una copia per il mapping
+    mapped_mask = np.zeros_like(mask_np)
+    
+    # 1. Forza tutto ciò che è >= 9 a essere 9 (Bricks)
+    # 2. Applica il mapping per i valori 0-8
+    for i in range(10):
+        if i == 9:
+            mapped_mask[mask_np >= 9] = 9
+        else:
+            mapped_mask[mask_np == i] = i
+            
     return mapped_mask
 
 # === Data Augmentation semplice ===
@@ -72,7 +93,7 @@ class SegmentationDataset(Dataset):
         self.image_paths = image_paths
         self.mask_paths = mask_paths
         self.transform = transform
-        self.mask_transform = mask_transform  # aggiunto
+        self.mask_transform = mask_transform  
 
     def __len__(self):
         return len(self.image_paths)
@@ -91,9 +112,10 @@ class SegmentationDataset(Dataset):
         else:
             image = transforms.ToTensor()(image)
 
-        if self.mask_transform:
-            mask = self.mask_transform(mask)
-        else:
-            mask = transforms.PILToTensor()(mask).squeeze(0).long()  # shape [H, W], dtype: long
+        # if self.mask_transform:
+        #     mask = self.mask_transform(mask)
+        # else:
+        #     mask = transforms.PILToTensor()(mask).squeeze(0).long()  # shape [H, W], dtype: long
 
+        mask = torch.from_numpy(mask_np).long()
         return image, mask

@@ -5,8 +5,11 @@ import torch
 from torch.utils.data import DataLoader
 from torchvision import transforms
 import matplotlib.pyplot as plt
-from UNet import UNet
-from SegmentationTools import SegmentationDataset, CLASS_COLORS_ORIGINAL #map_mask
+
+# from UNet import UNet
+from UNet_original import UNet
+
+from SegmentationTools import SegmentationDataset, CLASS_COLORS_ORIGINAL, map_mask
 from EarlyStopping import EarlyStopping
 from sklearn.model_selection import train_test_split
 
@@ -14,25 +17,25 @@ from sklearn.model_selection import train_test_split
 # Config
 # -----------------------
 
-IMAGE_SIZE = (120, 70)
+# IMAGE_SIZE = (120, 70)
 NUM_CLASSES = 10
 BATCH_SIZE = 4
-EPOCHS = 10
+EPOCHS = 1 #10
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 SHUFFLE = False
 SHOW_PLOTS = True
 SAVE_MODEL = True
-SAVE_PREDICTION = False
+# SAVE_PREDICTION = False
 
-images_path = "./dataset/images" # "./dataset/images" | "./dataset_complete/images"
-masks_path = "./dataset/masks" # "./dataset/images" | "./dataset_complete/images"
+images_path = "./dataset_new/images" # "./dataset/images" | "./dataset_complete/images"
+masks_path = "./dataset_new/masks" # "./dataset/images" | "./dataset_complete/images"
 
 
 MODEL_NAME = "segmentation_model"  
-model_path = f"model/{MODEL_NAME}.pth"
+model_path = f"model_new/{MODEL_NAME}.pth"
 
 BEST_MODEL_NAME = "best_segmentation_model"  
-best_model_path = f"model/{MODEL_NAME}.pth"
+best_model_path = f"model_new/{BEST_MODEL_NAME}.pth"
 
 
 # -----------------------
@@ -87,6 +90,10 @@ def compute_iou(preds, labels, num_classes):
 def get_image_mask_paths(images_dir, masks_dir):
     images = sorted([os.path.join(images_dir, f) for f in os.listdir(images_dir)])
     masks = sorted([os.path.join(masks_dir, f) for f in os.listdir(masks_dir)])
+    # Verifica i primi 5 accoppiamenti
+    print("--- Controllo Accoppiamento File ---")
+    for i in range(min(5, len(images))):
+        print(f"Immagine: {images[i]} <--> Maschera: {masks[i]}")
     return images, masks
 
 
@@ -158,6 +165,44 @@ def validate(model, loader, criterion, device, num_classes=NUM_CLASSES):
 # Visualization helper (on validation set)
 # -----------------------
 
+# def visualize_predictions(model, loader, max_images=5, device=DEVICE):
+#     model.eval()
+#     shown = 0
+#     with torch.no_grad():
+#         for images, masks in loader:
+#             images, masks = images.to(device), masks.to(device)
+#             outputs = model(images)
+#             preds = torch.argmax(outputs, dim=1)
+#             for b in range(images.size(0)):
+#                 img = images[b].cpu()
+#                 true_mask = map_mask(masks[b]).cpu().numpy()
+#                 pred_mask = preds[b].cpu().numpy()
+
+#                 img_vis = denormalize(img.clone(), [0.485, 0.456, 0.406], [0.229, 0.224, 0.225]).permute(1,2,0).numpy()
+#                 img_vis = np.clip(img_vis, 0, 1)
+#                 color_true = CLASS_COLORS_ORIGINAL[true_mask]
+#                 color_pred = CLASS_COLORS_ORIGINAL[pred_mask]
+
+#                 fig, axes = plt.subplots(1,3,figsize=(12,4))
+#                 axes[0].imshow(img_vis)
+
+#                 axes[0].set_title('Input')
+#                 axes[0].axis('off')
+#                 axes[1].imshow(color_true)
+#                 axes[1].set_title('Ground Truth')
+#                 axes[1].axis('off')
+#                 axes[2].imshow(color_pred)
+#                 axes[2].set_title('Prediction')
+#                 axes[2].axis('off')
+#                 plt.tight_layout()
+#                 plt.show()
+
+#                 shown += 1
+#                 if shown >= max_images:
+#                     return
+
+
+
 def visualize_predictions(model, loader, max_images=5, device=DEVICE):
     model.eval()
     shown = 0
@@ -166,25 +211,35 @@ def visualize_predictions(model, loader, max_images=5, device=DEVICE):
             images, masks = images.to(device), masks.to(device)
             outputs = model(images)
             preds = torch.argmax(outputs, dim=1)
+            
             for b in range(images.size(0)):
                 img = images[b].cpu()
-                true_mask = masks[b].cpu().numpy()
-                pred_mask = preds[b].cpu().numpy()
+                
+                # CORREZIONE QUI: map_mask restituisce già un numpy array
+                true_mask = map_mask(masks[b]) 
+                # Assicurati che anche pred_mask sia clippato per evitare crash con CLASS_COLORS
+                pred_mask = torch.clamp(preds[b], 0, 9).cpu().numpy()
 
                 img_vis = denormalize(img.clone(), [0.485, 0.456, 0.406], [0.229, 0.224, 0.225]).permute(1,2,0).numpy()
-                color_true = CLASS_COLORS_ORIGINAL[true_mask]
-                color_pred = CLASS_COLORS_ORIGINAL[pred_mask]
+                img_vis = np.clip(img_vis, 0, 1)
+                
+                # Applichiamo i colori
+                color_true = CLASS_COLORS_ORIGINAL[true_mask.astype(np.int64)]
+                color_pred = CLASS_COLORS_ORIGINAL[pred_mask.astype(np.int64)]
 
                 fig, axes = plt.subplots(1,3,figsize=(12,4))
                 axes[0].imshow(img_vis)
                 axes[0].set_title('Input')
                 axes[0].axis('off')
+                
                 axes[1].imshow(color_true)
                 axes[1].set_title('Ground Truth')
                 axes[1].axis('off')
+                
                 axes[2].imshow(color_pred)
                 axes[2].set_title('Prediction')
                 axes[2].axis('off')
+                
                 plt.tight_layout()
                 plt.show()
 
@@ -199,6 +254,17 @@ def visualize_predictions(model, loader, max_images=5, device=DEVICE):
 
 def main():
     train_loader, val_loader = make_dataloaders()
+
+    for images, masks in train_loader:
+        print("Valori unici nelle mask:", torch.unique(masks))
+        print("Max valore:", masks.max().item())
+        break
+
+
+    for images, masks in val_loader:
+        print("Valori unici nelle mask:", torch.unique(masks))
+        print("Max valore:", masks.max().item())
+        break
     model = build_model()
     criterion = torch.nn.CrossEntropyLoss()
     optimizer = torch.optim.Adam(model.parameters(), lr=1e-3)

@@ -1,5 +1,6 @@
 import torch
 import torch.nn as nn
+import torch.nn.functional as F
 
 NUM_CLASSES = 10
 
@@ -44,6 +45,8 @@ class UNet(nn.Module):
 
     def forward(self, x):
 
+        input_size = (x.shape[2], x.shape[3])
+
         e1 = self.enc1(x)
         e2 = self.enc2(self.pool(e1))
         e3 = self.enc3(self.pool(e2))
@@ -62,4 +65,8 @@ class UNet(nn.Module):
         e1 = self.crop(e1, u1)
         d1 = self.dec1(torch.cat([u1, e1], dim=1))
 
-        return self.out(d1)
+        # return self.out(d1)
+        out = self.out(d1)
+
+        # ← ridimensiona all'input originale senza toccare le conv
+        return F.interpolate(out, size=input_size, mode='bilinear', align_corners=False)

@@ -76,7 +76,7 @@ print(f"📦 Totale frame caricati: {len(data)} da {INPUT_PKL_PATH}")
 
 # === Process ===
 for i, frame in tqdm(enumerate(data), total=len(data), desc="Generazione frame"):
-    h, w = 70, 120  # dimensione frame
+    h, w = 128, 128  # dimensione frame
     rgb = np.zeros((h, w, 3), dtype=np.uint8) #  immagine RGB
     mask = np.zeros((h, w), dtype=np.uint8) # maschera numerica (1 canale)
 
