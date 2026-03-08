@@ -690,11 +690,9 @@ The following sections describe more in detail, the various components, workflow
 \end{figure}
 
 \section{Conceptual Foundations}
-
 This section presents the development of the thesis' themes and objectives, starting with the definition of the fundamental design principles that guided the development of the work.
 
 \subsection{Evolution of the Idea}
-
 The initial idea for this work originated from a preliminary draft of a research paper that proposed an evolutionary approach to modelling structured environments, drawing inspiration from the principles of Core Knowledge theory. The goal was to obtain human-interpretable representations of dynamic environments, such as simple 2D video games, by combining a preliminary visual processing phase with evolutionary learning mechanisms.
 Before the application of the evolutionary model, the framework involves the use of a semantic network in charge of extracting the fundamental components of the game environment. This network identifies relevant objects, relationships, and properties within visual patches, providing a first structural organization of perceptual data. This preliminary representation constitutes the conceptual basis from which the evolutionary system starts to build and optimize rules and symbolic categories.
 The original hypothesis was that by developing a system based on innate cognitive rules, it was possible to construct a symbolic representation of an environment without relying too much on data-driven learning. In this direction, an evolutionary algorithm has been developed those deals with optimizing symbolic representation through a compact sets of object classes and behavioural rules.  The encoded heuristics are used to provide a useful metric for this process. 
@@ -703,20 +701,14 @@ The core idea is to recreate the analysed game environment, based on the extract
 Although the framework is still at an early stage and limited in scope, it successfully generates a coherent symbolic representation of the game environment from low-level visual inputs, thereby offering a concrete proof of concept for the proposed research direction.
 The final goal is to develop a system that is highly adaptable to a wide range of 2D game environments, capable of generalizing across the diverse dynamics and structural properties that characterize such domains.
 
-
-
-
 \section{Proposed Implementation}
-
 This section presents the current state of the proposed framework, developed according to the fundamental design principles introduced earlier. Although still limited in terms of scope, functionality, and generalization, this version introduces a method that enables a symbolic system to extract interpretable representations from a dynamic environment using only low-level perceptual inputs. 
 The development is demonstrated in a simplified scenario, a 2D game environment that evolves frame by frame. These frames are processed initially by a semantic network and then through a pipeline consisting of object tracking, rule inference, and class generalization. Using the principles of Core Knowledge as guidance, the system developed explicit heuristics to generate symbolic knowledge about the identity and behavior of objects, which are then used as a guide in following iterations.
 The decision to structure the framework as a neural network for visual preprocessing followed by a Core Knowledge. The inspired module for interpreting segmented elements is motivated by the limitations of conventional deep learning in temporal reasoning. Although deep networks excel at pattern recognition within individual frames, they struggle to capture temporal dependencies critical for action-driven decision-making \cite{chiave31}. By combining neural perception with a symbolic reasoning layer, the framework leverages the strengths of deep learning while producing interpretable, structured representations that support temporal reasoning and rule extraction, addressing key limitations of purely neural approaches.
 The preliminary implementation used yields promising results, showing that the system can construct an interpretable, structured internal representation of the environment, track persistent objects, deduce interactions, and classify basic object types. This first version is not intended as a definitive solution, but as a minimal and interpretable foundation upon which develop more robust, generalizable and adaptive components.
 The following sections examine the key framework's modules in detail, focusing on their purpose, structure and limitations.
 
-
 \subsection{Segmentation}
-
 The environment that the system needs to understand is represented as a sequence of frames extracted from the game environment. These frames have to be processed to obtain a set of non-overlapping visual units called “patches". These patches are the primary perceptual input of the system: minimal, anonymous representations of visual elements that can correspond to objects or parts of objects within the environment.
 The framework relies on a segmentation algorithm that segments the images of game frames generated by a simulated environment. The result of the segmentation, appropriately coded, are used to extract the patches. As a result, the system encounters some of the challenges typical of real visual perception, such as noise, occlusion or ambiguity. 
 
@@ -730,7 +722,6 @@ The encoder consists of three convolutional blocks, each composed of two consecu
 The decoder mirrors the encoder structure and employs transposed convolutions for upsampling. At each decoding stage, the upsampled feature maps are concatenated with the corresponding encoder outputs through skip connections. This mechanism preserves spatial information and improves boundary localization in the predicted segmentation masks. Before concatenation, the encoder feature maps are spatially cropped in order to match the size of the decoder features.
 
 The final output layer is a $1\times1$ convolution that maps the decoded feature maps to the desired number of semantic classes. Since the convolutional operations reduce the spatial dimensions of the feature maps, a bilinear interpolation step is applied to resize the output to the original input resolution. The network outputs dense per-pixel class scores for each semantic category. During inference, the final segmentation mask is obtained by applying an \textit{argmax} operation across the class dimension to assign each pixel to the class with the highest predicted score.
-
 
 \begin{figure}[htbp]
   \centering
@@ -746,8 +737,6 @@ Its primary role is to explore a cognitive-inspired alternative for building int
 
 The following sections describe synthetically the key modules of that framework, focusing on their purpose, design, and current limitations.
 
-
-
 \subsubsection{Patch Extraction}
 The environment is represented as a sequence of discrete frames extracted from a game-like simulation. Each frame is decomposed into a set of non-overlapping visual units, called patches, which serve as the system's primary perceptual input. These patches are anonymous and minimal representations of visual elements that may correspond to objects or object parts.
 In the current framework, patch extraction is not performed through direct visual reasoning within the agent. Nevertheless, this component has undergone a slight improvement over the originally proposed model, as patches are no longer obtained directly from the simulated environment.
@@ -755,17 +744,13 @@ In the current framework, patch extraction is not performed through direct visua
 Instead, raw game frames are processed by the semantic segmentation module, whose outputs are subsequently post-processed by a reconstruction script. This script converts segmented objects into structured attributes, such as position and shape, which are then used to construct simplified patch representations.
 This component effectively serves as a placeholder perceptual pipeline. Its use reflects the framework's primary focus on symbolic modeling and knowledge representation rather than perceptual learning.
 
-
 The framework's next development phase will add a visual segmentation module, allowing patches to be derived from raw pixel inputs under the guidance previously acquired knowledge. However, this process is vital for examining how the system handles real-world perceptual challenges.
-
 
 \subsubsection{Object Formation}
 The object formation module is responsible for reconstructing persistent entities over time by associating sequences of patches across frames. Since the system receives no explicit information about object identity or permanence, this module plays a crucial role in establishing continuity and coherence in the environment representation.
 Object tracking is performed using a set of interpretable heuristics based on spatial and temporal coherence, as well as predictions derived from previously inferred knowledge encoded in object classes. Each object is associated with a class that defines behavioral constraints and predictive rules. Incoming patches are matched to existing objects according to proximity, shape similarity, and consistency with expected behavior.
 Patch-to-object assignments are categorized as perfect, possible or no-direct, allowing the system to represent both expected and unexpected changes. Due to the sequential nature of frame processing, ambiguities frequently arise. In order to manage this uncertainty, the system maintains multiple competing interpretations in parallel, each corresponding to a distinct configuration of objects and inferred behaviors.
 Objects are modeled as episodic reconstructions tied to the current observation sequence, while object classes and behavioral rules provide the basis for generalizable knowledge. This module, as integrated, establishes the foundational link between perceptual input and symbolic representation.
-
-
 
 \subsubsection{Rule Inference}
 The rule inference module is responsible for identifying and abstracting general symbolic rules that describe dynamic relationships between events and changes in objects. This module operates on data produced during object tracking, it identifies recurring correlations between observed events and unexplained property variations.
@@ -777,24 +762,20 @@ Throughout the processing pipeline, the system may generate multiple individuals
 Scoring criteria include the number of unexplained changes, adherence to object class rules, and overall explanatory complexity. Interpretations that achieve the highest scores are retained, while others are scheduled for removal after a short grace period, allowing confirmation from subsequent frames.
 This pruning strategy balances flexibility and computational efficiency, ensuring that the system can explore alternative hypotheses without incurring prohibitive computational costs.
 
-
 \subsubsection{Generalization}
 A central objective of the framework is the ability to generalize across different game environments without extensive retraining. Generalization is achieved through the formation of object classes that abstract away from individual episodic instances and encode stable structural and behavioral regularities.
 These classes act as flexible blueprints that support recognition and interpretation of similar objects in new environments. Learned classes can guide object formation and prediction in unfamiliar scenarios, with class assignments emerging gradually as consistent behaviors are observed.
 When new observations systematically violate existing class rules, the system can adapt by refining or splitting classes to preserve internal consistency. This mechanism enables incremental refinement of symbolic knowledge while maintaining interpretability and supporting transfer learning grounded in explicit object classes and rules.
 
 \subsection{From Symbolic Rules to a Playable Environment}
-
 The module presented in the previous section is capable of extracting meaningful symbolic representations from raw perceptual input. The system successfully identifies object classes, tracks their properties over time, and infers a set of interaction rules that closely match the dynamics encoded in the original environments. These rules capture not only static object attributes, but also conditional behaviors triggered by events such as contacts, disappearances, and user inputs, providing an explicit and interpretable description of the environment's underlying structure. In addition, the results obtained in previously executed experimental evaluation suggest that the inferred rules are stable, transferable across episodes, and robust to moderate environmental variations, reinforcing the hypothesis that they could eventually support the automatic generation of executable environments.
 From a conceptual standpoint, this inferred symbolic representation constitutes a natural candidate for the construction of a fully autonomous game environment. In principle, the object classes and behavioral rules discovered by the system could be compiled into an executable world model, allowing an agent to interact with an environment generated directly from learned knowledge. This capability would represent a crucial step toward closing the loop between perception, knowledge acquisition, and action.
 However, in the current stage of this work, the automatic synthesis of a playable environment from symbolic rules has not yet been implemented. Despite the inferred rules are sufficiently expressive to describe the observed dynamics, translating them into a complete and robust simulation raises additional challenges, including conflict resolution between rules, temporal coordination, and the handling of incompletely specified or ambiguous behaviors. For this reason, the experiments presented in this thesis adopt a simulated game environment as a proxy for the rule-generated world.
 A Deep Q-Network (DQN) agent is then trained to interact with this simulated environment, using state descriptions and event-based rewards derived from the system's representations. This approach allows the investigation of how an agent can learn effective control policies over an interpretable and structured state space, without relying on dense, task-specific reward functions.
 Crucially, the use of a simulated environment does not undermine the long-term objectives of the framework. Rather, it serves as a controlled experimental platform that enables the validation of the proposed learning mechanisms. In this sense, the simulated game world employed in this thesis should be regarded as a placeholder for future developments, in which symbolic rules will directly give rise to the environments in which agents learn and act.
 
-
 \subsection{Generic Environment as a Transitional Representation}
 \subsubsection{Generic Environment Design}
-
 To ensure domain independence, scalability, and reusability, a generic environment was implemented. The primary objective of this design is to avoid hard-coded assumptions about the environment structure, semantics, or task objectives, allowing the same learning architecture to be deployed across heterogeneous domains with minimal modification.
 The environment operates under the assumption that the underlying simulation exposes a set of observable attributes. Rather than relying on manually defined state representations, the system employs an automatic state discovery mechanism based on reflection. All observable numerical and boolean attributes of the simulation object are identified dynamically and treated as raw features. These attributes collectively define the agent's observation space, without encoding any semantic meaning such as object identity, spatial relations, or goals.
 By exposing only unstructured numerical signals, the agent is forced to infer regularities, correlations, and causal dependencies directly from experience. As a result, the learning process remains agnostic to the specific domain and does not depend on expert-designed representations.
@@ -804,9 +785,7 @@ In parallel with state extraction, the environment implements a fully generic ev
 This design reflects the assumption that interaction-relevant structure emerges from change, rather than from static state descriptions. Both discrete transitions (e.g., boolean flips or integer changes) and continuous dynamics (e.g., velocity or position variations) are captured uniformly. Each event is treated as equally informative at detection time, deferring any notion of importance or hierarchy to later stages of learning.
 Detected events are temporally organized into causal chains, under the hypothesis that clusters of events occurring within short temporal windows correspond to structured interactions between the agent and the environment. Longer chains are interpreted as evidence of richer causal dynamics, and they form the basis of the intrinsic reward signal described below.
 
-
 \subsection{Deep Q-Network in a Domain-Agnostic Environment}
-
 A Deep Q-Network (DQN) agent is trained to interact with the generic environment described above. The agent receives observations derived exclusively from automatically extracted numerical attributes \cite{chiave1}, without relying on hand-crafted object semantics or task-specific encodings. 
 Consequently, the DQN operates on a flat and unstructured state representation, learning control policies directly over raw features.
 
@@ -852,11 +831,6 @@ This chapter describes the concrete implementation of the proposed framework, de
 
 
 \section{End-to-End Pipeline}
-
-
-
-
-
 The implemented system follows a fully automated end-to-end pipeline that processes raw visual observations and transforms them into symbolic knowledge and action policies. The pipeline is designed to progressively increase the abstraction level of information, moving from pixels to semantic objects, then from symbolic events to decision-making strategies (see Figure \ref{fig:flow1}).
 \\
 The pipeline operates through the following stages:
@@ -889,10 +863,6 @@ The pipeline operates through the following stages:
 
 \end{itemize}
 
-
-
-
-
 \begin{figure}[htbp]
   \centering
     % \includegraphics[width=1\linewidth]{ELEMENT.png}
@@ -923,14 +893,12 @@ The pipeline operates through the following stages:
   \label{fig:element}
 \end{figure}
 
-
 This pipeline enables learning and reasoning without relying on handcrafted semantic labels or domain-specific reward functions. While semantic labels are used internally by the segmentation module to generate class maps, they are not, actually, provided as supervision for symbolic reasoning or reward assignment; the agent and the symbolic engine operate purely on observed state changes and event structures.
 
 \section{General Architecture of the Framework}
-
 \subsection{Design Choices}
 The architecture of the framework is guided by four fundamental design principles, each contributing to its flexibility, robustness, and transparency. 
-\\
+
 The first principle, modularity, ensures that each component of the system is implemented as an independent, self-contained module with clearly defined interfaces. This design allows vision, symbolic reasoning, and reinforcement learning components to be developed, tested, or replaced in isolation, facilitating experimentation and incremental improvements without disrupting the functionality of the overall system.
 
 Domain agnosticism represents a second cornerstone: the symbolic reasoning and reinforcement learning modules are intentionally designed to operate over arbitrary simulations, without assuming any prior knowledge of game mechanics, object semantics, or reward structures. This capability allows the framework to generalize across diverse environments and tasks, enhancing its adaptability and reducing the need for manual engineering.
@@ -939,10 +907,7 @@ A third guiding principle is incremental knowledge construction; whereby symboli
 
 Finally, interpretability sets the framework apart from conventional end-to-end black-box approaches. By exposing intermediate symbolic representations, including object properties, causal relationships between events, and inferred rules, the system allows researchers and practitioners to inspect, analyse, and validate the agent's reasoning process. Importantly, these symbolic components do not directly influence the DQN agent's decisions; rather, they provide a means to quantify how much the symbolic model has captured about the environment. This transparency not only facilitates debugging and knowledge extraction but also provides a foundation for explainable AI, ensuring that the agent's decisions can be understood and trusted.
 
-
-
 \subsection{Selected Techniques and Algorithms}
-
 The framework combines several established techniques in a novel configuration:
 \begin{itemize}
 
@@ -956,7 +921,6 @@ The framework combines several established techniques in a novel configuration:
 The interaction between these techniques allows the agent to learn meaningful behaviors even in the absence of explicit task rewards.
 
 \subsection{Modular Structure of the System}
-
 \subsubsection{Visual Input Acquisition and Preprocessing Module}
 The frame acquisition module is responsible for efficiently handling visual input data and preparing it for subsequent processing stages. It supports both online acquisition of frames from live simulations and the loading of previously recorded gameplay logs. 
 Each frame is resized to a fixed resolution to ensure a consistent input size for the neural network and is converted into a normalized tensor to facilitate stable training.
@@ -964,16 +928,12 @@ Each frame is resized to a fixed resolution to ensure a consistent input size fo
 The corresponding segmentation masks are loaded as integer-valued images, where each pixel represents a semantic class identifier, allowing the network to learn to associate spatial regions with meaningful object categories.
 A custom dataset class encapsulates the logic for pairing each image with its corresponding mask, while PyTorch data loaders handle batching, shuffling, and splitting into training and validation sets. A fixed random seed is used to ensure reproducibility of the dataset splits, which is crucial for consistent evaluation of model performance. By abstracting low-level data handling, this module provides a clean interface for the feature extraction stage, allowing the focus to remain on the learning task rather than on preprocessing logistics.
 
-
-
 \subsubsection{Perception Module}
 The perception module performs semantic segmentation using a U-Net architecture \cite{chiave36}, which is highly effective for dense pixel-wise prediction tasks. The architecture follows the classic encoder-decoder paradigm with skip connections (see Figure \ref{fig:network}), enabling the model to combine high-level semantic information with fine-grained spatial details .
 
 Training is conducted with a multi-class cross-entropy loss, optimized using the Adam optimizer. In order to improve stability and generalization, the training process incorporates data augmentation, input normalization, small batch sizes, and early stopping based on validation loss. Evaluation metrics include pixel accuracy and mean Intersection over Union (mIoU) \cite{chiave34}, which quantify agreement between predicted and ground-truth segmentation maps. 
-\\
+
 Overall, this module abstracts the pipeline from raw video frames to class-labeled segmentation maps, producing dense semantic representations that form the foundation for downstream tasks. Its design supports reproducible training and efficient inference, combining robust data handling with a well-established deep learning architecture.
-
-
 
 \subsubsection{Symbolic Reasoning Module}
 The symbolic reasoning module converts low-level perceptual outputs into high-level symbolic representations. Each segmented object is transformed into a symbolic entity characterized by:
@@ -1021,9 +981,7 @@ This reward structure allows the agent to learn even in environments with sparse
 \subsection{Optimizations and Efficiency Considerations}
 The implementation of the framework incorporates several strategies aimed at improving both computational efficiency and the stability of the training process. 
 
-
 One of the key measures is early stopping during the segmentation model training. By monitoring the validation loss and halting training when improvements plateau, the framework prevents overfitting while reducing unnecessary computational load. 
-
 
 In the reinforcement learning component, the dimensionality of the observation vector is intentionally limited to reduce computational overhead and accelerate training. Although the state extractor is capable of detecting and encoding numerous attributes from the simulation, only a small subset of numerical features is included in the state vector passed to the agent. This reduces the computational overhead per step and accelerates training.
 
@@ -1090,33 +1048,31 @@ Two main domains were considered:
 \noindent Each RL configuration was trained for up to 5000 episodes, with periodic checkpoint evaluation over 100 test episodes per model.
 Importantly, in generalization experiments, the trained model was evaluated without retraining under structural modifications.
 
-
 \subsection{Evaluation Metrics: Accuracy, Interpretability, Scalability}
-
 Evaluation was conducted along three orthogonal axes: task performance, structural coherence, and interpretability.
 The performance was measured using win rate measured as the percentage of episodes successfully completed, average number of bricks destroyed, average episode length (steps, in this context, one step is equal to one frame), survival time (only for pong), and stability across evaluation runs. These metrics quantify whether intrinsic reward is sufficient to produce goal-directed behavior without task-specific supervision.
 The symbolic layer was evaluated in terms of coherence of induced object classes, consistency of transition rules across episodes, stability under parameter changes, and correct abstention in stochastic conditions. These criteria assess whether the symbolic module produces well-formed and reliable representations of the environment.
 At the RL layer, interpretability was assessed through behavioral robustness under structural modifications, invariance to visual features, and generalization across object count variations. Rather than focusing solely on reward maximization, this axis investigates whether learned policies reflect structural regularities of the environment.
 
-
 \section{Experimental Results}
 \subsection{Semantic Grounding and Symbolic Log Reconstruction}
 A key preliminary step in our framework is the extraction of symbolic representations from visual input. The first question addressed is whether per-frame semantic segmentation can provide a reliable perceptual grounding for symbolic knowledge extraction, and whether structured logs can serve as an interface between visual understanding and symbolic reasoning.
-\subsubsection{From Semantic Masks to Symbolic Logs}
 
+\subsubsection{From Semantic Masks to Symbolic Logs}
 In principle, one might attempt to translate segmentation maps directly into symbolic logs compatible with the inference module. However, early experiments showed that this naive mapping is insufficient due to two main factors:
 \begin{enumerate}
     \item Noise in segmentation outputs: even state-of-the-art segmentation models produce spurious predictions, small artifacts, or intermittent missing detections, which can disrupt the identification of consistent object instances over time.
     \item First-generation symbolic module limitations: the initial symbolic reasoning pipeline expects structured, temporally coherent inputs. Raw masks alone do not encode relational information or temporal consistency, leading to fragmented event chains and breakdown in rule induction.
 \end{enumerate}
 To overcome these challenges, it was developed a refinement pipeline that converts semantic masks into structured interaction logs while preserving object identity and temporal continuity.
-\subsubsection{Symbolic Log Reconstruction}
 
+\subsubsection{Symbolic Log Reconstruction}
 Since the environment is a controlled synthetic domain, the geometric properties of all game objects are known a priori. This allows segmentation output to be systematically corrected to match the expected real-world shapes and dimensions. For example, a brick missing a corner pixel is completed, and slightly malformed contours are regularized. The semantic network inference is thus not treated as ground truth, but as a noisy signal that is refined against a structural prior derived from the environment itself.
 
 The reconstruction process proceeds in two main stages.
 In the first stage, mask parsing and object extraction, each frame is analysed to identify individual instances of balls, paddles, walls, and bricks using connected-component analysis. Each instance is assigned a unique identifier, particularly important for bricks, which can be numerous, and position, size, and hitbox information are extracted and normalized into a structured object description. In the second stage, frame-wise log assembly, each frame is transformed into a structured dictionary encoding four fields: elements, containing the objects present with their properties; commands, serving as placeholders for agent actions at this stage; events, initialized as empty lists for later derivation; and \textit{global\_state}, capturing environment-level metadata such as score and object velocity.
 This pipeline ensures that the symbolic module receives high-quality, temporally coherent logs, mitigating the effects of segmentation noise and module sensitivity.
+\\
 \\
 In addition, this procedure provides two main advantages:
 \begin{itemize}
@@ -1140,8 +1096,6 @@ Across these scenarios, the system demonstrated the ability to:
 
 \end{itemize}
 In deterministic settings, the inferred rules matched the true simulator dynamics. When stochasticity was introduced (random bounce speed), the system correctly refrained from extracting stable deterministic rules, highlighting a sensitivity to statistical regularity.
-
-
 
 \begin{center}
 \begin{minipage}{0.8\textwidth}
@@ -1196,15 +1150,12 @@ This degradation is interpretable as a form of reward hacking \cite{chiave70}. T
 This finding has an important methodological implication: handcrafted shaping signals can be harmful when a strong intrinsic structural reward is already present, because they introduce competing learning pressures that distort the trajectory of policy improvement.
 
 \subsubsection{Configuration 3: No Shaping - Density Enabled}
-
 Adding an event-density component, a reward term proportional to the magnitude of state change across consecutive frames, produced the highest peak performance of any configuration. The \textit{best\_time} checkpoint achieved a $100$\%-win rate with an average of 24.00 bricks destroyed per episode and a mean episode length of approximately 1,804 steps, essentially matching the supervised reference model. This represents a complete and reliable solution to the environment under purely intrinsic motivation.
 
 However, the across-checkpoint variance was substantially higher than in the no-density configuration. The \textit{best\_reward} model achieved only $52$\% wins and exhibited a characteristic bimodal failure pattern: some episodes terminated in under 100 steps, suggesting immediate ball loss, while others ran for hundreds of thousands of steps, suggesting loop behavior. The \textit{last\_generic} model reached $57$\% wins, with similar instability. This variance suggests that the density reward accelerates early exploration, helping the agent discover productive interaction patterns more quickly, but introduces optimization instability that makes the final learned policy less reliable.
 The density term rewards novelty in state transitions independently of their causal structure. While this promotes rapid coverage of the state space, it may also encourage the agent to seek dynamically rich states that are not strategically useful for brick destruction, thereby disrupting the convergence properties that the pure causal signal provides.
 
-\subsubsection{Configuration 4: Shaping Enabled - Density Enabled (yes\_shaping\_yes\_density)}
-
-
+\subsubsection{Configuration 4: Shaping Enabled - Density Enabled}
 The simultaneous activation of the handcrafted paddle-ball alignment bonus and the event-density term produced a markedly different dynamic compared to the previous configurations. Unlike the shaping-only setup, which collapsed due to reward hacking, and the density-only configuration, which showed high variance across checkpoints, this combined formulation achieved both high peak performance and strong final reliability.
 
 The \textit{best\_time} checkpoint reached a $100$\% win rate, destroying all $24$ bricks in every episode with an average episode length of approximately $1,761$ steps. This performance fully matches the supervised reference model. Crucially, unlike the density-only configuration, the success here is not transient: the \textit{last\_generic} checkpoint maintains a $96$\% win rate, indicating that performance remains stable at the end of training rather than appearing only as a temporary optimum.
@@ -1257,8 +1208,6 @@ yes\_shaping\_yes\_density -- last & 97\% & 23.88 & 1,780 \\
 \end{table}
 
 \subsubsection{Final consideration}
-
-
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=1\textwidth]{training_performance.png}
@@ -1283,8 +1232,8 @@ In summary, these experiments demonstrate that the causal interaction structure 
 
 
 \subsection{Generalization Under Structural Modifications}
-
-To further evaluate the structural robustness of the learned policy, the best-performing Arkanoid model was tested under controlled modifications of the environment, without performing any retraining. The goal was to determine whether the learned behavior depends on superficial perceptual features or whether it captures deeper causal regularities of the domain.
+To further evaluate the structural robustness of the learned policy, the best-performing Arkanoid model was tested under controlled modifications of the environment, without performing any retraining. 
+The goal was to determine whether the learned behavior depends on superficial perceptual features or whether it captures deeper causal regularities of the domain.
 
 \begin{figure}[htbp]
   \centering
@@ -1298,8 +1247,6 @@ To further evaluate the structural robustness of the learned policy, the best-pe
   \label{fig:modification}
 \end{figure}
 
-
-
 Three types of modifications were introduced: an increase in ball size, an increase in the number of bricks, and variations in the visual appearance of objects such as colors (see Figure \ref{fig:modification}).
 In the first experiment, the ball size was increased by a factor of five, significantly altering collision geometry and raising the probability of multiple brick contacts within a single frame. Despite this substantial physical change, the agent maintained stable behavior and continued to solve the task reliably. This result is particularly meaningful given that the observation space encodes normalized physical variables, positions and velocities, and that the intrinsic reward is derived exclusively from state transitions and causal impact. The policy is therefore not tied to specific geometric assumptions about object scale; instead, it reacts to relational dynamics such as ball-paddle alignment, collision-induced velocity changes, and brick disappearance events, demonstrating clear invariance to object size as long as the underlying causal interaction structure remains consistent.
 In the second experiment, the number of bricks was increased beyond the original $24$, affecting episode length, event frequency, and interaction density. Performance remained high even without retraining, with the agent successfully clearing the environment in most test runs. This outcome suggests that the learned policy does not memorize fixed spatial layouts but generalizes across variations in object count. Since the intrinsic reward depends on event chains and causal impact rather than explicit score signals, the agent remains motivated to generate meaningful interactions regardless of how many bricks are present the objective internalized by the network is not destroy exactly $24$ bricks, but rather something closer to maximizing structured causal engagement with the environment.
@@ -1308,7 +1255,6 @@ Finally, additional tests confirmed that modifying the colours of the ball, padd
 \subsection{Pong Experiments}
 To test domain generality, the same framework was applied to Pong without structural modification of the intrinsic reward mechanism. The techniques developed for Arkanoid transfer effectively to Pong ( see Figure \ref{fig:pong}), confirming that the approach is not tied to a specific game architecture. However, model performance in Pong is noticeably lower, which can be attributed to the fact that Pong generates fewer simultaneous events compared to Arkanoid, providing a sparser set of interaction opportunities for the agent to exploit.
 Training logs show gradual increases in survival time and event chain complexity. After $1000$ episodes, the average survival time reached approximately $1{.}3$ seconds, indicating that the agent had begun exploiting interaction regularities but had not yet converged to expert-level behavior. Although Pong learning is slower than Arkanoid, the same intrinsic reward structure drives improvement without any task-specific reward definition. This supports the claim that the proposed reward mechanism captures generic properties of interactive dynamics rather than game-specific objectives.
-
 
 \begin{figure}[htbp]
 
@@ -1319,8 +1265,6 @@ Training logs show gradual increases in survival time and event chain complexity
 
   \label{fig:pong}
 \end{figure}
-
-
 
 \subsection{Critical discussion of the results }
 The experimental results highlight several important findings concerning both the representational layer and the reinforcement learning dynamics enabled by the proposed framework.
@@ -1338,15 +1282,11 @@ This invariance is particularly significant. The agent does not rely on fixed ge
 % =========================
 
 \chapter{Conclusion and Future Works}
-
 This thesis has examined fundamental limitations in contemporary artificial intelligence systems, particularly their brittleness, limited reasoning capabilities, and lack of transparency. Modern large language models often operate through large-scale statistical pattern extraction rather than grounded semantic understanding, while deep reinforcement learning agents typically fail to construct transferable, structured knowledge about the environments in which they operate. In both cases, the dominant paradigm remains heavily sub-symbolic and correlation-driven, with limited capacity for explicit causal modelling or conceptual abstraction.
-
 
 Drawing on insights from philosophy, cognitive science, and artificial intelligence research, this work aligns with a growing body of scholarship arguing for hybrid architectures that integrate symbolic structure with neural computation. Researchers such as Melanie Mitchell and Gary Marcus have emphasized the importance of combining statistical learning with structured reasoning in order to achieve robustness, interpretability, and systematic generalization.
 
-
 Inspired by Core Knowledge Theory, this thesis leverages the foundations of a framework that constructs structured representations of dynamic environments by identifying entities through fundamental properties and modelling their interactions symbolically. Rather than relying solely on end-to-end optimization, the system abstracts object classes, infers interaction rules, and builds a reusable structural representation of the environment.
-
 
 Preliminary empirical results indicate that this structured approach improves interpretability, robustness under environmental modifications, and explainability of learned behavior in dynamic domains. At the same time, several challenges remain: the current implementation lacks deep context-based reasoning, operates with a still limited and immature knowledge base, faces potential combinatorial growth in rule induction, does not yet fully integrate formal causal reasoning mechanisms, and does not perfectly incorporate the perceptual module. These limitations define a rich space for future research.
 
@@ -1365,7 +1305,6 @@ Once an object has been modelled symbolically, its predicted future position cou
 \subsection{RL Integration}
 A further extension of this work involves embedding the existing framework within a fully model-based reinforcement learning architecture, inspired by a Dyna-style approach. In the current implementation, the agent relies primarily on off-policy Q-learning and incorporates a forward model only indirectly through curiosity-based reward shaping. While this provides some predictive information, the agent does not yet use the symbolic internal representation to plan or simulate future trajectories explicitly.
 
-
 In order to achieve a fully model-based setup, the symbolic internal representation could be leveraged as a predictive engine for internal rollouts. In this configuration, the agent would maintain an internal model of the environment derived from the structured rules and object representations. Incoming observations would be encoded into symbolic states capturing the relevant entities and their properties, and potential actions could be evaluated by simulating their effects within this internal model. This refinement would allow the agent to anticipate the consequences of actions before executing them in the real environment, using the symbolic framework not only for decision-making but also as a testable hypothesis of environmental dynamics. Discrepancies between predicted and actual outcomes would then inform continuous refinement of the internal model. This approach could preserve the existing modules, event detection, causal chains, curiosity, and density-based shaping, while augmenting the system with planning capabilities and enhanced interpretability, progressively transforming it into a fully model-based agent.
 
 \subsection{Generalization Across Environments}
@@ -1374,9 +1313,6 @@ Another important avenue for future research is the evaluation and enhancement o
 % =========================
 % REFERENCES
 % =========================
-
-\chapter*{References}
-\addcontentsline{toc}{chapter}{References}
 
 \bibliographystyle{IEEEtran}
 \bibliography{references}
