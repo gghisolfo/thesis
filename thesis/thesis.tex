@@ -808,9 +808,10 @@ Detected events are temporally organized into causal chains, under the hypothesi
 \subsection{Deep Q-Network in a Domain-Agnostic Environment}
 
 A Deep Q-Network (DQN) agent is trained to interact with the generic environment described above. The agent receives observations derived exclusively from automatically extracted numerical attributes \cite{chiave1}, without relying on hand-crafted object semantics or task-specific encodings. 
-Consequently, the DQN operates on a flat and unstructured state representation, learning control policies directly over raw features. The underlying goal is to develop an agent capable of adapting to a diverse set of environments without being explicitly provided with environment-specific reward functions.
-The training follows a standard off-policy DQN framework \cite{chiave7}, incorporating experience replay, target network stabilization, gradient clipping, and $\varepsilon$-greedy exploration. However, unlike classical reinforcement learning setups, the agent is not guided by an externally defined reward function tied to task success or failure.
+Consequently, the DQN operates on a flat and unstructured state representation, learning control policies directly over raw features.
 
+The underlying goal is to develop an agent capable of adapting to a diverse set of environments without being explicitly provided with environment-specific reward functions.
+The training follows a standard off-policy DQN framework \cite{chiave7}, incorporating experience replay, target network stabilization, gradient clipping, and $\varepsilon$-greedy exploration. However, unlike classical reinforcement learning setups, the agent is not guided by an externally defined reward function tied to task success or failure.
 
 \subsubsection{Reward}
 The underlying goal is to develop an agent capable of adapting to a diverse set of environments without being explicitly provided with environment-specific reward functions. In order to achieve this, rather than relying on sparse or task-specific rewards, the agent is trained with a composite intrinsic reward that reflects the causal structure of the environment.
@@ -830,10 +831,7 @@ Intrinsic motivation is further reinforced through a curiosity mechanism based o
 A learned forward model attempts to predict the next state \cite{chiave41} given the current state and action. The prediction error of this model serves as an intrinsic reward signal, encouraging the agent to explore regions of the state space that are novel, complex, or difficult to predict.
 This formulation aligns with the view that learning progress and model error are proxies for informational gain. The forward model is trained online, ensuring that curiosity adapts dynamically as the agent's understanding of the environment improves.
 
-
-
 \subsubsection{Evaluation Perspective}
-
 Due to no extrinsic goal is defined, performance is not evaluated in terms of task completion. Instead, evaluation focuses on survival time, behavioral stability, and the agent's ability to maintain coherent interaction with the environment over extended periods. This choice reflects the underlying philosophy of the framework: learning is assessed by the richness and persistence of interaction rather than by predefined success criteria.
 In this implementation, temporal reasoning emerges through several mechanisms. The discount factor encourages long-term planning by valuing future rewards, while the replay buffer allows the agent to learn from past sequences of interactions. Additionally, a forward dynamic model explicitly predicts future states, enabling the agent to anticipate the consequences of its actions. The causal event tracker further reinforces multi-step strategies by rewarding chains of temporally connected events. Together, these components allow the agent to handle delayed rewards, learn action timing, and develop long-term strategies.
 
@@ -993,7 +991,7 @@ The best-performing individuals are retained, serialized, and summarized into hi
 
 \subsubsection{Reinforcement Learning Agent}
 The reinforcement learning agent is implemented using a fully generic symbolic environment designed to work across different simulations without requiring manually engineered features. 
-\\
+
 The environment, automatically, thought a specific module,  extracts all observable numerical and boolean attributes from the simulation object, forming a state representation. Each attribute represents an observable property, such as positions, velocities.
 Events are detected by comparing consecutive states and identifying significant changes in attribute values.
 A causal event tracker groups events occurring within a temporal window into causal chains. Longer chains yield higher intrinsic rewards, encouraging the agent to discover action sequences that produce rich and structured dynamics.
