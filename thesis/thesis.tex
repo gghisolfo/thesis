@@ -16,6 +16,12 @@
 \usepackage{geometry}
 \usepackage{subcaption}
 
+% \usepackage{indentfirst}
+% \setlength{\parindent}{2em}
+% \setlength{\parskip}{0pt}
+% \linespread{1.1} 
+\setlength{\parskip}{0.4em}
+
 
 \geometry{top=1cm, bottom=2.5cm, left=3cm, right=3cm}
 
@@ -79,12 +85,14 @@
 % =========================
 
 \chapter*{Abstract}
-The ability to generalize knowledge across novel situations is a defining feature of human intelligence. DeepMind's landmark results on Atari games exposed a revealing paradox: deep reinforcement learning agents can achieve superhuman scores yet collapse entirely when trivial changes are introduced to the environment. These systems do not learn in any meaningful sense; they optimize fragile heuristics over raw pixel statistics. As Melanie Mitchell and others have argued, such models lack an internal world model; a structured, causal representation of how objects behave and interact, and this absence is precisely what makes them brittle.
-The opacity of these systems is not merely an aesthetic limitation. When a neural agent cannot articulate why it acts as it does, it cannot be corrected or trusted in high-stakes settings. 
+The ability to generalize knowledge across novel situations is a defining feature of human intelligence. DeepMind's landmark results on Atari games exposed a revealing paradox: deep reinforcement learning agents can achieve superhuman scores yet collapse entirely when trivial changes are introduced to the environment. These systems do not learn in any meaningful sense; they optimize fragile heuristics over raw pixel statistics. As Melanie Mitchell and others have argued, such models lack an internal world model; a structured, causal representation of how objects behave and interact, and this absence is precisely what makes them brittle. The opacity of these systems is not merely an aesthetic limitation. When a neural agent cannot articulate why it acts as it does, it cannot be corrected or trusted in high-stakes settings. 
 In a black-box model, there is no reasoning process to expose. There is only pattern matching, and pattern matching without structure that cannot generalize. The black box problem and the brittleness problem are, at root, the same problem.
-This thesis takes a different path. Rather than training a network to approximate behavior from vast amounts of data, the proposed framework actively constructs explicit, human-readable models of environment dynamics directly from video streams. The system requires no pre-defined object categories: it begins with anonymous visual patches, identified solely by fundamental properties such as position and shape, and tracks them over time using heuristics grounded in Core Knowledge; the cognitive primitives that structure human physical reasoning from infancy. Through rule inference, the system identifies causal regularities in object behavior, reconstructing the underlying mechanics of the environment as a set of interpretable symbolic rules. Every inferred rule can be read, inspected, and understood. The model is not a black box; it is an open book.
-Because they are abstract and capture causal structures rather than mere perceptual features, these representations can, in principle, be transferred across different environments. The system does not lose its understanding when encountering a new context; instead, it retains and adapts its symbolic model. This contrasts with deep learning models, whose learned weights are entangled with the specific sensory statistics of the training data and cannot be meaningfully reused. The structured representations produced by this framework are therefore portable across related environments without retraining, mirroring how humans transfer physical intuitions from one context to another. 
-The symbolic world model is further integrated with a reinforcement learning agent through a domain-agnostic environment wrapper, enabling the agent to be rewarded for generating causally coherent interactions rather than optimizing a hand-crafted objective. Evaluated on Atari-inspired environments, this intrinsic causal reward drives the agent to near-optimal performance and, crucially, the learned policy remains stable under structural perturbations including changes in object size, brick count, and visual appearance applied without any retraining. The same framework transfers to a second domain (Pong) without architectural modification.
+
+This thesis takes a different path. Rather than training a network to approximate behavior from vast amounts of data, the proposed framework actively constructs explicit, human-readable models of environment dynamics directly from video streams. The system begins anonymous visual patches, without pre-defined object categories. The patches are identified solely by fundamental properties such as position and shape which the systems tracks over time using heuristics grounded in Core Knowledge; the fundamental cognitive primitives that underlying human physical reasoning from early infancy. 
+Through rule inference, the system identifies causal regularities in object behavior, reconstructing the underlying mechanics of the environment as a set of interpretable symbolic rules. Every inferred rule can be read, inspected, and understood. 
+As these rules are abstract and encode causal relationships rather than simple perceptual features, they can, in principle, be transferred across different environments. The system does not lose its understanding when encountering a new context; instead, it retains and adapts its symbolic model. This contrasts with deep learning models, whose learned weights are entangled with the specific sensory statistics of the training data and cannot be meaningfully reused. The structured representations produced by this framework are therefore portable across related environments without retraining, mirroring how humans transfer physical intuitions from one context to another. 
+The symbolic world model is further integrated with a reinforcement learning agent through a domain-agnostic environment wrapper, enabling the agent to be rewarded for generating causally coherent interactions rather than optimizing a hand-crafted objective. Evaluated on Atari-inspired environments, this intrinsic causal reward drives the agent to near-optimal performance and, crucially, the learned policy remains stable under structural perturbations including changes in object size, brick count, and visual appearance applied without any retraining. The same framework transfers to a second domain without architectural modification.
+
 Together, these results suggest that interpretability and competence are not in tension, but they are complementary. A system that reasons causally about its environment can act effectively and explain itself, generalizes where black-box models fail, and lays the groundwork for AI that reasons about the world in a genuinely human-like way. The framework opens concrete research directions in autonomous surveillance, human-computer interaction, healthcare monitoring, and robotics, wherever trustworthy, transparent decision-making matters.
 
 \addcontentsline{toc}{chapter}{Abstract}
@@ -102,7 +110,9 @@ Together, these results suggest that interpretability and competence are not in 
 
 In recent years, artificial intelligence has achieved remarkable progress, driven by dedicated research, increased computational power, and the availability of vast amounts of data. Deep learning models have produced outstanding results across a variety of domains \cite{chiave1}, from natural language processing and video generation to drug discovery and genomics, occasionally surpassing human performance in specific tasks. These achievements are impressive, yet they also highlight intrinsic limitations. Despite their ability to solve specific problems, deep learning systems often lack a genuine understanding of the world: they learn statistical patterns without forming explicit internal models that represent concepts, hierarchies, or causal relationships. Moreover, most models exhibit limited generalization and brittle behavior, requiring fine-tuning or retraining when the environment changes even slightly. Their opacity further prevents interpretability, which constrains the deployment of AI in domains where reliability and accountability are critical, such as medicine or economics.
 Motivated by these challenges, this thesis explores the development of a cognitively inspired framework capable of constructing structured and interpretable representations of dynamic environments. The research investigates how to extract symbolic knowledge from raw perceptual input, manage ambiguity and uncertainty in object tracking and interaction modelling, and employ intrinsic motivation to guide adaptive behavior without relying on task-specific rewards. A key goal is to abstract object classes and interaction rules, enabling the system to generalize across environments and transfer learned knowledge to new contexts. The framework is not intended to compete with state-of-the-art performance in specific tasks; rather, it aims to lay the foundations for AI systems that are robust, interpretable, and capable of human-like reasoning about interactive environments.
-The main contributions of this work are fourfold. First, it proposes a cognitively inspired architecture that integrates visual perception, symbolic reasoning, and reinforcement learning into a coherent pipeline. Second, it introduces a structured symbolic representation, extracting persistent objects and inferring generalized interaction rules to form an interpretable internal world model. Third, it incorporates a composite intrinsic motivation mechanism, combining event detection, causal impact estimation, and curiosity-driven exploration to promote adaptive behavior without predefined rewards. Finally, the framework emphasizes generalization, abstracting object classes and symbolic rules to enable knowledge transfer across different environmental contexts.
+
+The main contributions of this work are fourfold. First, it proposes a cognitively inspired architecture that integrates visual perception, symbolic reasoning, and reinforcement learning into a coherent pipeline. Second, it introduces a structured symbolic representation, extracting persistent objects and inferring generalized interaction rules to form an interpretable internal world model. Third, it incorporates a composite intrinsic motivation mechanism, combining event detection, causal impact estimation, and curiosity-driven exploration to promote adaptive behavior without predefined rewards. Finally, the framework emphasizes generalization, abstracting object classes and symbolic rules potentially enabling knowledge transfer across different environmental contexts.
+
 The thesis is organized to guide the reader from background to implementation and evaluation. The following chapter reviews the state of the art in deep reinforcement learning, object-centric and neuro-symbolic approaches, and intrinsic motivation. Chapter 3 introduces the theoretical foundations, including insights from Core Knowledge theory and cognitive science that inform the framework. Chapter 4 and 5 presents the design and architecture of the system, detailing perception, object reconstruction, symbolic rule inference, and reinforcement learning integration. Chapter 6 describes the experimental evaluation in simplified two-dimensional arcade-like environments and analyses the results. Finally, Chapter 7 concludes the thesis by summarizing the key contributions and implications of the study and discusses the findings, highlights limitations, and outlines directions for future work. 
 
 
@@ -380,20 +390,17 @@ improving value functions through:
         V_{k+1}(s) = \max_{a \in A} \sum_{s' \in S} P(s' \mid s, a) 
     \left[ R(s, a, s') + \gamma V_k(s') \right]
         \]
-
     \noindent where:
-\begin{itemize}
-    \item $k$ is the iteration index of the algorithm;
-    \item $V_k(s)$ is the estimated value of state $s$ at iteration $k$;
-    \item $V_{k+1}(s)$ is the updated value estimate at the next iteration;
-    \item $A$ is the set of available actions;
-    \item $S$ is the set of possible next states;
-    \item $P(s' \mid s, a)$ is the transition probability to state $s'$ given state $s$ and action $a$;
-    \item $R(s, a, s')$ is the reward received after transitioning to $s'$;
-    \item $\gamma \in [0,1)$ is the discount factor.
-\end{itemize}
-
-
+        \begin{itemize}
+            \item $k$ is the iteration index of the algorithm;
+            \item $V_k(s)$ is the estimated value of state $s$ at iteration $k$;
+            \item $V_{k+1}(s)$ is the updated value estimate at the next iteration;
+            \item $A$ is the set of available actions;
+            \item $S$ is the set of possible next states;
+            \item $P(s' \mid s, a)$ is the transition probability to state $s'$ given state $s$ and action $a$;
+            \item $R(s, a, s')$ is the reward received after transitioning to $s'$;
+            \item $\gamma \in [0,1)$ is the discount factor.
+        \end{itemize}
 \end{itemize}
 Dynamic programming breaks down complex tasks into smaller subtasks. It then models 
 problems as workflows of sequential decisions made in discrete time steps. Each decision is made based on the possible resulting next state, since dynamic programming considers potential future states and reward signals when selecting actions. Indeed, 
@@ -502,7 +509,6 @@ where:
 \end{itemize}
 The algorithm updates the action-value function using the maximum estimated reward of the subsequent state, allowing it to iteratively improve its policy based on expected future returns.
 Since Q-Learning does not require explicit knowledge of the transition probabilities or reward function, it can learn directly from raw experience, making it particularly suitable for environments where a model is unavailable or difficult to construct \cite{chiave4}. Once the optimal action-value function $Q^*(s,a)$ has been learned, the optimal policy is obtained by selecting, in each state, the action that maximizes the estimated Q-value:
-
 \[
 \pi^*(s) = \arg\max_{a} Q^*(s, a)
 \]
@@ -518,7 +524,6 @@ The second innovation was targeting networks. This technique maintains a separat
 
 \paragraph{Loss Function and Optimization}
 The DQN loss function is designed to minimize the difference between the current Q-value estimates and the target values defined by the Bellman optimality equation. Using a target network with parameters $\theta^-$ , the algorithm stabilizes learning by providing a fixed reference for the updates. In practice, DQN can be seen as a method that approximates the Q-function with a deep neural network and iteratively solves the Bellman optimality equation via stochastic gradient descent.
-
 \[
 L_i(\theta_i) = \mathbb{E}_{(s,a,r,s') \sim \mathrm{U}(D)}\left[\left(r + \gamma 
 \max_{a'} Q(s', a'; \theta^-_i) - Q(s, a; \theta_i)\right)^2\right]
@@ -538,10 +543,8 @@ One of the most significant aspects of DQN is its ability to learn directly from
 
 \section{Atari-like Environments as Testbeds}
 Over the past decade, two-dimensional video games, especially those from the Atari 2600 game suite, have become standard benchmarks for the evaluation of reinforcement learning and artificial intelligence systems \cite{chiave61}. By offering high-dimensional visual inputs, diverse dynamics, and well-defined evaluation protocols within a controlled setting, these environments bridge the gap between simple toy problems and real-world applications. This section examines the characteristics and inherent challenges that make Atari-like environments particularly suitable as experimental testbeds for AI research.
-
 \subsection{Challenges of two-dimensional Game Environments}
-
-Atari games present diverse challenges that require different capabilities \cite{chiave62}. In this study, we concentrate our analysis on the Atari game  (also called Arkanoid) as a representative benchmark environment. This choice allows us to highlight several fundamental properties shared by many Atari games suit. 
+Atari games present diverse challenges that require different capabilities \cite{chiave62}. In this study, we concentrate our analysis on the Atari game as a representative benchmark environment. This choice allows us to highlight several fundamental properties shared by many Atari games suit. 
 More in details, these environments often require strong temporal reasoning. Temporal reasoning is essential in many games, where success depends on understanding sequences of events, anticipating future states, and planning multi-step strategies. In some cases, precise timing of actions is crucial, while in others, rewards are delayed and the consequences of decisions become apparent only after multiple steps. Breakout requires predicting where the ball will land based on its current trajectory and velocity. Furthermore, the agent must plan the paddle's movements several steps in advance, especially when the ball bounces off bricks or edges. This corresponds to the need for multi-step planning and anticipation of future states.
 
 Exploration and credit assignment pose additional challenges. Many Atari games sparse reward structures, in which positive feedback is infrequent, making difficult for learning algorithms to discover effective strategies. Furthermore, long action sequences with delayed outcomes complicate the attribution of credit to individual actions that ultimately lead to success or failure. 
@@ -555,7 +558,6 @@ The diversity and complexity of Atari games, combined with their standardized in
 % =========================
 
 \chapter{State of the Art and Challenges}
-
 Although artificial intelligence has achieved significant successes in recent years, particularly through deep learning methodologies \cite{chiave1}, fundamental challenges persist in the development of systems that are truly intelligent, interpretable, reproducible, and trustworthy. This chapter examines the current state of the art in AI, focusing on the limitations of purely neural approaches and the emerging paradigm of neuro-symbolic integration \cite{chiave2}. We explore the cognitive foundations that inspire alternative approaches, and the position of the framework proposed in this thesis within the broader landscape of contemporary AI research.
 
 \section{Challenges in Symbolic Interpretation}
@@ -581,16 +583,11 @@ Moreover, the opacity of neural networks significantly complicates their debuggi
 Finally, the lack of transparency also limits the scientific insight that can be gained from successful AI systems. Although building effective models is undeniably valuable from an engineering perspective, understanding the principles that govern their behavior is essential for advancing the field of artificial intelligence. Black-box models may achieve high performance on specific tasks yet fail to provide generalizable insights that could guide the development of more robust, reliable, and capable systems.
 In response to these concerns, a growing body of research has sought to make sense of AI systems by focusing on their interpretability and explanatory power.
 
-
-
 \subsubsection{Making AI Transparent: Principles of Explainable Machine Learning}
-
 These limitations have spurred research into explainable artificial intelligence (XAI), which aims to make the behavior of machine learning systems more transparent and interpretable \cite{chiave11,chiave12}. The approaches to interpretable machine learning can be broadly categorized based on when interpretability is achieved. Post-hoc explanation methods attempt to interpret already trained models by constructing a secondary model that provides explanations for the original system. In contrast, inherently interpretable models are designed to be transparent from the outset \cite{chiave13}, achieving interpretability by embedding explanatory mechanisms directly into their structures, such as decision trees and rule-based models. Additionally, hybrid approaches combine symbolic reasoning with neural learning to balance predictive performance and interpretability.
 Despite impressive empirical achievements, contemporary AI systems remain fundamentally limited in their capacity for genuine understanding \cite{chiave8}, reasoning, and symbolic interpretation. Their reliance on statistical correlations, lack of internal world models, and opaque decision-making processes constrain their ability to generalize, explain, and reason about complex environments. Future research should therefore prioritize interpretability, commonsense reasoning, and the development of structured internal representations, shifting the focus from narrow benchmark performance toward robust, transparent, and truly intelligent systems.
 
-
 \subsection{Learning Paradigms and Explainable AI}
-
 The growing demand for explainability in artificial intelligence is not merely a response to ethical or regulatory concerns, but reflects a deeper limitation rooted in contemporary learning paradigms. Most state-of-the-art AI systems rely on statistical learning from large-scale datasets, optimizing performance objectives without explicitly representing meaning, causality, or structured knowledge. As a result, the challenge of explainability cannot be separated from the way models learn and internally represent information.
 This section examines Explainable Artificial Intelligence (XAI) as a response to the black-box nature of modern machine learning, highlighting both its achievements and its fundamental limitations. In doing so, it argues that explainability is inseparable from learning mechanisms and representational choices, and that post-hoc explanations alone are insufficient to address the deeper issues of understanding and reasoning in AI systems.
 
@@ -600,38 +597,32 @@ Modern machine learning systems, particularly deep neural networks, learn by ide
 Consequently, models may rely on spurious correlations, dataset biases, or superficial cues that enable high performance during training but fail to generalize under distributional shifts, attributable to phenomena of this kind. This highlights the gap between statistical success and genuine conceptual understanding \cite{chiave17}. Moreover, because internal representations are distributed and opaque, it is difficult to determine what a model has truly learned, even when its predictions appear correct.
 This form of learning without understanding directly contributes to the interpretability problem. If a system lacks structured internal representations, explanations can only describe correlations in behavior rather than reasons grounded in knowledge or world models.
 
-
 \subsubsection{Explainable AI: Goals and Approaches}
 Explainable Artificial Intelligence (XAI) emerged in response to the opacity of high-performing machine learning models, particularly deep neural networks \cite{chiave5}. The primary goal of XAI is to enable humans to understand, trust, and effectively interact with AI systems by providing explanations of their behavior.
 Interpretability is especially critical in high-stakes domains such as healthcare, finance, law, and autonomous systems, where decisions must be justified, audited, and contested when necessary \cite{chiave19}. Beyond practical considerations, explainability is also essential for scientific understanding, debugging, and the iterative improvement of models.
 However, explainability is often treated as an external requirement imposed after learning has already occurred. This framing raises a fundamental question: can meaningful explanations be produced if the learning process itself does not involve the acquisition of interpretable knowledge?
-\subsubsection{Post-hoc Explainability}
 
+\subsubsection{Post-hoc Explainability}
 A large body of XAI research focuses on post-hoc explanation methods, which aim to interpret the behavior of trained black-box models without modifying their internal structure. Prominent examples include feature attribution techniques such as LIME (i.e., Local Interpretable Model-Agnostic Explanations) \cite{chiave20} and SHAP (i.e., Shapley Additive Explanations) \cite{chiave21}, which estimate the contribution of individual input features to a model's prediction. These approaches assist in identifying biases, facilitating debugging, and enhancing user confidence.
 Other approaches include saliency and attention-based methods, particularly in computer vision and NLP (i.e., natural language processing), which highlight regions of the input that most strongly influence model outputs \cite{chiave22}. For instance, in image classification, saliency maps can indicate the specific areas of an image that influenced a particular prediction.
 Surrogate models provide another strategy, approximating complex models with simpler, interpretable ones such as decision trees or linear regressions \cite{chiave23}. This method aids in interpreting the overall behavior of black-box models, though its accuracy in reflecting the original model may be constrained in highly nonlinear decision domains.
 While these methods offer valuable insights into model behavior, they remain fundamentally limited. Post-hoc explanations describe \textit{"how"} a model behaves locally, but not \textit{"why"} it behaves that way in terms of underlying concepts or causal reasoning. As a result, explanations may be unstable, incomplete, or misleading, especially when models operate in highly nonlinear or out-of-distribution settings \cite{chiave24}.
 
-
 \subsubsection{Intrinsic Interpretability}
-
 In contrast to post-hoc approaches, intrinsically interpretable models aim to achieve transparency by design. These models, including decision trees, rule-based systems, linear models, and symbolic representations, provide explicit reasoning structures that can be directly inspected and understood by humans \cite{chiave25}.
 Intrinsic interpretability is often achieved by constraining model complexity or imposing structured representations. However, this typically comes at the cost of reduced flexibility or performance when compared to deep neural networks. This trade-off has historically limited the adoption of interpretable models in complex real-world tasks.
 Recent research has therefore explored hybrid approaches that integrate neural learning with symbolic or structured components, seeking to balance expressivity with transparency \cite{chiave26}. These approaches suggest that interpretability need not be an afterthought, but can emerge naturally from models that learn structured, compositional representations.
-
 
 \subsubsection{Why XAI is Not Enough}
 Despite significant progress, XAI methods cannot fully compensate for the absence of explicit internal world models. Explanations that operate solely at the level of input-output correlations fail to capture higher-level concepts such as object identity, causality, goals, and physical constraints. Without these structures, explanations remain shallow and task specific.
 This limitation has led several researchers to argue that explainability must be addressed at the level of representation and learning, rather than through post-hoc analysis alone \cite{chiave27}. In other words, a system can only explain what it has explicitly represented.
 From this perspective, the challenge of explainable AI is inseparable from broader questions about how knowledge is acquired, structured, and used for reasoning. This insight motivates a shift toward cognitively inspired approaches that emphasize structured representations, inductive biases, and internal world models topics that will be explored in the following section.
 
-
 \section{Making Sense of AI: Toward Explainability}
 \subsection{Cognitive Foundations}
 The limitations of purely data-driven approaches have led researchers to reconsider insights from cognitive science and developmental psychology. Understanding how humans acquire knowledge, form concepts, and reason about the world may provide valuable principles for building more effective and interpretable AI systems.
 
 \subsection{Human World Modelling and the Origins of Structured Cognition}
-
 Human intelligence is characterized by the ability to form internal models of the external world; structured representations that capture the objects, the relationships, and the causal mechanisms that govern observable phenomena. These models enable prediction, planning, and reasoning beyond immediate perceptual experience. The question of how these models is acquired, has been central to cognitive science and developmental psychology.
 The Core Knowledge theory, developed primarily through research by Elizabeth Spelke, Renée Baillargeon \cite{chiave10}, and colleagues, proposes that human cognition is founded on a small set of innate knowledge systems that emerge early in development and provide the foundation for subsequent learning. These core systems are domain-specific, addressing fundamental aspects of the physical and social world, and are hypothesized to be evolutionarily ancient, shared with other species.
 The existence of core knowledge systems suggests that learning is not a completely domain-general process of association formation, but rather involves specialized mechanisms tuned to specific aspects of the environment. This perspective contrasts with blank slate views of learning and suggests that effective AI systems may benefit from incorporating analogous inductive biases.
@@ -648,39 +639,33 @@ Finally, infants possess a system for agent representation, which enables them t
 Across diverse domains, core knowledge systems share several defining characteristics. They emerge early in development, operate on specialized types of entities and their interrelations, and provide a foundational framework that supports the acquisition of increasingly complex knowledge \cite{chiave10}. When the principles underlying these systems are violated, they elicit surprise and heightened attention, thereby promoting enhanced learning and cognitive engagement. 
 Importantly, core knowledge should not be understood as a set of static, preloaded facts; rather, it consists of flexible principles that guide attention, interpretation, and learning from experience. Moreover, studying these systems highlights their evolutionary roots and universality, offering insights not only into human development but also into the ways cognition is shaped by both biology and experience.
 
-
 \subsection{Definition and Relevance for World Understanding}
-
 The relevance of Core Knowledge theory for artificial intelligence extends beyond learning efficiency and directly concerns the problem of explainability. The systems that reason about the world through structured internal models, composed of objects, relations, and causal mechanisms, are not only better equipped to generalize, but also to produce explanations that are meaningful to human users. Core Knowledge suggests that effective world understanding depends on inductive biases that privilege certain entities and relations as explanatory primitives, rather than treating all aspects of the environment as equally relevant, learning from scratch through domain-general mechanisms, or modelling perception as an undifferentiated stream of data \cite{chiave10}.
 In the context of understanding dynamic environments such as video games, core knowledge principles suggest several design principles that directly support interpretability and explanation. In particular, the object persistence and identity enable explanations in terms of enduring entities that interact over time, rather than transient patterns in sensory input. Physical causality supports accounts of system behavior based on cause-effect relations, allowing predictions and outcomes to be justified rather than merely observed. Similarly, representing agents as goal-directed entities provides a basis for interpreting and explaining actions in intentional terms, which is essential for understanding behavior in interactive environments \cite{chiave10}. Finally, compositional structure allows complex scenes and events to be explained as combinations of simpler, interpretable components and relations, rather than as opaque high-dimensional states \cite{chiave8}.
 By adopting object-centric and relational representations inspired by Core Knowledge, an artificial system could construct explicit internal world models that support not only prediction and control, but also explanation and counterfactual reasoning \cite{chiave18}. These considerations motivate the architectural choices in the framework proposed in this thesis, which emphasizes the extraction of structured, object-based representations from visual inputs and the use of symbolic or relational reasoning mechanisms to model environment dynamics in an interpretable manner.
 
-
 \subsection{Cognitive Models and Symbolic Representation}
-
 The integration of cognitive principles with symbolic AI offers a path toward systems that combine the learning capabilities of neural networks with the interpretability and reasoning power of symbolic representations. The cognitive architectures such as ACT-R \cite{chiave28} and SOAR \cite{chiave29} have demonstrated the value of hybrid systems that integrate symbolic reasoning with sub-symbolic processing, enabling more efficient learning and generalization.
 Intuitive physics research in cognitive science has revealed that humans possess sophisticated, often implicit, models of physical phenomena that enable prediction and reasoning about object motion, stability, and interactions. Incorporating similar models into AI systems could enable more sample-efficient learning and better generalization, as systems would not need to learn fundamental physical principles from scratch.
 The causal reasoning is central to human intelligence, enabling understanding of why events occur and prediction of the consequences of interventions. Causal models, represented graphically or through structured probabilistic models, provide a framework for integrating symbolic causal knowledge with probabilistic reasoning. The systems that can learn and reason with causal models may achieve more robust generalization and interpretability than purely associative systems.
 Additionally, compositional semantics suggests that effective knowledge representations should construct complex concepts from simpler primitives. Neural-symbolic systems that learn such compositional representations can better capture the systematic structure of domains, thereby facilitating interpretation and explanation \cite{chiave26}.
-\\
+
 In summary, developing interpretable AI systems requires methods to extract structured, symbolic representations from raw sensory data while maintaining the flexibility and learning capability of neural approaches. This requires bridging the gap between sub-symbolic distributed representations learned by neural networks and symbolic, compositional representations suitable for reasoning and explanation.
 
-
 \section{Positioning of the Proposed Framework}
-
 The framework developed in this thesis is positioned at the intersection of several research directions including visual perception in dynamic environments, symbolic knowledge extraction, cognitive modelling, and reinforcement learning. It addresses key limitations of current approaches while building on their strengths.
 In relation to deep reinforcement learning, the framework addresses two well-known limitations of end-to-end neural approaches: their high data requirements and the opacity of the representations they produce. Although methods such as Deep Q-Networks have achieved strong results in visually complex domains, they typically learn implicit, task-specific representations that provide little explicit insight into the structure of the environment.
-\\
+
 The proposed framework departs from standard paradigm by decoupling visual perception from policy learning. Rather than relying on a reinforcement learning agent to simultaneously learn perception, environment structure, and control, perceptual processing is handled by dedicated neural components whose outputs are subsequently transformed into explicit symbolic representations. This shift moves the emphasis away from end-to-end policy optimization and toward structured environment understanding, enabling interpretability and reasoning while preserving the advantages of neural visual processing.
 In this positioning, deep reinforcement learning is not replaced but reframed: the DQN agent operates on a structured environment representation rather than raw visual input, allowing learning to focus on decision-making and exploration instead of implicit model acquisition.
 From the perspective of neuro-symbolic AI, the framework reinforces the view that symbolic representations remain valuable when they are grounded in perception rather than manually specified. Unlike approaches that impose symbolic constraints on neural models or use neural networks as auxiliary components within symbolic pipelines, this work emphasizes the extraction of symbolic structures directly from visual experience. In doing so, it consolidates the role of neural networks as perceptual front ends while extending neuro-symbolic integration toward the autonomous discovery of environment rules.
 The framework embodies core principles of neuro-symbolic integration by combining neural visual processing with symbolic reasoning. This model serves as an interpretable intermediate representation that bridges perception and action.
 The framework draws inspiration from Core Knowledge theory and cognitive principles about object representation, physical causality, and compositional structure. However, unlike full cognitive architectures that aim to model the breadth of human cognition, this framework focuses on a specific task; understanding and acting in dynamic visual environments and implements only those cognitive principles most relevant to this domain.
 The proposed framework makes several distinctive contributions. It demonstrates a complete pipeline from raw visual input to symbolic knowledge extraction, to environment reconstruction to policy learning. It shows how cognitive principles can inform the design of AI systems for dynamic environments. And it offers a concrete instantiation of neuro-symbolic integration in the domain of game playing.
-\\
-Overall, the proposed framework is not intended as a replacement for existing reinforcement learning systems or other established approaches, but as a model designed to overcome key limitations of previous approaches by emphasizing interpretability and explicit knowledge representation over end-to-end optimization. It contributes to the state of the art by showing how symbolic knowledge can be extracted from visual observations and structured in a form suitable for reasoning and future interaction. The framework offers a pathway toward systems that are both effective in dynamic environments and understandable, highlighting the potential of neuro-symbolic approaches to enhance reasoning, exploration, and future interaction.
+
+Overall, the proposed framework is not intended as a replacement for existing reinforcement learning systems or other established approaches, but as a model designed to overcome key limitations of previous approaches by emphasizing interpretability and explicit knowledge representation over end-to-end optimization. It contributes to the state-of-the-art by showing how symbolic knowledge can be extracted from visual observations and structured in a form suitable for reasoning and future interaction. The framework offers a pathway toward systems that are both effective in dynamic environments and understandable, highlighting the potential of neuro-symbolic approaches to enhance reasoning, exploration, and future interaction.
 The following chapter describes in detail the design and implementation of this framework, explaining the architectural choices, algorithms, and integration mechanisms that enable the extraction of interpretable symbolic knowledge from video streams and its use in guiding reinforcement learning in reconstructed environments.
-\\
+
 Although, the framework demonstrates a complete conceptual pipeline from raw visual input to symbolic knowledge extraction and policy learning, the reconstructed environment is currently defined at the design level. It serves as an intermediate symbolic representation intended to support reasoning and learning, with a full interactive implementation deferred to future work.
 
 
@@ -976,7 +961,8 @@ The interaction between these techniques allows the agent to learn meaningful be
 
 \subsubsection{Visual Input Acquisition and Preprocessing Module}
 The frame acquisition module is responsible for efficiently handling visual input data and preparing it for subsequent processing stages. It supports both online acquisition of frames from live simulations and the loading of previously recorded gameplay logs. 
-Each frame is resized to a fixed resolution of $128 \times 128$ pixels to ensure a consistent input size for the neural network and is converted into a normalized tensor to facilitate stable training. 
+Each frame is resized to a fixed resolution to ensure a consistent input size for the neural network and is converted into a normalized tensor to facilitate stable training.
+
 The corresponding segmentation masks are loaded as integer-valued images, where each pixel represents a semantic class identifier, allowing the network to learn to associate spatial regions with meaningful object categories.
 A custom dataset class encapsulates the logic for pairing each image with its corresponding mask, while PyTorch data loaders handle batching, shuffling, and splitting into training and validation sets. A fixed random seed is used to ensure reproducibility of the dataset splits, which is crucial for consistent evaluation of model performance. By abstracting low-level data handling, this module provides a clean interface for the feature extraction stage, allowing the focus to remain on the learning task rather than on preprocessing logistics.
 
@@ -1364,7 +1350,7 @@ Drawing on insights from philosophy, cognitive science, and artificial intellige
 Inspired by Core Knowledge Theory, this thesis leverages the foundations of a framework that constructs structured representations of dynamic environments by identifying entities through fundamental properties and modelling their interactions symbolically. Rather than relying solely on end-to-end optimization, the system abstracts object classes, infers interaction rules, and builds a reusable structural representation of the environment.
 
 
-Preliminary empirical results indicate that this structured approach improves interpretability, robustness under environmental modifications, and explainability of learned behavior in dynamic domains. At the same time, several challenges remain: the current implementation lacks deep context-based reasoning, operates with a still limited and immature knowledge base, faces potential combinatorial growth in rule induction, and does not yet fully integrate formal causal reasoning mechanisms. These limitations define a rich space for future research
+Preliminary empirical results indicate that this structured approach improves interpretability, robustness under environmental modifications, and explainability of learned behavior in dynamic domains. At the same time, several challenges remain: the current implementation lacks deep context-based reasoning, operates with a still limited and immature knowledge base, faces potential combinatorial growth in rule induction, does not yet fully integrate formal causal reasoning mechanisms, and does not perfectly incorporate the perceptual module. These limitations define a rich space for future research.
 
 \section{Future Directions}
 The framework, in its present form, demonstrates that symbolic, interpretable models of dynamic environments can be constructed by grounding object tracking and rule inference in structural priors. Although the initial validation in controlled game environments shows promising generalization and robustness, further development is necessary to extend the framework's scalability and applicability.
@@ -1387,8 +1373,6 @@ In order to achieve a fully model-based setup, the symbolic internal representat
 \subsection{Generalization Across Environments}
 Another important avenue for future research is the evaluation and enhancement of the framework's ability to generalize across different environments. Although current experiments demonstrate promising transfer within similar game instances, extending the symbolic representation and rule abstraction mechanisms to support entirely new domains remains largely unexplored. Future work could investigate how the structured knowledge captured by the framework, such as object classes, interaction rules, and causal chains, can be adapted or reused in novel environments, providing robust generalization while minimizing retraining. This could involve mechanisms for abstracting high-level patterns, aligning entities across domains, or leveraging meta-learning strategies to accelerate adaptation to previously unseen scenarios.
 
-\section{Summary of Contributions, Impact of the Research, and Final Reflections}
-
 % =========================
 % REFERENCES
 % =========================
@@ -1398,18 +1382,5 @@ Another important avenue for future research is the evaluation and enhancement o
 
 \bibliographystyle{IEEEtran}
 \bibliography{references}
-
-
-% =========================
-% APPENDICES
-% =========================
-
-\appendix
-
-\chapter{Additional Technical Details}
-
-\chapter{Code Snippets or Pseudocode of Relevant Modules}
-
-\chapter{Dataset Specifications or Experimental Settings}
 
 \end{document}

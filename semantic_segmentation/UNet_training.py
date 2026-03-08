@@ -20,7 +20,7 @@ from sklearn.model_selection import train_test_split
 # IMAGE_SIZE = (120, 70)
 NUM_CLASSES = 10
 BATCH_SIZE = 4
-EPOCHS = 10 #1
+EPOCHS = 1 #1
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 SHUFFLE = False
 SHOW_PLOTS = True
@@ -101,8 +101,14 @@ def make_dataloaders(images_dir=images_path, masks_dir=masks_path, batch_size=BA
     all_images, all_masks = get_image_mask_paths(images_dir, masks_dir)
     train_imgs, val_imgs, train_masks, val_masks = train_test_split(all_images, all_masks, test_size=val_split, random_state=42)
 
-    train_dataset = SegmentationDataset(train_imgs, train_masks)
-    val_dataset = SegmentationDataset(val_imgs, val_masks)
+
+    img_transform = transforms.Compose([
+        transforms.ToTensor(),
+        transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
+    ])
+
+    train_dataset = SegmentationDataset(train_imgs, train_masks, transform=img_transform)
+    val_dataset = SegmentationDataset(val_imgs, val_masks, transform=img_transform)
 
     train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=shuffle)
     val_loader = DataLoader(val_dataset, batch_size=batch_size, shuffle=False)
@@ -165,44 +171,6 @@ def validate(model, loader, criterion, device, num_classes=NUM_CLASSES):
 # Visualization helper (on validation set)
 # -----------------------
 
-# def visualize_predictions(model, loader, max_images=5, device=DEVICE):
-#     model.eval()
-#     shown = 0
-#     with torch.no_grad():
-#         for images, masks in loader:
-#             images, masks = images.to(device), masks.to(device)
-#             outputs = model(images)
-#             preds = torch.argmax(outputs, dim=1)
-#             for b in range(images.size(0)):
-#                 img = images[b].cpu()
-#                 true_mask = map_mask(masks[b]).cpu().numpy()
-#                 pred_mask = preds[b].cpu().numpy()
-
-#                 img_vis = denormalize(img.clone(), [0.485, 0.456, 0.406], [0.229, 0.224, 0.225]).permute(1,2,0).numpy()
-#                 img_vis = np.clip(img_vis, 0, 1)
-#                 color_true = CLASS_COLORS_ORIGINAL[true_mask]
-#                 color_pred = CLASS_COLORS_ORIGINAL[pred_mask]
-
-#                 fig, axes = plt.subplots(1,3,figsize=(12,4))
-#                 axes[0].imshow(img_vis)
-
-#                 axes[0].set_title('Input')
-#                 axes[0].axis('off')
-#                 axes[1].imshow(color_true)
-#                 axes[1].set_title('Ground Truth')
-#                 axes[1].axis('off')
-#                 axes[2].imshow(color_pred)
-#                 axes[2].set_title('Prediction')
-#                 axes[2].axis('off')
-#                 plt.tight_layout()
-#                 plt.show()
-
-#                 shown += 1
-#                 if shown >= max_images:
-#                     return
-
-
-
 def visualize_predictions(model, loader, max_images=5, device=DEVICE):
     model.eval()
     shown = 0
@@ -215,12 +183,10 @@ def visualize_predictions(model, loader, max_images=5, device=DEVICE):
             for b in range(images.size(0)):
                 img = images[b].cpu()
                 
-                # CORREZIONE QUI: map_mask restituisce già un numpy array
                 true_mask = map_mask(masks[b]) 
-                # Assicurati che anche pred_mask sia clippato per evitare crash con CLASS_COLORS
                 pred_mask = torch.clamp(preds[b], 0, 9).cpu().numpy()
 
-                img_vis = denormalize(img.clone(), [0.485, 0.456, 0.406], [0.229, 0.224, 0.225]).permute(1,2,0).numpy()
+                img_vis = denormalize(img.clone(), [0.485, 0.456, 0.406], [0.229, 0.224, 0.225]).permute(1,2,0).numpy() # ImageNet Statistics.
                 img_vis = np.clip(img_vis, 0, 1)
                 
                 # Applichiamo i colori

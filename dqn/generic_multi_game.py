@@ -593,7 +593,7 @@ def train_generic_dqn(env_factory: Callable,sim_name: str, total_episodes=10000,
     Training DQN completamente generico con reward causale.
     """
     env = env_factory()
-    buffer = deque(maxlen=100000)  # Buffer più grande
+    buffer = deque(maxlen=100000)  # Buffer più grande - REPLAY BUFFER 
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     q_net = QNetwork(env.observation_space.shape[0], env.action_space.n).to(device)

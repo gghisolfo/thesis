@@ -69,7 +69,7 @@ class UNet(nn.Module):
         e1 = self.crop(e1, u1)
         d1 = self.dec1(torch.cat([u1, e1], dim=1))
 
-        # return self.out(d1)
+
         out = self.out(d1) # 1x1 = 64 channels → NUM_CLASSES
 
         # bilinear interpolation is applied to resize the output feature maps
