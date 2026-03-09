@@ -426,19 +426,21 @@ class GenericSymbolicEnv(gym.Env):
                 inp = torch.cat([state_t, act_t], dim=1)
                 
                 self._forward_model.train()
-                pred = self._forward_model(inp)  # predicts next state vector
-                target = torch.tensor(current_state_vec, dtype=torch.float32).unsqueeze(0)
-                loss = nn.functional.mse_loss(pred, target, reduction='none').mean(1)  # per-batch error
+                pred = self._forward_model(inp)  # predicts next state vector with forward network (curiosity)
+                target = torch.tensor(current_state_vec, dtype=torch.float32).unsqueeze(0) # real-future state
+                loss = nn.functional.mse_loss(pred, target, reduction='none').mean(1)  # confronto stato predetto con stato reale MSError=∣∣s_pred(t+1)​−s_target(t+1)​∣∣^2
                 err = float(loss.item())
                 
-                # piccolo training step online (1 step)
-                self._forward_opt.zero_grad()
-                loss.mean().backward()
-                # gradient clipping to be safe
-                torch.nn.utils.clip_grad_norm_(self._forward_model.parameters(), 1.0)
+                # update forward network 
+                self._forward_opt.zero_grad() # azzera gradienti ∇​L=0 (ϕ​: parameters)
+                loss.mean().backward() # calcola ∇ϕ​L, gradiente della loss rispetto ai pesi della rete
+                torch.nn.utils.clip_grad_norm_(self._forward_model.parameters(), 1.0)               # gradient clipping to be safe
                 self._forward_opt.step()
+
                 
                 curiosity_bonus = self.w_curiosity * err
+
+
             except Exception as e:
                 if PRINT_MODE:
                     print("Curiosity failed:", e)
@@ -472,7 +474,7 @@ class GenericSymbolicEnv(gym.Env):
             # Reward totale: eventi (dominante) + shaping (minore) + nuovi bonus generici
             reward = event_reward + shaping_reward * 0.1 + causal_bonus + curiosity_bonus + density_bonus
         
-        
+        print(event_reward, causal_bonus, curiosity_bonus, density_bonus)
         # Reward totale: eventi (dominante) + shaping (minore) + nuovi bonus generici
         reward = event_reward + causal_bonus + curiosity_bonus + density_bonus
         
@@ -514,9 +516,14 @@ class GenericSymbolicEnv(gym.Env):
         values = [v for v in state.values() if isinstance(v, (int, float))]
         return np.array(values[:10], dtype=np.float32)  # Limita a 10 per semplicità
 
-
+# neural network that approximates the Q-function -> Q-function approximation
 class QNetwork(nn.Module):
-    """Rete Q-Network per l'apprendimento."""
+    """Rete Q-Network per l'apprendimento.
+        state_dim: dimensione dello stato s
+        action_dim: numero di azioni 
+        output -> Q-values per ogni azione: Q(s, a1), Q(s, a2), Q(s, a3)
+    
+    """
     def __init__(self, state_dim, action_dim):
         super().__init__()
         self.net = nn.Sequential(
@@ -542,6 +549,7 @@ def create_generic_env(sim_type="arkanoid"):
             1: lambda game: game.set_paddle_speed(0),   # Fermo
             2: lambda game: game.set_paddle_speed(1),   # Destra
         }
+        # ma raw state features della simulazione
         def obs_extractor(game):
             ball_x = game.ball_x / grid_width
             ball_y = game.ball_y / grid_height
@@ -596,12 +604,13 @@ def train_generic_dqn(env_factory: Callable,sim_name: str, total_episodes=10000,
     buffer = deque(maxlen=100000)  # Buffer più grande - REPLAY BUFFER 
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    q_net = QNetwork(env.observation_space.shape[0], env.action_space.n).to(device)
-    q_target = QNetwork(env.observation_space.shape[0], env.action_space.n).to(device)
+    q_net = QNetwork(env.observation_space.shape[0], env.action_space.n).to(device) # online network
+    q_target = QNetwork(env.observation_space.shape[0], env.action_space.n).to(device) # target network
     q_target.load_state_dict(q_net.state_dict())
-    optimizer = optim.Adam(q_net.parameters(), lr=1e-4)  # Learning rate più basso lr = 5e-5
 
-    gamma = 0.99
+    optimizer = optim.Adam(q_net.parameters(), lr=1e-4)  # Learning rate più basso lr = 5e-5, per ottimizazione SGD
+
+    gamma = 0.99 # discount factor
     epsilon = 1.0
     epsilon_min = 0.05  # Epsilon minimo più alto per continuare esplorazione
     epsilon_decay = 0.9995  # Decay più lento
@@ -625,7 +634,7 @@ def train_generic_dqn(env_factory: Callable,sim_name: str, total_episodes=10000,
         steps = 0
 
         while not done and steps < max_steps:
-            # Epsilon-greedy
+            # Epsilon-greedy exploration
             if random.random() < epsilon: # 🎯 EXPLORATION - ogni quanto ignoro la rete e scelgo un'azione a caso
                 action = env.action_space.sample()
             else:
@@ -636,11 +645,11 @@ def train_generic_dqn(env_factory: Callable,sim_name: str, total_episodes=10000,
 
             next_state, reward, done, info = env.step(action) #reward = R(t+1)
 
-            buffer.append((state, action, reward, next_state, done))
+            buffer.append((state, action, reward, next_state, done)) # safed transition into replay buffer
 
             # Training - batch più grande e più frequente
             if len(buffer) >= 128:
-                batch = random.sample(buffer, 128)  # Batch size aumentato
+                batch = random.sample(buffer, 128)  # Batch size aumentato - campionamento aumentato : (s,a,r,s′)∼U(D)
                 s, a, r, ns, d = zip(*batch)
                 
                 s_t = torch.tensor(np.array(s), device=device)
@@ -650,17 +659,21 @@ def train_generic_dqn(env_factory: Callable,sim_name: str, total_episodes=10000,
                 d_t = torch.tensor(d, dtype=torch.float32, device=device)
 
 
-                # Q(st​,at​)    ←    Q(st​,at​)   +   α[Rt+1​+γamax​Q(st+1​,a)  −  Q(st​,at​)]
+                # Bellman Equation 
                 with torch.no_grad():
-                    max_next_q = q_target(ns_t).max(1)[0] # max ​Q(st+1​,a)
-                    target_q = r_t + gamma * (1 - d_t) * max_next_q # target - parte dx
+                    max_next_q = q_target(ns_t).max(1)[0] # max ​Q(s'​,a', θ−)
+                    target_q = r_t + gamma * (1 - d_t) * max_next_q # r+γ max ​Q(s′,a′;θ−)
 
-                current_q = q_net(s_t).gather(1, a_t).squeeze(1) # Q(st, at) parte sx
-                loss = nn.functional.mse_loss(current_q, target_q) #minimizzare questa loss equivale a Q←Q+α(target−Q)
+
+                # Q(st​,at​)    ←    Q(st​,at​)   +   α[Rt+1​+γamax​Q(st+1​,a)  −  Q(st​,at​)]
+                current_q = q_net(s_t).gather(1, a_t).squeeze(1) # TD error
+                # minimizzare questa loss a minimizzare : (target−Q(s,a))^2 (MSE, TD error quadratico)
+                loss = nn.functional.mse_loss(current_q, target_q) # Li​(θi​)=E[(r+γmaxQ(s′,a′;θ−)−Q(s,a;θ))2]
+                 
                 
 
+                # ottimizazione SGD :
                 optimizer.zero_grad()
-
                 # Q[s,a] += alpha * (reward + gamma * max(Q[s_next]) - Q[s,a])
                 loss.backward()
                 torch.nn.utils.clip_grad_norm_(q_net.parameters(), 1.0)  # Gradient clipping
@@ -670,7 +683,7 @@ def train_generic_dqn(env_factory: Callable,sim_name: str, total_episodes=10000,
             state = next_state
             steps += 1
 
-        epsilon = max(epsilon_min, epsilon * epsilon_decay)
+        epsilon = max(epsilon_min, epsilon * epsilon_decay) # decay epsilon-exploration
         
         # Update target network più frequentemente all'inizio
         if ep < 1000 and ep % 5 == 0:
@@ -763,7 +776,7 @@ if __name__ == "__main__":
 
     total_episodes = 5000 
 
-    sim_to_train = "pong"  # "arkanoid" o "pong"
+    sim_to_train = "arkanoid"  # "arkanoid" o "pong"
 
     rewards, stats, survival = train_generic_dqn(
         env_factory=lambda: create_generic_env(sim_type=sim_to_train),
